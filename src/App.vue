@@ -84,7 +84,8 @@ export default {
     width: 100%;
     min-height: 100vh;
     position: relative;
-    background: #FAFAFA;
+    background: #14171A;
+    font-size: 28px;
     .children_view {
       width: 100%;
       min-height: 100vh;

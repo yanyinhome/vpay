@@ -44,7 +44,7 @@ export default {
     color: #000000;
     width: 750px;
     height: 80px;
-    background: #FFB84B;
+    background: #fff;
   }
 }
 </style>

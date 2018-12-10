@@ -32,18 +32,21 @@ export default {
   transition: all 0.1s;
   // color: #ffffff;
   font-size: 30px;
-  color: rgba(255, 255, 255, 1);
-  width: 464px;
-  height: 82px;
-  background: rgba(255, 184, 75, 1);
-  box-shadow: 4px 4px 6px 0px rgba(255, 255, 255, 0.6) inset,
-    0px -4px 8px 0px rgba(0, 0, 0, 0.2) inset;
+  color: #000000;
+  width: 690px;
+  height: 80px;
+  background: linear-gradient(
+    90deg,
+    rgba(234, 205, 163, 1) 0%,
+    rgba(214, 174, 123, 1) 100%
+  );
   border-radius: 10px;
   margin: 0 auto;
-  margin-top: 40px;
+  margin-top: 100px;
+  display: block;
   &.com_button_click {
-    background: #f28c0e;
-    color: #ffffff;
+    // background: #f28c0e;
+    color: #000;
     // margin-top: 3px;
     // margin-bottom: -3px;
   }

@@ -1,6 +1,6 @@
 <template>
   <div id="pageHead" :class="{'page_head_opacity': opacity}">
-    <p class="iconfont icon-fanhui" @click="clickBack"></p>
+    <p class="iconfont icon-shangyiye" @click="clickBack"></p>
     <slot></slot>
   </div>
 </template>
@@ -30,24 +30,25 @@ export default {
     left: 50%;
     width: 750px;
     margin-left: -375px;
-    height: 80px;
-    line-height: 80px;
+    height: 82px;
+    line-height: 82px;
     font-size: 34px;
+    font-weight: 500;
     text-align: center;
-    color: #000000;
-    background: #fff;
+    color: #fff;
+    background: #212121;
     border-bottom: 1Px solid rgba(0,0,0,0.1);
     z-index: 99;
-    .icon-fanhui {
+    .icon-shangyiye {
       position: absolute;
       top: 0;
       left: 0;
       width: 120px;
       font-size: 40px;
-      color: #000000;
     }
     &.page_head_opacity {
-      background: none;
+      background: #fff;
+      color: #000;
     }
 
   }

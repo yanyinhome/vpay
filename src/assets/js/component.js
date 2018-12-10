@@ -11,6 +11,8 @@ import imgFoot from '../../components/img_foot';
 import comTime from '../../components/time_picker';
 // 底部通栏button
 import butFoot from '../../components/button_foot';
+// 导航栏
+import navlist from '../../components/navlist';
 
 // 挂载全局组件
 Vue.component('comButton', comButton);
@@ -19,3 +21,4 @@ Vue.component('comFoot', comFoot);
 Vue.component('imgFoot', imgFoot);
 Vue.component('comTime', comTime);
 Vue.component('butFoot', butFoot);
+Vue.component('navlist', navlist);

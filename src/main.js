@@ -15,7 +15,10 @@ require('animate.css');
 import Mint from 'mint-ui';
 import 'mint-ui/lib/style.css';
 Vue.use(Mint);
-
+//引入swiper
+require('swiper/dist/css/swiper.css');
+import VueAwesomeSwiper from 'vue-awesome-swiper';
+Vue.use(VueAwesomeSwiper);
 
 // import BScroll from "better-scroll";
 // Vue.use(BScroll);
@@ -96,7 +99,7 @@ Vue.filter('hideAddress', function (value) {
 
 // axios请求
 Vue.prototype.axios = axios.create({
-  baseURL: 'http://cschushi.cadhx.com/api/',
+  baseURL: 'http://swyj.cadhx.com/api/',
   timeout: 10000,
   withCredentials: true,
   transformRequest: [function (data) {

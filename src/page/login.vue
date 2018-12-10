@@ -8,16 +8,28 @@
       <!-- 登录 -->
       <div class="logininp" v-if="login">
         <div class="box">
-          <input type="text" v-model="phone" placeholder="请输入用户名/手机号">
+          <input type="text" v-model="phone" placeholder="请输入手机号">
           <input type="password" v-model="password" placeholder="请输入登录密码">
         </div>
         <router-link class="forget" tag="div" to="forget">忘记密码？</router-link>
       </div>
       <!-- 注册 -->
       <div class="logininp" v-if="register">
-        <div class="item">
+        <!-- <div class="item">
           <i class="iconfont icon-yonghuming"/>
           <input type="text" v-model="name" placeholder="请设置用户名">
+        </div> -->
+        <div class="item">
+          <i class="iconfont icon-zhucedenglushoujihao"/>
+          <input type="text" v-model="tel" placeholder="请输入手机号">
+        </div>
+        <div class="item verify">
+          <i class="iconfont icon-yanzhengyanzhengma"/>
+          <input type="text" placeholder="请输入验证码" v-model="verify">
+          <button
+            @click="verification"
+            :disabled="isSend"
+          >{{btntxt}}</button>
         </div>
         <div class="item">
           <i class="iconfont icon-3denglumima"/>
@@ -25,20 +37,7 @@
         </div>
         <div class="item">
           <i class="iconfont icon-yunongtongqingshurumima"/>
-          <input type="password" v-model="safepass" placeholder="请设置支付密码">
-        </div>
-        <div class="item">
-          <i class="iconfont icon-zhucedenglushoujihao"/>
-          <input type="text" v-model="tel" placeholder="请输入手机号">
-        </div>
-        <div class="item verify">
-          <i class="iconfont icon-yanzhengyanzhengma"/>
-          <input type="text" placeholder="请输入验证码：" v-model="verify">
-          <button
-            @click="verification"
-            :disabled="isSend"
-            :class="{'send-sms' : isSend, 'no-send-sms': isSend}"
-          >{{btntxt}}</button>
+          <input type="password" v-model="safepass" placeholder="请设置六位支付密码">
         </div>
         <div class="item">
           <i class="iconfont icon-yaoqingma"/>
@@ -65,7 +64,7 @@ export default {
       sendSMSTime: 0,
       isSend: false,
 
-      name: "",
+      // name: "",
       loginpass: "",
       safepass: "",
       tel: "",
@@ -82,17 +81,23 @@ export default {
 
   methods: {
     verification () {
-			if (!this.name) {
-        this.$bus.$emit('toast', '用户名不能为空');
-      } else if (!this.tel){
+      let regTel = /^(1[3-9])\d{9}$/;
+			if (!this.tel){
         this.$bus.$emit('toast', '手机号不能为空');       
-      } else if (!this.password){
-        this.$bus.$emit('toast', '密码不能为空');       
-      } else if (!/^.{6,20}$/.test(this.password)) {
-        this.$bus.$emit('toast', '请输入6-20位登录密码');
+      } else if (!regTel.test(this.tel)) {
+        this.$bus.$emit("toast", "手机号码不合法");
+      } else if (!this.verify){
+        this.$bus.$emit('toast', '验证码不能为空');       
+      } else if (!this.loginpass){
+        this.$bus.$emit('toast', '登录密码不能为空');       
+      } else if (!this.safepass) {
+        this.$bus.$emit('toast', '支付密码不能为空');
+      } else if (!this.code) {
+        this.$bus.$emit('toast', '邀请码');
       } else {
-				this.axios.post('Reg/send_sms',{
-					mobile: this.tel,
+				this.axios.post('register/getcode',{
+          type: '1',
+          account: this.tel
 				})
 				.then((response)=>{
 					if (response.data=='1'){
@@ -191,17 +196,38 @@ export default {
         height: 80px;
         background: rgba(255, 255, 255, 1);
         border-radius: 40px;
+      }  
+      input::-webkit-input-placeholder {
+        /* WebKit browsers */
+        color: #888;
+      }
+      input:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: #888;
+      }
+
+      input::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: #888;
+      }
+
+      input:-ms-input-placeholder {
+        /* Internet Explorer 10+ */
+        color: #888;
+      }
+      input:nth-of-type(2) {
+        margin-top: 40px;
       }
       input:nth-of-type(2) {
         margin-top: 40px;
       }
     }
     .forget {
-      padding-left: 40px;
+      padding-left: 50px;
       font-size: 24px;
       font-family: PingFangSC-Regular;
       color: rgba(255, 255, 255, 1);
-      line-height: 70px;
+      line-height: 80px;
     }
     .item {
       color: #fff;
@@ -218,18 +244,40 @@ export default {
         background: rgba(0, 0, 0, 0);
         width: 400px;
         line-height: 100px;
+      }  
+      input::-webkit-input-placeholder {
+        /* WebKit browsers */
+        color: #888;
+      }
+      input:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: #888;
+      }
+
+      input::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: #888;
+      }
+
+      input:-ms-input-placeholder {
+        /* Internet Explorer 10+ */
+        color: #888;
+      }
+      input:nth-of-type(2) {
+        margin-top: 40px;
       }
     }
     .verify {
       input {
         margin-left: 10px;
+        padding-left: 10px;
         width: 290px;
       }
       button {
         width: 140px;
         background: rgba(237, 70, 70, 0);
         border-radius: 10px;
-        color: white;
+        color: #D6AE7B;
       }
     }
   }
