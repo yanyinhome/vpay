@@ -10,10 +10,10 @@
                <div class="touxiang">
                   <img :src="yulan">
                </div>
-               <i class="iconfont icon-xiayi"></i>
+               <i class="iconfont icon-next"></i>
             </div>
         </div>
-        <div class="item"><span>手机号</span><input type="text" v-model="message.user_mobile" readonly="readonly"></div>
+        <div class="item"><span>手机号</span><input type="text" v-model="phone" readonly="readonly"></div>
     </div>
   </div>
 </template>
@@ -23,52 +23,32 @@ export default {
   name: "userMessage",
   data() {
     return {
-      message: {},
+      phone: '',
+      yulan: '',
       picValue: '',
       newimg: '',
-      yulan: ''
+      
     };
   },
 
   computed: {},
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.axios
-        .post("login/verifylogin", {
-          token: localStorage.getItem("token")
-        })
-        .then(({ data }) => {
-          console.log(data);
-          // 如果返回值为201，则跳转到绑定
-          if (data.code === "201") {
-            vm.$bus.$emit("toast", "请先绑定手机号");
-            vm.$router.push("register");
-          } else {
-            next();
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    });
-  },
+ 
   created() {},
 
   mounted() {
     this.loading();
-    // console.log(this.newimg);
   },
   methods: {
     loading() {
       this.axios
-        .post("user/index", {
+        .post("user/upmessge", {
           token: this.token()
         })
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
-            this.message = data.data;
-            this.yulan = data.data.user_avat;
+            this.phone = data.data.phone;
+            this.yulan = data.data.head_img;
           } else if (data.code === "201") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -81,7 +61,6 @@ export default {
       this.axios
         .post("user/apiuser", {
           token: this.token(),
-          user_truename: this.message.user_name,
           user_avat: this.newimg
         })
         .then(({ data }) => {
@@ -273,7 +252,7 @@ export default {
   }
   .userMessage {
     width: 100%;
-    margin-top: 20px;
+    // margin-top: 20px;
     padding: 0 30px;
     box-sizing: border-box;
     background-color: #fff;
@@ -306,8 +285,8 @@ export default {
           }
         }
         .iconfont {
-          font-size: 50px;
-          color: #999;
+          font-size: 40px;
+          color: #ddd;
         }
       }
     }

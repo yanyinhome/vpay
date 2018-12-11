@@ -28,29 +28,29 @@ export default {
   created() {},
 
   mounted() {
-    // this.loading();
+    this.loading();
   },
 
   methods: {
-    // loading() {
-    //   this.axios
-    //     .post("apiindex/newsinfo", {
-    //       id: this.id
-    //     })
-    //     .then(({ data }) => {
-    //       console.log(data);
-    //       if (data.code === "200") {
-    //         this.detail = data.data.news_content;
-    //         this.news_title = data.data.news_title;
-    //         this.create_time = data.data.create_time;
-    //       } else if (data.code === "204") {
-    //         this.$bus.$emit("toast", data.data);
-    //       }
-    //     })
-    //     .catch(function(error) {
-    //       console.log(error);
-    //     });
-    // }
+    loading() {
+      this.axios
+        .post("user/newsinfo", {
+          id: this.id
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.detail = data.data.news_content;
+            this.news_title = data.data.title;
+            this.create_time = data.data.create_time;
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }
   }
 };
 </script>

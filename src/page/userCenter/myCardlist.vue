@@ -1,46 +1,48 @@
 <template>
   <div id="myCardlist">
     <com-head :opacity="1">我的银行卡</com-head>
-    <!-- <div class="card" v-for="(item,index) in message" :key="index">
-      <div class="left">
-        <div class="img"><img :src="item.img" alt="" srcset=""></div>
-      </div>
-      <div class="right">
-        <p>{{item.name}}</p>
-        <p>{{item.type}}</p>
-        <p>{{item.number}}</p>
-      </div>
-    </div>
-    <div class="box">
-        <span><i class="iconfont icon-add"/>&emsp;添加银行卡</span>
-        <i class="iconfont icon-next"/>
-    </div>-->
+    <div class="keepdata" @click="keepdata"><img src="../../assets/image/addcard.png"></div>
     <div class="outside">
-      <!-- <div class="lunbo">
-            <mt-swipe :auto="3000">
-              <mt-swipe-item  v-for="(item,index) in images" :key="index"><img :src="item"></mt-swipe-item>
-            </mt-swipe>
-      </div>-->
-      <div class="swiper-container" :options="swiperOption" ref="mySwiper" v-if="images.length>1">
-        <div class="swiper-wrapper">
-          <div
-            class="swiper-slide"
-            v-for="(item,index) in images"
-            :key="index"
-            data-history="index"
-          >
-            <img :src="item">
-          </div>
-        </div>
-        <!-- 如果需要分页器 -->
-        <div class="swiper-pagination"></div>
-
-        <!-- 如果需要导航按钮 -->
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-
-        <!-- 如果需要滚动条 -->
-        <div class="swiper-scrollbar"></div>
+      <p>我的银行卡</p>
+      <swiper :options="swiperOption" ref="mySwiper">
+        <!-- slides -->
+        <swiperSlide v-for="(item,index) in images" :key="index">
+          <img class="swiper-slid_img" :src="item" data-history="index">
+        </swiperSlide>
+        <div class="swiper-pagination" slot="pagination"></div>
+        <!-- Optional controls -->
+      </swiper>
+    </div>
+    <div class="message" border>
+      <p>银行卡信息</p>
+      <!-- <div class="item"><span>开户行</span></div>
+      <div class="item"><span>支行名称</span></div>
+      <div class="item"><span>持卡人姓名</span></div>
+      <div class="item"><span>银行卡号</span></div>-->
+      <table border="1" width="100%" rules="none" frame="void" cellspacing="0">
+        <tr>
+          <td width="30%">开户行</td>
+          <td width="70%"></td>
+        </tr>
+        <tr>
+          <td width="30%">支行名称</td>
+          <td width="70%"></td>
+        </tr>
+        <tr>
+          <td width="30%">持卡人姓名</td>
+          <td width="70%"></td>
+        </tr>
+        <tr>
+          <td width="30%">银行卡号</td>
+          <td width="70%"></td>
+        </tr>
+      </table>
+      <button @click="mask=true">删除银行卡</button>
+    </div>
+    <div class="mask" v-if="mask">
+      <div class="box">
+        <button @click="deleteCard">确定删除银行卡</button>
+        <button @click="mask=false">取消</button>
       </div>
     </div>
   </div>
@@ -53,6 +55,7 @@ export default {
   name: "myCardlist",
   data() {
     return {
+      mask: false,
       message: [
         {
           img: require("../../assets/image/zanshi/card.png"),
@@ -76,17 +79,25 @@ export default {
       images: [
         require("../../assets/image/card1.png"),
         require("../../assets/image/card2.png"),
-        require("../../assets/image/card3.png")
+        require("../../assets/image/card3.png"),
+        require("../../assets/image/card4.png"),
       ],
+      // swiper配置
       swiperOption: {
-        autoplay: {
-          //自动播放
-          delay: 2500,
-          disableOnInteraction: false
+        direction: "horizontal",
+        pagination: {
+          el: ".swiper-pagination"
         },
-        loop: true, //环装轮播
-        history: "love"
-      }
+        autoplay: {
+          delay: 500,
+          stopOnLastSlide: true
+        },
+        activeIndex: false,
+        notNextTick: true,
+        autoplay: true,
+        loop: true,
+        autoplayDisableOnInteraction: false
+      },
     };
   },
   components: {
@@ -95,18 +106,59 @@ export default {
   },
   computed: {},
 
-  created() {},
+  created() {
+    console.log(swiperSlide.activeIndex);
+    this.loading();
+  },
 
   mounted() {},
 
-  methods: {}
+  methods: {
+    loading(){
+      this.axios.post('/user/banklist',{
+        token: this.token()
+				})
+				.then(({data})=>{
+          console.log(data);
+					if (data.code=='200'){
+            this.message = data.data;        						
+					} else if(data.code=='204'){
+						this.$bus.$emit('toast', data.msg);	
+					}
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    deleteCard() {
+
+    },
+    keepdata(){
+
+    }
+  }
 };
 </script>
 <style lang='scss' scoped>
-//  @import "../../static/css/swiper-3.4.0.min.css";
+@import url(../../assets/scss/swiper-3.4.0.min.css);
 #myCardlist {
   padding-top: 112px;
   background-color: #fff;
+  .keepdata {
+    width: 160px;
+    height: 80px;
+    text-align: center;
+    color: #D6AE7B;
+    line-height: 80px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100;
+    img {
+      margin-top: 20px;
+      height: 60%;
+    }
+  }
   .outside {
     width: 690px;
     height: 100%;
@@ -114,6 +166,10 @@ export default {
     // background-color: pink;
     background: rgba(255, 255, 255, 1);
     border-radius: 20px;
+    p {
+      font-size: 32px;
+      font-weight: 500;
+    }
     .swiper-container {
       width: 550px;
       height: 390px;
@@ -123,70 +179,70 @@ export default {
       }
     }
   }
-  //  .card {
-  //      padding-top: 30px;
-  //      box-sizing: border-box;
-  //      width:690px;
-  //       height:232px;
-  //       margin: auto;
-  //       margin-top: 20px;
-  //       background:rgba(227,93,93,1);
-  //       box-shadow:0px -20px 0px 0px rgba(255,255,255,0.5);
-  //       border-radius:10px;
-  //   display: flex;
-  //   justify-content: flex-start;
-  //   // align-items: center;
-  //   background-color: #fff;
-  //   position: relative;
-  //   .left{
-  //       width: 170px;
-  //       .img {
-  //           margin: 0  auto;
-  //       width:90px;
-  //       height:90px;
-  //       img {
-  //           width: 100%;
-  //       }
-  //   }
-  //   }
-  //   .right {
-  //       p:nth-of-type(1) {
-  //       font-size:28px;
-  //       font-family:PingFangSC-Medium;
-  //       font-weight:500;
-  //       color:#000;
-  //       line-height:40px;
-  //       }
-  //       p:nth-of-type(2) {
-  //       font-size:26px;
-  //       font-family:PingFangSC-Medium;
-  //       font-weight:500;
-  //       color:#000;
-  //       line-height:50px;
-  //       }
-  //       p:nth-of-type(3) {
-  //           margin-top: 20px;
-  //       font-size:32px;
-  //       font-family:PingFangSC-Medium;
-  //       font-weight:500;
-  //       color:#000;
-  //       line-height:40px;
-  //       }
-  //   }
-
-  //  }
-  //  .box {
-  //     margin: 30px 0px;
-  //     padding: 0 30px;
-  //     color: #888;
-  //     background-color: #2A2A2A;
-  //     display: flex;
-  //     justify-content: space-between;
-  //     align-items: center;
-  //     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  //     line-height: 100px;
-
-  //   }
-  
+  .message {
+    width: 630px;
+    height: 266px;
+    margin: auto;
+    margin-top: 100px;
+    p {
+      text-align: center;
+      line-height: 80px;
+      font-size: 26px;
+      font-family: PingFangSC-Medium;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.9);
+    }
+    // border:1px solid rgba(221,221,221,1);
+    table,
+    tr {
+      border: 1px solid rgba(221, 221, 221, 1);
+      line-height: 70px;
+    }
+    td {
+      padding-left: 10px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 400px;
+      height: 76px;
+      display: block;
+      margin: 64px auto;
+      font-size: 26px;
+      color: #fff;
+      background: linear-gradient(
+        270deg,
+        rgba(255, 220, 182, 1) 0%,
+        rgba(214, 174, 123, 1) 100%
+      );
+      border-radius: 38px;
+    }
+  }
+  .mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 50;
+    background: rgba(0, 0, 0, 0.6);
+    .box {
+      position: absolute;
+      bottom: 3%;
+      left: 16px;
+      button {
+        width: 718px;
+        height: 112px;
+        background: rgba(248, 248, 248, 0.82);
+        border-radius: 28px;
+        font-size: 34px;
+      }
+      button:nth-of-type(1) {
+        margin-bottom: 16px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: rgba(241, 0, 0, 1);
+      }
+    }
+  }
 }
 </style>

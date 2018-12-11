@@ -4,9 +4,9 @@
     <!-- 公告 -->
     <div class="notice" v-for="item in notice" :key="item.id" @click="noticeDetail(item.id)">
         <div class="left">
-            <p>{{item.news_title}}1111111111111111</p>
-            <p>{{item.create_time}}111111111111112222222222222222222222222</p>
-            <p>1111111111111111</p>
+            <p>{{item.title}}</p>
+            <p>{{item.content}}</p>
+            <p>{{item.create_time}}</p>
         </div>
     </div>
   </div>
@@ -26,29 +26,29 @@ export default {
   created() {},
 
   mounted() {
-    // this.loading();
+    this.loading();
   },
 
   methods: {
-    // loading() {
-    //   this.axios
-    //     .post("apiindex/newslist", {
-    //       token: this.token()
-    //     })
-    //     .then(({ data }) => {
-    //       console.log(data);
-    //       if (data.code === "200") {
-    //         this.notice = data.data;
-    //       } else if (data.code === "204") {
-    //         this.$bus.$emit("toast", data.data);
-    //       } else if (data.code === "205") {
-    //         this.$bus.$emit("toast", '暂无数据');
-    //       }
-    //     })
-    //     .catch(function(error) {
-    //       console.log(error);
-    //     });
-    // },
+    loading() {
+      this.axios
+        .post("user/newslist", {
+          token: this.token()
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.notice = data.data;
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "205") {
+            this.$bus.$emit("toast", '暂无数据');
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     shownav() {
       this.$bus.$emit("navlist");
     },

@@ -44,7 +44,7 @@
           <input type="text" v-model="code" placeholder="请输入邀请码">
         </div>
       </div>
-      <div class="jiantou">
+      <div class="jiantou" @click="submitTo">
         <img src="../assets/image/jiantou.png">
       </div>
     </div>
@@ -56,8 +56,8 @@ export default {
   name: "login",
   data() {
     return {
-      login: false,
-      register: true,
+      login: true,
+      register: false,
       phone: "",
       password: "",
       btntxt: "获取验证码",
@@ -80,37 +80,100 @@ export default {
   mounted() {},
 
   methods: {
-    verification () {
-      let regTel = /^(1[3-9])\d{9}$/;
-			if (!this.tel){
-        this.$bus.$emit('toast', '手机号不能为空');       
-      } else if (!regTel.test(this.tel)) {
-        this.$bus.$emit("toast", "手机号码不合法");
-      } else if (!this.verify){
+    submitTo(){
+      if (this.login === true ) {
+        //登录
+        this.loginSubmit();
+      } else if (this.register === true) {
+        //注册
+        this.resSubmit();
+      }
+    }, 
+    loginSubmit(){
+      if (!this.phone){
+        this.$bus.$emit('toast', '请输入手机号');       
+      } else if (!this.password){
+        this.$bus.$emit('toast', '请输入登录密码');       
+      } else {
+        this.axios.post('register/login',{
+          password: this.password,
+          user_num: this.phone,
+				})
+				.then(({data})=>{
+					if (data.code=='200'){
+            if (!localStorage.token) {
+              localStorage.setItem("token", data.data);
+            } else {
+              localStorage.removeItem("token");
+              localStorage.setItem("token", data.data);
+            }
+            this.$router.push("index");
+            this.$bus.$emit("toast", "登录成功");	           						
+					} else if(data.code=='204'){
+						this.$bus.$emit('toast', data.msg);	
+					}
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      }
+    },
+    resSubmit(){
+      if (!this.verify){
         this.$bus.$emit('toast', '验证码不能为空');       
       } else if (!this.loginpass){
         this.$bus.$emit('toast', '登录密码不能为空');       
       } else if (!this.safepass) {
         this.$bus.$emit('toast', '支付密码不能为空');
       } else if (!this.code) {
-        this.$bus.$emit('toast', '邀请码');
+        this.$bus.$emit('toast', '邀请码不能为空');
       } else {
+        this.axios.post('register/reg',{
+          password: this.loginpass.replace(/\s/g,''),
+          sale_code: this.safepass,
+          phone: this.tel,
+          pid: this.code,
+          param: this.verify,
+				})
+				.then(({data})=>{
+					if (data.code=='200'){
+            this.$router.push("login");
+            this.$bus.$emit('toast', data.msg);	           						
+					} else if(data.code=='204'){
+						this.$bus.$emit('toast', data.msg);	
+					}
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      }
+    },
+    verification () {
+      let regTel = /^(1[3-9])\d{9}$/;
+			if (!this.tel){
+        this.$bus.$emit('toast', '手机号不能为空');       
+      } else if (!regTel.test(this.tel)) {
+        this.$bus.$emit("toast", "手机号码不合法");
+      } else {
+			  this.isSend = true;
 				this.axios.post('register/getcode',{
           type: '1',
           account: this.tel
 				})
-				.then((response)=>{
-					if (response.data=='1'){
-						this.sendSMSTime = 60;
-						this.isSend = true;
-						this.disabled = true;
-						this.btntxt = '已发送(' + this.sendSMSTime + ')s';
-						this.timer();
-					}else if(response.data=='2'){
-						this.$bus.$emit('toast', '手机号已注册');	
-						this.disabled = false;
+				.then(({data})=>{
+					if (data.code=='200'){
+            this.sendSMSTime = 60;
+            this.isSend = true;
+            this.btntxt = '已发送(' + this.sendSMSTime + ')s';
+					  this.timer();
+            this.$bus.$emit('toast', data.msg);	           						
+					} else if(data.code=='204'){
+						this.$bus.$emit('toast', data.msg);	
 					}
-				})
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
 			}			
     },
     timer () {
@@ -271,10 +334,10 @@ export default {
       input {
         margin-left: 10px;
         padding-left: 10px;
-        width: 290px;
+        width: 270px;
       }
       button {
-        width: 140px;
+        width: 160px;
         background: rgba(237, 70, 70, 0);
         border-radius: 10px;
         color: #D6AE7B;

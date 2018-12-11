@@ -13,6 +13,8 @@ import comTime from '../../components/time_picker';
 import butFoot from '../../components/button_foot';
 // 导航栏
 import navlist from '../../components/navlist';
+// 公告文字轮播
+import notice from '../../components/notice';
 
 // 挂载全局组件
 Vue.component('comButton', comButton);
@@ -22,3 +24,4 @@ Vue.component('imgFoot', imgFoot);
 Vue.component('comTime', comTime);
 Vue.component('butFoot', butFoot);
 Vue.component('navlist', navlist);
+Vue.component('noticeSwiper', notice);

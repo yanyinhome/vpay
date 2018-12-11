@@ -103,7 +103,7 @@ export default {
           color: #000;
           font-size: 28px;
           border-radius: 39px;
-          background: #FFB84B;
+          background: #D6AE7B;
           // @include bgChangeStyle();
         }
       }

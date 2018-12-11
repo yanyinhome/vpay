@@ -17,6 +17,7 @@ import addCard from '../page/userCenter/addCard.vue';                           
 import myCardlist from '../page/userCenter/myCardlist.vue';                      //我的银行卡
 import Cardmes from '../page/userCenter/Cardmes.vue';                            //添加银行卡信息
 import Verify from '../page/userCenter/Verify.vue';                              //验证手机号
+import shareMes from '../page/userCenter/shareMes.vue';                          //个人信息分享
 
 
 export default [
@@ -84,5 +85,9 @@ export default [
         path: '/Verify',
         component: Verify,
         name: 'Verify'
+    },{
+        path: '/shareMes',
+        component: shareMes,
+        name: 'shareMes'
     },
 ]

@@ -1,5 +1,6 @@
 <template>
   <div id='shoplist'>
+    <com-foot :select="2"></com-foot>
 
   </div>
 </template>

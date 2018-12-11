@@ -101,7 +101,7 @@ Vue.filter('hideAddress', function (value) {
 Vue.prototype.axios = axios.create({
   baseURL: 'http://swyj.cadhx.com/api/',
   timeout: 10000,
-  withCredentials: true,
+  withCredentials: false,
   transformRequest: [function (data) {
     data = Qs.stringify(data);
     return data;

@@ -7,7 +7,7 @@
     </div>
     <div class="usermenu">
         <router-link class="item" tag="div" to=""><span>版本信息</span><span style="color:rgba(136,136,136,1);">{{edition}}</span></router-link>
-        <router-link class="item" tag="div" to=""><span>关于我们</span><i class="iconfont icon-next"></i></router-link>
+        <router-link class="item" tag="div" :to="{name: 'rewritePassword',query:{status: '2'}}"><span>关于我们</span><i class="iconfont icon-next"></i></router-link>
     </div>
   </div>
 </template>
@@ -17,7 +17,8 @@ export default {
   name: "systemSetup",
   data() {
     return {
-        edition: '1.0'
+      show: true,
+      edition: ''
     };
   },
 
@@ -25,10 +26,30 @@ export default {
 
   created() {},
 
-  mounted() {},
+  mounted() {
+    this.loading();
+  },
 
   methods: {
-   
+    loading(){
+      this.axios.post('/user/system',{
+        token: this.token()
+				})
+				.then(({data})=>{
+          console.log(data);
+					if (data.code=='200'){
+            this.edition = data.data.edtion;	    						
+					} else if(data.code=='204'){
+						this.$bus.$emit('toast', data.msg);	
+					}
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    abountmes(){
+
+    }
   }
 };
 </script>

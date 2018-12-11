@@ -3,9 +3,9 @@
     <div class="usernav">
       <div class="nav">
         <div class="logo"  @click="toUsercenter">
-          <img src="../assets/image/zanshi/touxiang.jpg">
+          <img :src="user.img">
         </div>
-        <div class="phone">{{phone}}</div>
+        <div class="phone">{{user.phone}}</div>
         <div class="box" @click="toNotice">
           <div class="left">
             <img src="../assets/image/gonggao.png">
@@ -53,7 +53,7 @@
         </div>
         <com-button class="btn" :click="signout">退出登录</com-button>
         <div class="footnav">
-          <div class="box1">
+          <div class="box1" @click="toShare">
             <img src="../assets/image/fenxiang.png">
             <p>分享</p>
           </div>
@@ -100,7 +100,7 @@ export default {
       animateIndex: 0
     };
   },
-
+  props: ["user"],
   computed: {},
 
   created() {
@@ -150,11 +150,15 @@ export default {
     },
     toCardlist() {
       this.navout();
-      this.$router.push("notice");
+      this.$router.push("myCardlist");
     },
     toSystem() {
       this.navout();
       this.$router.push("systemSetup");
+    },
+    toShare() {
+      this.navout();
+      this.$router.push("shareMes");
     },
     signout() {
       this.navout();

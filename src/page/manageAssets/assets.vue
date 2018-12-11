@@ -1,5 +1,6 @@
 <template>
   <div id='assets'>
+    <com-foot :select="1"></com-foot>
 
   </div>
 </template>

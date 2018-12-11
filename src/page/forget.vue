@@ -1,11 +1,6 @@
 <template>
   <div id="forget">
     <div class="login">
-      <div class="title">
-        <!-- <span :class="{active:login}" @click="login1()">登录</span>
-        <span :class="{active:register}" @click="register1()">注册</span> -->
-      </div>
-      <!-- 登录 -->
       <div class="logininp">
         <div class="item">
           <input type="text" v-model="tel" placeholder="请输入手机号">
@@ -24,7 +19,7 @@
           <input type="password" v-model="loginpass2" placeholder="确认登录密码">
         </div>
       </div>
-      <div class="jiantou">
+      <div class="jiantou" @click="submitTo">
         <img src="../assets/image/jiantou.png">
       </div>
     </div>
@@ -54,32 +49,56 @@ export default {
   mounted() {},
 
   methods: {
+    submitTo(){
+      if (!this.loginpass1||!this.loginpass2){
+        this.$bus.$emit('toast', '密码不能为空');       
+      } else if (this.loginpass1 !== this.loginpass2) {
+        this.$bus.$emit("toast", "俩次输入的密码不一致");
+      } else {
+        this.axios.post('register/forgetpwd',{
+          param: this.verify,
+          account: this.tel,
+          newpassword: this.loginpass1.replace(/\s/g,'')
+				})
+				.then(({data})=>{
+					if (data.code=='200'){
+            this.$router.push("login");
+            this.$bus.$emit('toast', data.msg);	           						
+					} else if(data.code=='204'){
+						this.$bus.$emit('toast', data.msg);	
+					}
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      }
+    },
     verification () {
       let regTel = /^(1[3-9])\d{9}$/;
 			if (!this.tel){
         this.$bus.$emit('toast', '手机号不能为空');       
       } else if (!regTel.test(this.tel)) {
         this.$bus.$emit("toast", "手机号码不合法");
-      } else if (!this.loginpass1||!this.loginpass2){
-        this.$bus.$emit('toast', '登录密码不能为空');       
-      } else if (this.loginpass1!=this.loginpass2) {
-        this.$bus.$emit('toast', '俩次输入的密码不一致');
       } else {
-				// this.axios.post('Reg/send_sms',{
-				// 	mobile: this.tel,
-				// })
-				// .then((response)=>{
-				// 	if (response.data=='1'){
-				// 		this.sendSMSTime = 60;
-				// 		this.isSend = true;
-				// 		this.disabled = true;
-				// 		this.btntxt = '已发送(' + this.sendSMSTime + ')s';
-				// 		this.timer();
-				// 	}else if(response.data=='2'){
-				// 		this.$bus.$emit('toast', '手机号已注册');	
-				// 		this.disabled = false;
-				// 	}
-				// })
+			  this.isSend = true;
+				this.axios.post('register/getcode',{
+          type: '2',
+          account: this.tel
+				})
+				.then(({data})=>{
+					if (data.code=='200'){
+            this.sendSMSTime = 60;
+            this.isSend = true;
+            this.btntxt = '已发送(' + this.sendSMSTime + ')s';
+					  this.timer();
+            this.$bus.$emit('toast', data.msg);	           						
+					} else if(data.code=='204'){
+						this.$bus.$emit('toast', data.msg);	
+					}
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
 			}			
     },
     timer () {
@@ -181,10 +200,10 @@ export default {
       input {
         margin-left: 10px;
         padding-left: 10px;
-        width: 290px;
+        width: 270px;
       }
       button {
-        width: 140px;
+        width: 160px;
         background: rgba(237, 70, 70, 0);
         border-radius: 10px;
         color: #D6AE7B;

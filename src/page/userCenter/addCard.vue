@@ -20,14 +20,16 @@ export default {
   },
   watch: {
      numbers(newValue,oldValue){
-        console.log(newValue);
+      console.log(newValue);
      } 
   },
   computed: {},
 
   created () {},
 
-  mounted () {},
+  mounted () {
+    this.news = [2,6,9]
+  },
 
   methods: {}
 }
