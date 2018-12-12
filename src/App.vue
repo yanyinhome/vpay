@@ -92,6 +92,9 @@ export default {
       font-family:PingFangSC-Regular;
       box-sizing: border-box;
       padding-bottom: 150px;
+      .iconfont {
+        // font-size: 30px;
+      }
     }
   }
 </style>

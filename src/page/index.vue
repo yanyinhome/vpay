@@ -1,28 +1,48 @@
 <template>
   <div id="index">
-    <navlist :user= 'user'></navlist>
+    <navlist :user="user"></navlist>
     <!-- <button @click="shownav">左侧导航</button> -->
     <div class="index">
-      <div class="indextop" @click="shownav">
-        <div class="user">
+      <div class="indextop">
+        <div class="user" @click="shownav">
           <div class="left">
             <img :src="user.img">
           </div>
           <div class="right">
-            <p>ID：{{user.phone}}</p>
-            <p>信用：<img src="../assets/image/grade.png" v-for="(item,index) in grade" :key="index"></p>
+            <p>UID：{{user.UID}}</p>
+            <p>
+              信用：
+              <img src="../assets/image/grade.png" v-for="(item,index) in grade" :key="index">
+            </p>
+          </div>
+        </div>
+        <div class="saoma">
+          <div class="img">
+            <img src="../assets/image/saoma.png">
+          </div>
+          <p>扫码支付</p>
+          <div class="yuor">
+            <div class="item">
+              <p>账户余额</p>
+              <p>{{balance}}</p>
+            </div>
+            <div class="item">
+              <p>积分余额</p>
+              <p>{{integral}}</p>
+            </div>
           </div>
         </div>
       </div>
+
       <noticeSwiper :news="news" class="gonggao"></noticeSwiper>
       <div class="turnto">
         <p>账户余额操作</p>
         <div class="box">
-          <div class="item item1">
+          <router-link class="item item1" tag="div" to="turnOut">
             <img src="../assets/image/out.png">转出
-          </div>
+          </router-link>
           <div class="item">
-            <img src="../assets/image/shou.png">收款
+            <img src="../assets/image/shou.png">转入
           </div>
         </div>
       </div>
@@ -63,8 +83,11 @@ export default {
     return {
       user: {
         img: require("../assets/image/zanshi/touxiang.jpg"),
-        phone: "1888888",
+        UID: ""
       },
+      balance: "",
+      integral: "",
+      balance: "",
       grade: [],
       news: [
         "2018年7月30日更新升级版本1.0，各种新功能均已上线",
@@ -83,22 +106,25 @@ export default {
   },
 
   methods: {
-    loading(){
-      this.axios.post('/user/index',{
-        token: this.token()
-				})
-				.then(({data})=>{
+    loading() {
+      this.axios
+        .post("/user/index", {
+          token: this.token()
+        })
+        .then(({ data }) => {
           console.log(data);
-					if (data.code=='200'){
-            this.user.img = data.data.head_img;	           						
-            this.user.tel = data.data.phone;	   				
-            this.news = data.data.news;	
+          if (data.code == "200") {
+            this.user.img = data.data.head_img;
+            this.user.UID = data.data.UID;
+            this.balance = data.data.balance;
+            this.integral = data.data.integral;
+            this.news = data.data.news;
             for (let index = 0; index < data.data.credit; index++) {
               this.grade.push(1);
-            }	           						
-					} else if(data.code=='204'){
-						this.$bus.$emit('toast', data.msg);	
-					}
+            }
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
         })
         .catch(function(error) {
           console.log(error);
@@ -142,7 +168,59 @@ export default {
             display: inline-block;
             width: 26px;
             height: 26px;
-
+          }
+        }
+      }
+      .saoma {
+        color: #fff;
+        .img {
+          margin: auto;
+          margin-top: 70px;
+          width: 204px;
+          height: 190px;
+          img {
+            width: 100%;
+          }
+        }
+        p {
+          text-align: center;
+          line-height: 140px;
+        }
+        .yuor {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          .item {
+            width: 350px;
+            // border-right: 1Px solid rgba(68,68,68,1);
+            p:nth-of-type(1) {
+              font-size: 24px;
+              font-family: PingFangSC-Regular;
+              font-weight: 400;
+              color: rgba(255, 255, 255, 1);
+              line-height: 50px;
+            }
+            p:nth-of-type(2) {
+              font-size: 28px;
+              font-family: PingFangSC-Regular;
+              font-weight: 400;
+              color: rgba(214, 174, 123, 1);
+              line-height: 60px;
+            }
+          }
+          .item:nth-of-type(1) {
+            position: relative;
+            &:after {
+              content: "";
+              position: absolute;
+              height: 60px;
+              width: 2px;
+              right: 0;
+              top: 50%;
+              transform: translateY(-50%);
+              background: rgba(68, 68, 68, 1);
+            }
           }
         }
       }
@@ -162,7 +240,7 @@ export default {
         font-weight: 400;
         color: rgba(234, 205, 163, 1);
         line-height: 60px;
-        border-bottom: 1px solid rgba(68, 68, 68, 1);
+        border-bottom: 1Px solid rgba(68, 68, 68, 1);
       }
       .box {
         display: flex;
@@ -184,7 +262,7 @@ export default {
           }
         }
         .item1 {
-          border-right: 1px solid rgba(68, 68, 68, 1);
+          border-right: 1Px solid rgba(68, 68, 68, 1);
         }
       }
       .box1 {

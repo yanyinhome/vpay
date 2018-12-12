@@ -1,40 +1,48 @@
 <template>
   <div id="myCardlist">
-    <com-head :opacity="1">我的银行卡</com-head>
-    <div class="keepdata" @click="keepdata"><img src="../../assets/image/addcard.png"></div>
+    <com-head :opacity="1">我的银行卡
+      <div class="keepdata" @click="keepdata">
+        <img src="../../assets/image/addcard.png">
+      </div>
+    </com-head>
+
     <div class="outside">
       <p>我的银行卡</p>
-      <swiper :options="swiperOption" ref="mySwiper">
-        <!-- slides -->
-        <swiperSlide v-for="(item,index) in images" :key="index">
-          <img class="swiper-slid_img" :src="item" data-history="index">
-        </swiperSlide>
-        <div class="swiper-pagination" slot="pagination"></div>
-        <!-- Optional controls -->
-      </swiper>
+      <div class="lunbo">
+        <div class="number">{{bankmes.bank_num}}</div>
+        <swiper :options="swiperOption" ref="mySwiper">
+          <swiperSlide v-for="(item,index) in images" :key="index">
+            <img class="swiper-slid_img" :src="item" data-history="index">
+          </swiperSlide>
+          <div class="swiper-pagination" slot="pagination"></div>
+        </swiper>
+      </div>
+
+      <div class="moren"  @click="checkbox" >
+        <i v-if="bankmes.default_bank" class="iconfont icon-fuxuankuang"/>
+        <i v-if="!bankmes.default_bank" class="iconfont icon-fangkuang"/>&nbsp;
+        <span v-if="bankmes.default_bank">默认银行卡</span>
+        <span v-if="!bankmes.default_bank">设置为默认银行卡</span>
+      </div>
     </div>
     <div class="message" border>
       <p>银行卡信息</p>
-      <!-- <div class="item"><span>开户行</span></div>
-      <div class="item"><span>支行名称</span></div>
-      <div class="item"><span>持卡人姓名</span></div>
-      <div class="item"><span>银行卡号</span></div>-->
       <table border="1" width="100%" rules="none" frame="void" cellspacing="0">
         <tr>
           <td width="30%">开户行</td>
-          <td width="70%"></td>
+          <td width="70%">{{bankmes.open_bank}}</td>
         </tr>
         <tr>
           <td width="30%">支行名称</td>
-          <td width="70%"></td>
+          <td width="70%">{{bankmes.bank_address}}</td>
         </tr>
         <tr>
           <td width="30%">持卡人姓名</td>
-          <td width="70%"></td>
+          <td width="70%">{{bankmes.bank_name}}</td>
         </tr>
         <tr>
           <td width="30%">银行卡号</td>
-          <td width="70%"></td>
+          <td width="70%">{{bankmes.bank_num}}</td>
         </tr>
       </table>
       <button @click="mask=true">删除银行卡</button>
@@ -54,33 +62,21 @@ import { swiper, swiperSlide } from "vue-awesome-swiper";
 export default {
   name: "myCardlist",
   data() {
+    let that = this;
     return {
+      checkbox1: true,
+      checkbox2: false,
       mask: false,
-      message: [
-        {
-          img: require("../../assets/image/zanshi/card.png"),
-          name: "农行",
-          type: "储蓄卡",
-          number: "888888"
-        },
-        {
-          img: require("../../assets/image/zanshi/card.png"),
-          name: "农行",
-          type: "储蓄卡",
-          number: "888888"
-        },
-        {
-          img: require("../../assets/image/zanshi/card.png"),
-          name: "农行",
-          type: "储蓄卡",
-          number: "888888"
-        }
-      ],
-      images: [
+      bankmes: {},
+      bankIndex: "0",
+      lengthmes: "", //数据长度
+      message: [],
+      images: [],
+      img: [
         require("../../assets/image/card1.png"),
         require("../../assets/image/card2.png"),
         require("../../assets/image/card3.png"),
-        require("../../assets/image/card4.png"),
+        require("../../assets/image/card4.png")
       ],
       // swiper配置
       swiperOption: {
@@ -88,16 +84,23 @@ export default {
         pagination: {
           el: ".swiper-pagination"
         },
-        autoplay: {
-          delay: 500,
-          stopOnLastSlide: true
-        },
-        activeIndex: false,
+        // autoplay: {
+        //   delay: 500,
+        //   stopOnLastSlide: true
+        // },
+        // loop: true,
         notNextTick: true,
-        autoplay: true,
-        loop: true,
-        autoplayDisableOnInteraction: false
-      },
+        autoplayDisableOnInteraction: true,
+
+        on: {
+          slideChangeTransitionStart() {
+            // console.log(this.activeIndex);
+            that.bankmes = that.message[this.activeIndex];
+            that.bankIndex = this.activeIndex;
+            // console.log(that.message[this.activeIndex]);
+          }
+        }
+      }
     };
   },
   components: {
@@ -107,48 +110,112 @@ export default {
   computed: {},
 
   created() {
-    console.log(swiperSlide.activeIndex);
     this.loading();
   },
 
   mounted() {},
 
   methods: {
-    loading(){
-      this.axios.post('/user/banklist',{
-        token: this.token()
-				})
-				.then(({data})=>{
+    // 从图片列表随机取出数据
+    takeout() {
+      this.message.forEach((element, index) => {
+        const img = this.img[Math.floor(Math.random() * 4)];
+        this.images.push(img);
+      });
+      // console.log(this.images);
+    },
+    loading() {
+      this.axios
+        .post("user/banklist", {
+          token: this.token()
+        })
+        .then(({ data }) => {
           console.log(data);
-					if (data.code=='200'){
-            this.message = data.data;        						
-					} else if(data.code=='204'){
-						this.$bus.$emit('toast', data.msg);	
-					}
+          if (data.code == "200") {
+            this.message = data.data;
+            this.lengthmes = data.data.length;
+            this.bankmes = this.message[0];
+            this.takeout();
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
         })
         .catch(function(error) {
           console.log(error);
         });
     },
     deleteCard() {
-
+      console.log(this.bankIndex);
+      this.axios
+        .post("user/delbank", {
+          token: this.token(),
+          id: this.bankmes.id
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code == "200") {
+            this.mask = false;
+            this.$router.go(0);
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code == "204") {
+            this.mask = false;
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
-    keepdata(){
-
+    checkbox() {
+      this.bankmes.default_bank = !this.bankmes.default_bank;
+      if (this.bankmes.default_bank) {
+        this.$bus.$emit("comAlert", {
+          title: "温馨提示",
+          info: "你确定将此银行卡设置为默认",
+          button: [
+            {
+              text: "确认",
+              callback: () => {
+                this.axios
+                  .post("user/setdefbank", {
+                    token: this.token(),
+                    id: this.bankmes.id
+                  })
+                  .then(({ data }) => {
+                    console.log(data);
+                    if (data.code === "200") {
+                      this.$router.go(0);
+                      this.$bus.$emit("toast", data.msg);
+                    } else if (data.status === "204") {
+                      this.$bus.$emit("toast", data.msg);
+                    }
+                  });
+              }
+            },
+            {
+              text: "取消",
+              callback: () => {}
+            }
+          ]
+        });
+      }
+    },
+    keepdata() {
+      this.$router.push("addCard");
     }
   }
 };
 </script>
-<style lang='scss' scoped>
+<style lang='scss'>
 @import url(../../assets/scss/swiper-3.4.0.min.css);
 #myCardlist {
-  padding-top: 112px;
+  padding-top: 82px;
   background-color: #fff;
   .keepdata {
     width: 160px;
     height: 80px;
     text-align: center;
-    color: #D6AE7B;
+    color: #d6ae7b;
     line-height: 80px;
     position: absolute;
     right: 0;
@@ -156,26 +223,68 @@ export default {
     z-index: 100;
     img {
       margin-top: 20px;
-      height: 60%;
+      height: 55%;
     }
   }
   .outside {
-    width: 690px;
-    height: 100%;
+    // width: 690px;
+    height: 604px;
     margin: 0 auto;
-    // background-color: pink;
-    background: rgba(255, 255, 255, 1);
-    border-radius: 20px;
+    background: url("../../assets/image/cardbg.png");
+    background-size: contain;
     p {
+      padding-left: 30px;
+      padding-top: 30px;
+      box-sizing: border-box;
       font-size: 32px;
       font-weight: 500;
     }
-    .swiper-container {
-      width: 550px;
-      height: 390px;
-      margin: 20px auto;
-      img {
-        width: 100%;
+    .lunbo {
+      position: relative;
+      .number {
+        color: #fff;
+        font-size: 40px;
+        position: absolute;
+        bottom: 104px;
+        left: 50%;
+        transform: translateX(-59%);
+        z-index: 99;
+      }
+      .swiper-container {
+        width: 550px;
+        height: 390px;
+        margin: 20px auto;
+        // .swiper-pagination-bullets {
+        //   bottom: -90px;
+        //   z-index: 100;
+        //   .swiper-pagination-bullet {
+        //   widows: 20px;
+        //   height: 20px;
+        // }
+        // }
+        // .swiper-pagination-bullet-active {
+        //   background: red;
+        // }
+        img {
+          width: 100%;
+        }
+      }
+    }
+    .moren {
+      margin-bottom: 30px;
+      line-height: 60px;
+      box-sizing: border-box;
+      text-align: center;
+      font-size: 12px;
+      .iconfont {
+        color: #979797;
+        font-size: 30px;
+        box-sizing: border-box;
+      }
+      .icon-fuxuankuang {
+        color: #eacda3;
+        font-size: 26px;
+        box-sizing: border-box;
       }
     }
   }
@@ -183,7 +292,7 @@ export default {
     width: 630px;
     height: 266px;
     margin: auto;
-    margin-top: 100px;
+    margin-top: 50px;
     p {
       text-align: center;
       line-height: 80px;
@@ -192,10 +301,10 @@ export default {
       font-weight: 500;
       color: rgba(0, 0, 0, 0.9);
     }
-    // border:1px solid rgba(221,221,221,1);
+    // border:1Px solid rgba(221,221,221,1);
     table,
     tr {
-      border: 1px solid rgba(221, 221, 221, 1);
+      border: 1Px solid rgba(221, 221, 221, 1);
       line-height: 70px;
     }
     td {

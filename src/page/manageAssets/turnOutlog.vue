@@ -1,0 +1,112 @@
+<template>
+  <div id="turnOutlog">
+    <com-head :opacity="0">{{name}}</com-head>
+    <!-- 转入记录 -->
+    <div class="chargeLog" v-for="item in log" :key="item.id">
+      <div class="left">
+        <p>{{item.content}}</p>
+        <p>{{item.create_time}}</p>
+      </div>
+      <div class="right" :class="{active: item.money>0}">
+        <p>{{item.num}}</p>
+        <p>{{item.after_ban}}</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "turnOutlog",
+  data() {
+    return {
+      status: this.$route.query.status,
+      name: '',
+      log: [],
+    };
+  },
+
+  computed: {},
+
+  created() {
+    if (this.status == "1") {
+      //转出记录
+      this.name = "转出记录";
+      this.loading('1');
+    } else if (this.status == "2") {
+      //转入记录
+      this.name = "转入记录";
+      this.loading();
+    }
+  },
+
+  mounted() {},
+
+  methods: {
+    loading(type) {
+      this.axios
+        .post("exchange/turnoutlog", {
+          token: this.token(),
+          type: type
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.log = data.data;
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+  }
+};
+</script>
+<style lang='scss' scoped>
+#turnOutlog {
+  padding-top: 82px;
+  .chargeLog {
+    margin: 0 32px;
+    height: 144px;
+    border-bottom: 1Px solid rgba(68,68,68,1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .left {
+      width: 400px;
+      p:nth-of-type(1) {
+        // padding-top: 20px;
+        font-size: 28px;
+        color: #C1C1C1;
+        line-height: 60px;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      p:nth-of-type(2) {
+        font-size: 24px;
+        color: #C1C1C1;
+        line-height: 40px;
+      }
+    }
+    .right {
+      p:nth-of-type(1) {
+        font-size: 28px;
+        color: #fff;
+        line-height: 60px;
+      }
+      p:nth-of-type(2) {
+        font-size: 24px;
+        color: #888;
+        line-height: 40px;
+      }
+    }
+    .active {
+      color: #ec0202;
+    }
+  }
+}
+</style>

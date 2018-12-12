@@ -15,12 +15,16 @@ export default {
   name: 'addCard',
   data () {
     return {
-      numbers: ''
+      numbers: '',
+      // code: '',
     };
   },
   watch: {
      numbers(newValue,oldValue){
-      console.log(newValue);
+      if(newValue.length==6){
+        // this.code = newValue;
+        this.verification(newValue);
+      }
      } 
   },
   computed: {},
@@ -28,10 +32,30 @@ export default {
   created () {},
 
   mounted () {
-    this.news = [2,6,9]
+    
   },
-
-  methods: {}
+  methods: {
+    verification(newValue){
+      console.log(newValue);
+      this.axios
+        .post("user/beforaddbank", {
+          token: this.token(),
+          sale_code: newValue
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code == "200") {
+            this.$router.push('Cardmes');
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }
+  }
 }
 
 </script>

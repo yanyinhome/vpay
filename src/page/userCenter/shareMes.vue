@@ -5,8 +5,10 @@
     <p>一种新的生活方式</p>
     <div class="sharemes">
       <p>你的邀请码</p>
-      <p>{{code}}<input :id="clone" type="text" v-model="text" readonly></p>
-      <button>复制</button>
+      <p>
+        <input id="clone" type="text" v-model="code" readonly>
+      </p>
+      <button @click="clone_code">复制</button>
       <p>邀请好友下载，注册有好礼相送</p>
       <div class="load">
         ---------------&emsp;
@@ -14,7 +16,7 @@
       </div>
       <div class="erweima">
         <div class="img">
-          <img src>
+          <canvas id="canvas" width="100px" height="100px"></canvas>
         </div>
         <p>扫码下载Vpay钱包</p>
         <p>加入Vpay享受更多权益</p>
@@ -24,12 +26,13 @@
 </template>
 
 <script>
+import QRCode from "qrcode";
 export default {
   name: "shareMes",
   data() {
     return {
       code: "12345",
-      url: ''
+      url: ""
     };
   },
 
@@ -42,6 +45,18 @@ export default {
   mounted() {},
 
   methods: {
+    qrcode() {
+      var canvas = document.getElementById("canvas");
+      // const ctx = canvas.getContext('2d');
+      // ctx.lineTo(100,100);
+      QRCode.toCanvas(
+        canvas,
+        this.url,
+        function(error) {
+          if (error) console.error(error);
+        }
+      );
+    },
     loading() {
       this.axios
         .post("/user/share", {
@@ -52,16 +67,25 @@ export default {
           if (data.code === "200") {
             this.url = data.data.url;
             this.code = data.data.UID;
+            this.qrcode();
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
-          } else if (data.code === "205") {
-            this.$bus.$emit("toast", '暂无数据');
           }
         })
         .catch(function(error) {
           console.log(error);
         });
     },
+    clone_code() {
+      let Url = document.getElementById("clone");
+      Url.select(); // 选择对象
+      document.execCommand("Copy"); // 执行浏览器复制命令
+      if (document.execCommand("Copy")) {
+        this.$bus.$emit("toast", "复制成功");
+      } else {
+        this.$bus.$emit("toast", "若复制失败，请手动复制");
+      }
+    }
   }
 };
 </script>
@@ -98,16 +122,21 @@ export default {
       line-height: 140px;
     }
     p:nth-of-type(2) {
-      font-size: 60px;
-      font-family: HelveticaNeue-Medium;
-      font-weight: 600;
-      color: rgba(214, 175, 124, 1);
-      line-height: 74px;
+      input {
+        width: 100%;
+        font-size: 60px;
+        font-family: HelveticaNeue-Medium;
+        font-weight: 600;
+        color: rgba(214, 175, 124, 1);
+        line-height: 74px;
+        text-align: center;
+      }
     }
     button {
       margin-top: 20px;
       width: 180px;
       height: 60px;
+      color: #fff;
       background: linear-gradient(
         140deg,
         rgba(234, 205, 163, 1) 0%,
@@ -157,9 +186,9 @@ export default {
     .erweima {
       .img {
         margin: 10px auto;
-        width: 220px;
-        height: 220px;
-        background-color: #000;
+        // width: 220px;
+        // height: 220px;
+        // background-color: #000;
       }
       p:nth-of-type(1) {
         font-size: 28px;

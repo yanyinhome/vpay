@@ -1,19 +1,30 @@
 <template>
-  <div id='userMessage'>
-    <com-head :opacity='0'>个人资料</com-head>
+  <div id="userMessage">
+    <com-head :opacity="0">个人资料</com-head>
     <div class="keepdata" @click="keepdata">保存</div>
     <div class="userMessage">
-        <div class="box1"  @click="portrait">
-            <span>头像</span>
-            <input class="imginp" ref="portrait" name="imgLocal" id="imgLocal" type='file' accept="image/*" @change="shangchuan"/>
-            <div class="tou">
-               <div class="touxiang">
-                  <img :src="yulan">
-               </div>
-               <i class="iconfont icon-next"></i>
-            </div>
+      <div class="box1" @click="portrait">
+        <span>头像</span>
+        <input
+          class="imginp"
+          ref="portrait"
+          name="imgLocal"
+          id="imgLocal"
+          type="file"
+          accept="image/*"
+          @change="shangchuan"
+        >
+        <div class="tou">
+          <div class="touxiang">
+            <img :src="yulan">
+          </div>
+          <i class="iconfont icon-next"></i>
         </div>
-        <div class="item"><span>手机号</span><input type="text" v-model="phone" readonly="readonly"></div>
+      </div>
+      <div class="item">
+        <span>手机号</span>
+        <input type="text" v-model="phone" readonly="readonly">
+      </div>
     </div>
   </div>
 </template>
@@ -23,16 +34,15 @@ export default {
   name: "userMessage",
   data() {
     return {
-      phone: '',
-      yulan: '',
-      picValue: '',
-      newimg: '',
-      
+      phone: "",
+      yulan: "",
+      picValue: "",
+      newimg: ""
     };
   },
 
   computed: {},
- 
+
   created() {},
 
   mounted() {
@@ -49,7 +59,7 @@ export default {
           if (data.code === "200") {
             this.phone = data.data.phone;
             this.yulan = data.data.head_img;
-          } else if (data.code === "201") {
+          } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           }
         })
@@ -59,16 +69,14 @@ export default {
     },
     keepdata() {
       this.axios
-        .post("user/apiuser", {
+        .post("user/editheadimg", {
           token: this.token(),
-          user_avat: this.newimg
+          head_img: this.newimg
         })
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
-            this.$router.push("usercenter");
-            this.$bus.$emit("toast", data.msg);
-          } else if (data.code === "201") {
+            this.$router.push("index");
             this.$bus.$emit("toast", data.msg);
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
@@ -78,7 +86,7 @@ export default {
           console.log(error);
         });
     },
-   
+
     shangchuan(e) {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
@@ -159,7 +167,7 @@ export default {
         this.$bus.$emit("toast", "大于100万像素");
         console.log("超过100W像素");
         count = ~~(Math.sqrt(count) + 1); //计算要分成多少块瓦片
-        //            计算每块瓦片的宽和高
+        //计算每块瓦片的宽和高
         let nw = ~~width;
         let nh = ~~height;
         tCanvas.width = nw;
@@ -196,12 +204,10 @@ export default {
       return ndata;
     },
 
-
-
     // 头像单击事件
     portrait() {
       this.$refs.portrait.click(); // 获取ref为portrait的元素相当于获取id为portrait的元素
-    },
+    }
     // 上传图片
     // shangchuan(e) {
     //   var self = this;
@@ -243,7 +249,7 @@ export default {
     width: 160px;
     height: 80px;
     text-align: center;
-    color: #D6AE7B;
+    color: #d6ae7b;
     line-height: 80px;
     position: absolute;
     right: 0;

@@ -70,6 +70,7 @@ export default {
     left: 10vw;
     width: 80vw;
     text-align: center;
+    z-index: 999;
     .alert_box {
       display: inline-block;
       background: rgba(0, 0, 0, 0.6);

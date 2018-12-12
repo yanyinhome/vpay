@@ -208,7 +208,7 @@ export default {
   .login {
     margin: 0 auto;
     width: 590px;
-    // border: 1px solid #e32;
+    // border: 1Px solid #e32;
     position: relative;
     .jiantou {
       width: 110px;

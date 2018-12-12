@@ -35,6 +35,7 @@ export default {
     loading() {
       this.axios
         .post("user/newsinfo", {
+          token: this.token(),
           id: this.id
         })
         .then(({ data }) => {

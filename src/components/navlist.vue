@@ -5,7 +5,7 @@
         <div class="logo"  @click="toUsercenter">
           <img :src="user.img">
         </div>
-        <div class="phone">{{user.phone}}</div>
+        <div class="phone">{{user.UID}}</div>
         <div class="box" @click="toNotice">
           <div class="left">
             <img src="../assets/image/gonggao.png">
@@ -138,11 +138,13 @@ export default {
     },
     toStore() {
       this.navout();
-      this.$router.push("myStore");
+      this.$bus.$emit("toast", "功能开发中");
+      // this.$router.push("myStore");
     },
     toOrder() {
       this.navout();
-      this.$router.push("notice");
+      this.$bus.$emit("toast", "功能开发中");
+      // this.$router.push("notice");
     },
     toAddress() {
       this.navout();
@@ -174,7 +176,6 @@ export default {
       this.showIn = true;
     },
     navout(data) {
-      console.log(3333);
       if (!this.showIng) return false;
       this.animateIndex = Math.floor(Math.random() * 2);
       this.showOut = false;
@@ -238,7 +239,7 @@ export default {
         justify-content: flex-start;
         align-items: center;
         color: #fff;
-        border-bottom: 1px solid #444;
+        border-bottom: 1Px solid #444;
         padding: 0 30px;
         box-sizing: border-box;
         .left {
