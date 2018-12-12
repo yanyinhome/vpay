@@ -110,24 +110,6 @@ export default {
   mounted() {},
 
   methods: {
-    // loading() {
-    //   this.axios.post("apireg/home_page", {
-    //       token: this.token()
-    //     })
-    //     .then(({ data }) => {
-    //       console.log(data);
-    //     if (data.code === "200") {
-    //         this.huiyuan = data.data.huiyuan;
-    //         this.my = data.data.my;
-    //         this.other = data.data.other;
-    //       } else if (data.code === "204") {
-    //         this.$bus.$emit("toast", data.data);
-    //       }
-    //     })
-    //     .catch(function(error) {
-    //       console.log(error);
-    //     });
-    // },
     toUsercenter() {
       this.navout();
       this.$router.push("userMessage");
@@ -221,6 +203,7 @@ export default {
         margin: 110px auto 0;
         width: 100px;
         height: 100px;
+        border: 1Px solid #222;
         border-radius: 55px;
         overflow: hidden;
         img {

@@ -57,7 +57,7 @@
           </div>
         </div>
       </div>
-      <div class="turnto">
+      <div class="turnto turnto1">
         <div class="box1">
           <div class="item">
             <img src="../assets/image/zichan.png">
@@ -240,7 +240,7 @@ export default {
         font-weight: 400;
         color: rgba(234, 205, 163, 1);
         line-height: 60px;
-        border-bottom: 1Px solid rgba(68, 68, 68, 1);
+        border-bottom: 1px solid rgba(68, 68, 68, 1);
       }
       .box {
         display: flex;
@@ -262,7 +262,7 @@ export default {
           }
         }
         .item1 {
-          border-right: 1Px solid rgba(68, 68, 68, 1);
+          border-right: 1px solid rgba(68, 68, 68, 1);
         }
       }
       .box1 {
@@ -270,8 +270,8 @@ export default {
         justify-content: space-between;
         align-items: center;
         .item {
-          width: 326px;
-          height: 174px;
+          width: 336px;
+          height: 194px;
           background: rgba(42, 42, 42, 1);
           border-radius: 6px;
           color: #fff;
@@ -283,6 +283,10 @@ export default {
           }
         }
       }
+    }
+    .turnto1 {
+      padding: 0px;
+      background: rgba(42, 42, 42, 0);
     }
   }
 }

@@ -12,7 +12,7 @@
       <div class="box2">
         <div class="left">
           <i class="iconfont icon-fangkuang"/>
-          <i class="iconfont icon-fuxuankuang"/>
+          <!-- <i class="iconfont icon-fuxuankuang"/> -->
           <span>设为默认</span>
         </div>
         <div class="right">

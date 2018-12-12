@@ -89,6 +89,10 @@ export default {
         //   stopOnLastSlide: true
         // },
         // loop: true,
+        // slidesOffsetBefore : 30,
+        // slidesOffsetAfter : 30,
+        // // slidesPerView : 3,
+        // spaceBetween : 30,
         notNextTick: true,
         autoplayDisableOnInteraction: true,
 
@@ -266,7 +270,7 @@ export default {
         //   background: red;
         // }
         img {
-          width: 100%;
+          width: 550px;
         }
       }
     }
