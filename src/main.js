@@ -76,6 +76,14 @@ Vue.prototype.nowTime = function () {
 Vue.prototype.$axios = axios;
 
 // 全局过滤器，手机号中间四位隐藏
+Vue.filter('hideNum', function (value) {
+  if (!value){
+    return;
+  }
+  return value.replace(/(.*)/,'*');
+});
+
+// 全局过滤器，手机号中间四位隐藏
 Vue.filter('hideTel', function (value) {
   if (!value){
     return;
@@ -99,7 +107,7 @@ Vue.filter('hideAddress', function (value) {
 
 // axios请求
 Vue.prototype.axios = axios.create({
-  baseURL: 'http://swyj.cadhx.com/api/',
+  baseURL: 'http://www.3wej.com/api/',
   timeout: 10000,
   withCredentials: false,
   transformRequest: [function (data) {

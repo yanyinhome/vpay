@@ -1,7 +1,8 @@
 // 资产管理
 
 import assets from '../page/manageAssets/assets.vue';    
-import turnOut from '../page/manageAssets/turnOut.vue';   //转出  
+import turnOut from '../page/manageAssets/turnOut.vue';   //转出
+import turnIn from '../page/manageAssets/turnIn.vue';     //转入 
 import turnOutmes from '../page/manageAssets/turnOutmes.vue';   //转出信息  
 import turnOutlog from '../page/manageAssets/turnOutlog.vue';   //转出记录  
 
@@ -15,6 +16,10 @@ export default [
         path: '/turnOut',
         component: turnOut,
         name: 'turnOut'
+    },{
+        path: '/turnIn',
+        component: turnIn,
+        name: 'turnIn'
     },{
         path: '/turnOutmes',
         component: turnOutmes,

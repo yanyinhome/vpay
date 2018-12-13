@@ -9,6 +9,7 @@
             <p>{{item.create_time}}</p>
         </div>
     </div>
+    <div class="mesnull" v-if="!notice.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
   </div>
 </template>
 
@@ -62,6 +63,7 @@ export default {
 #notice {
     background-color: #14171A;
     padding-top: 82px;
+    color: #fff;
   .notice {
     margin: 0 32px;
     border-bottom: 1Px solid #666;
@@ -72,7 +74,7 @@ export default {
         font-size: 32px;
         font-family: PingFangSC-Medium;
         font-weight: 500;
-        color: #ffff;
+        color: #fff;
         line-height: 90px;
         box-sizing: border-box;
         display: -webkit-box;
@@ -98,12 +100,6 @@ export default {
         -webkit-line-clamp: 1;
         overflow: hidden;
       }
-    }
-    .right {
-      font-size: 40px;
-      font-weight: 600;
-      color: rgba(34, 34, 34, 1);
-      font-family: PingFangSC-Medium;
     }
   }
 }

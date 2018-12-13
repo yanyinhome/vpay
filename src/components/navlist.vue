@@ -130,7 +130,8 @@ export default {
     },
     toAddress() {
       this.navout();
-      this.$router.push("myAddress");
+      this.$bus.$emit("toast", "功能开发中");
+      // this.$router.push("myAddress");
     },
     toCardlist() {
       this.navout();
@@ -141,14 +142,32 @@ export default {
       this.$router.push("systemSetup");
     },
     toShare() {
-      this.navout();
-      this.$router.push("shareMes");
+      this.loading();
+      this.navout();     
     },
     signout() {
       this.navout();
       localStorage.removeItem("token");
       this.$router.push("login");
       this.$bus.$emit("toast", "退出成功");
+    },
+    loading() {
+      this.axios
+        .post("/user/share", {
+          token: this.token()
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.$router.push("shareMes");
+          } else if (data.code === "204") {
+            this.$router.push('index');
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
     navshow(data) {
       if (this.showIng) return false;
@@ -194,7 +213,7 @@ export default {
     justify-content: flex-start;
     .nav {
       // width: 550px;
-      height: 100%;
+      height: 110%;
       overflow: scroll;
       // padding: 42px 32px;
       // box-sizing: border-box;

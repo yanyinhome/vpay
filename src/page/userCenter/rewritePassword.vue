@@ -9,7 +9,7 @@
         <input type="password" placeholder="请输入您的新密码" v-model="newpass1">
       </div>
       <div class="box">
-        <input type="password" placeholder="输入新密码" v-model="newpass2">
+        <input type="password" placeholder="确认新密码" v-model="newpass2">
       </div>
       <com-button :click="rewriteTo">确定修改</com-button>
     </div>
@@ -101,7 +101,7 @@ export default {
                 {
                   text: "确认",
                   callback: () => {
-                    this.$router.push("usercenter");
+                    this.$router.push("index");
                   }
                 }
               ]

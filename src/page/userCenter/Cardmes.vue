@@ -1,7 +1,7 @@
 <template>
   <div id="Cardmes">
     <com-head :opacity="1">添加银行卡</com-head>
-    <p>请绑定持卡人本人的银行卡</p>
+    <p>请绑定本人的银行卡</p>
     <div class="message">
       <div class="box">
         <span>开户行</span>

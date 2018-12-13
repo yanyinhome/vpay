@@ -1,15 +1,16 @@
 <template>
   <div id="turnOut">
-    <com-head :opacity="0">转出
+    <com-head :opacity="0">
+      转出
       <router-link class="keepdata" tag="div" :to="{name:'turnOutlog',query:{status: '1'}}">
         <span>转出记录</span>
       </router-link>
     </com-head>
+    <!-- 转出 -->
     <div class="account">
       <input type="text" v-model="account" placeholder="请输入对方账户">
+      <com-button :click="submit">下一步</com-button>
     </div>
-
-    <com-button :click="submit">下一步</com-button>
   </div>
 </template>
 
@@ -24,7 +25,8 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+  },
 
   mounted() {},
 
@@ -43,7 +45,7 @@ export default {
             if (data.code == "200") {
               this.$router.push({
                 name: "turnOutmes",
-                query: { UID: data.data }
+                query: { UID: data.data}
               });
             } else if (data.code == "204") {
               this.$bus.$emit("toast", data.msg);
@@ -53,7 +55,7 @@ export default {
             console.log(error);
           });
       }
-    }
+    },
   }
 };
 </script>
@@ -86,25 +88,25 @@ export default {
       background: rgba(42, 42, 42, 1);
       border-radius: 10px;
       color: #fff;
-    }  
-      input::-webkit-input-placeholder {
-        /* WebKit browsers */
-        color: #999;
-      }
-      input:-moz-placeholder {
-        /* Mozilla Firefox 4 to 18 */
-        color: #999;
-      }
+    }
+    input::-webkit-input-placeholder {
+      /* WebKit browsers */
+      color: #999;
+    }
+    input:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      color: #999;
+    }
 
-      input::-moz-placeholder {
-        /* Mozilla Firefox 19+ */
-        color: #999;
-      }
+    input::-moz-placeholder {
+      /* Mozilla Firefox 19+ */
+      color: #999;
+    }
 
-      input:-ms-input-placeholder {
-        /* Internet Explorer 10+ */
-        color: #999;
-      }
+    input:-ms-input-placeholder {
+      /* Internet Explorer 10+ */
+      color: #999;
+    }
   }
 }
 </style>

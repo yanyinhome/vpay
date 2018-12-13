@@ -22,14 +22,14 @@
           </div>
           <p>扫码支付</p>
           <div class="yuor">
-            <div class="item">
+            <router-link class="item" tag="div" :to="{name:'turnOutlog',query:{status: '4'}}">
               <p>账户余额</p>
               <p>{{balance}}</p>
-            </div>
-            <div class="item">
+            </router-link>
+            <router-link class="item" tag="div" :to="{name:'turnOutlog',query:{status: '3'}}">
               <p>积分余额</p>
               <p>{{integral}}</p>
-            </div>
+            </router-link>
           </div>
         </div>
       </div>
@@ -41,31 +41,31 @@
           <router-link class="item item1" tag="div" to="turnOut">
             <img src="../assets/image/out.png">转出
           </router-link>
-          <div class="item">
+          <router-link class="item" tag="div" to="turnIn">
             <img src="../assets/image/shou.png">转入
-          </div>
+          </router-link>
         </div>
       </div>
       <div class="turnto">
         <p>积分余额操作</p>
-        <div class="box">
+        <div class="box" @click="warn">
           <div class="item item1">
-            <img src="../assets/image/buy.png">买入
+            <img src="../assets/image/buy.png">兑换
           </div>
           <div class="item">
-            <img src="../assets/image/sell.png">卖出
+            <img src="../assets/image/sell.png">记录
           </div>
         </div>
       </div>
       <div class="turnto turnto1">
         <div class="box1">
-          <div class="item">
+          <div class="item" @click="warn">
             <img src="../assets/image/zichan.png">
-            <div>资产交易</div>
+            <div>e家公链</div>
           </div>
-          <div class="item">
+          <div class="item" @click="warn">
             <img src="../assets/image/shoping.png">
-            <div>商城</div>
+            <div>藏宝阁</div>
           </div>
         </div>
       </div>
@@ -82,18 +82,14 @@ export default {
   data() {
     return {
       user: {
-        img: require("../assets/image/zanshi/touxiang.jpg"),
+        img: "",
         UID: ""
       },
       balance: "",
       integral: "",
       balance: "",
       grade: [],
-      news: [
-        "2018年7月30日更新升级版本1.0，各种新功能均已上线",
-        "2018年9月30日更新升级版本2.0",
-        "vpay,2018年11月30日更新升级版本3.0"
-      ]
+      news: []
     };
   },
 
@@ -130,6 +126,9 @@ export default {
           console.log(error);
         });
     },
+    warn() {
+      this.$bus.$emit("toast", "功能开发中");
+    },
     shownav() {
       this.$bus.$emit("navlist");
     }
@@ -138,7 +137,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 #index {
-  padding: 10px 30px 150px;
+  padding: 20px 30px 150px;
   .index {
     .indextop {
       height: 586px;

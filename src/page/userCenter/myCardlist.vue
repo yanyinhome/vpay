@@ -5,54 +5,56 @@
         <img src="../../assets/image/addcard.png">
       </div>
     </com-head>
+    <div class="cardmes" v-if='show'>
+      <div class="outside">
+        <p>我的银行卡</p>
+        <div class="lunbo">
+          <div class="number">{{bankmes.bank_num}}</div>
+          <swiper :options="swiperOption" ref="mySwiper">
+            <swiperSlide v-for="(item,index) in images" :key="index">
+              <img class="swiper-slid_img" :src="item">
+            </swiperSlide>
+            <div class="swiper-pagination" slot="pagination"></div>
+          </swiper>
+        </div>
 
-    <div class="outside">
-      <p>我的银行卡</p>
-      <div class="lunbo">
-        <div class="number">{{bankmes.bank_num}}</div>
-        <swiper :options="swiperOption" ref="mySwiper">
-          <swiperSlide v-for="(item,index) in images" :key="index">
-            <img class="swiper-slid_img" :src="item" data-history="index">
-          </swiperSlide>
-          <div class="swiper-pagination" slot="pagination"></div>
-        </swiper>
+        <div class="moren" @click="checkbox">
+          <i v-if="bankmes.default_bank" class="iconfont icon-fuxuankuang"/>
+          <i v-if="!bankmes.default_bank" class="iconfont icon-fangkuang"/>&nbsp;
+          <span v-if="bankmes.default_bank">默认银行卡</span>
+          <span v-if="!bankmes.default_bank">设置为默认银行卡</span>
+        </div>
       </div>
-
-      <div class="moren"  @click="checkbox" >
-        <i v-if="bankmes.default_bank" class="iconfont icon-fuxuankuang"/>
-        <i v-if="!bankmes.default_bank" class="iconfont icon-fangkuang"/>&nbsp;
-        <span v-if="bankmes.default_bank">默认银行卡</span>
-        <span v-if="!bankmes.default_bank">设置为默认银行卡</span>
+      <div class="message" border>
+        <p>银行卡信息</p>
+        <table border="1" width="100%" rules="none" frame="void" cellspacing="0">
+          <tr>
+            <td width="30%">开户行</td>
+            <td width="70%">{{bankmes.open_bank}}</td>
+          </tr>
+          <tr>
+            <td width="30%">支行名称</td>
+            <td width="70%">{{bankmes.bank_address}}</td>
+          </tr>
+          <tr>
+            <td width="30%">持卡人姓名</td>
+            <td width="70%">{{bankmes.bank_name}}</td>
+          </tr>
+          <tr>
+            <td width="30%">银行卡号</td>
+            <td width="70%">{{bankmes.bank_num}}</td>
+          </tr>
+        </table>
+        <button @click="mask=true">删除银行卡</button>
       </div>
-    </div>
-    <div class="message" border>
-      <p>银行卡信息</p>
-      <table border="1" width="100%" rules="none" frame="void" cellspacing="0">
-        <tr>
-          <td width="30%">开户行</td>
-          <td width="70%">{{bankmes.open_bank}}</td>
-        </tr>
-        <tr>
-          <td width="30%">支行名称</td>
-          <td width="70%">{{bankmes.bank_address}}</td>
-        </tr>
-        <tr>
-          <td width="30%">持卡人姓名</td>
-          <td width="70%">{{bankmes.bank_name}}</td>
-        </tr>
-        <tr>
-          <td width="30%">银行卡号</td>
-          <td width="70%">{{bankmes.bank_num}}</td>
-        </tr>
-      </table>
-      <button @click="mask=true">删除银行卡</button>
-    </div>
-    <div class="mask" v-if="mask">
-      <div class="box">
-        <button @click="deleteCard">确定删除银行卡</button>
-        <button @click="mask=false">取消</button>
+      <div class="mask" v-if="mask">
+        <div class="box">
+          <button @click="deleteCard">确定删除银行卡</button>
+          <button @click="mask=false">取消</button>
+        </div>
       </div>
     </div>
+    <div class="mesnull"  v-if="!images.length">暂无信息</div>
   </div>
 </template>
 
@@ -64,6 +66,7 @@ export default {
   data() {
     let that = this;
     return {
+      show: false,
       checkbox1: true,
       checkbox2: false,
       mask: false,
@@ -82,17 +85,20 @@ export default {
       swiperOption: {
         direction: "horizontal",
         pagination: {
-          el: ".swiper-pagination"
+          el: ".swiper-pagination",
+          type: "fraction"
         },
         // autoplay: {
         //   delay: 500,
         //   stopOnLastSlide: true
         // },
         // loop: true,
+        // centerInsufficientSlides: true,
         // slidesOffsetBefore : 30,
         // slidesOffsetAfter : 30,
-        // // slidesPerView : 3,
-        // spaceBetween : 30,
+        slidesPerView: 1,
+        spaceBetween: 20,
+        centeredSlides: true,
         notNextTick: true,
         autoplayDisableOnInteraction: true,
 
@@ -136,11 +142,14 @@ export default {
         .then(({ data }) => {
           console.log(data);
           if (data.code == "200") {
+            this.show = true;
             this.message = data.data;
             this.lengthmes = data.data.length;
             this.bankmes = this.message[0];
             this.takeout();
           } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "205") {
             this.$bus.$emit("toast", data.msg);
           }
         })
@@ -163,6 +172,8 @@ export default {
             this.$bus.$emit("toast", data.msg);
           } else if (data.code == "204") {
             this.mask = false;
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "205") {
             this.$bus.$emit("toast", data.msg);
           }
         })
@@ -231,11 +242,12 @@ export default {
     }
   }
   .outside {
-    // width: 690px;
-    height: 604px;
+    width: 750px;
+    // height: 604px;
     margin: 0 auto;
-    background: url("../../assets/image/cardbg.png");
-    background-size: contain;
+    padding-bottom: 2px;
+    background: url("../../assets/image/cardbg.png") no-repeat;
+    background-size: 100% 100%;
     p {
       padding-left: 30px;
       padding-top: 30px;
@@ -249,34 +261,27 @@ export default {
         color: #fff;
         font-size: 40px;
         position: absolute;
-        bottom: 104px;
+        bottom: 144px;
         left: 50%;
-        transform: translateX(-59%);
-        z-index: 99;
+        transform: translateX(-50%);
+        z-index: 9;
+      }
+      .swiper-pagination {
+        color: rgb(226, 168, 92);
+        // bottom: 90px;
+        font-size: 26px;
+        z-index: 100;
       }
       .swiper-container {
-        width: 550px;
-        height: 390px;
-        margin: 20px auto;
-        // .swiper-pagination-bullets {
-        //   bottom: -90px;
-        //   z-index: 100;
-        //   .swiper-pagination-bullet {
-        //   widows: 20px;
-        //   height: 20px;
-        // }
-        // }
-        // .swiper-pagination-bullet-active {
-        //   background: red;
-        // }
+        width: 650px;
+        margin: 20px auto 0;
         img {
-          width: 550px;
+          width: 100%;
         }
       }
     }
     .moren {
-      margin-bottom: 30px;
-      line-height: 60px;
+      margin-bottom: 50px;
       box-sizing: border-box;
       text-align: center;
       font-size: 12px;
@@ -296,7 +301,7 @@ export default {
     width: 630px;
     height: 266px;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 10px;
     p {
       text-align: center;
       line-height: 80px;
@@ -308,7 +313,7 @@ export default {
     // border:1Px solid rgba(221,221,221,1);
     table,
     tr {
-      border: 1Px solid rgba(221, 221, 221, 1);
+      border: 1px solid rgba(221, 221, 221, 1);
       line-height: 70px;
     }
     td {
@@ -356,6 +361,11 @@ export default {
         color: rgba(241, 0, 0, 1);
       }
     }
+  }
+  .mesnull {
+    font-size: 32px;
+    text-align: center;
+    margin-top: 30vh;
   }
 }
 </style>

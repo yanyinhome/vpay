@@ -108,7 +108,8 @@ export default {
               localStorage.setItem("token", data.data);
             }
             this.$router.push("index");
-            this.$bus.$emit("toast", "登录成功");	           						
+            this.$bus.$emit("toast", "登录成功");	
+            this.$router.go(0);                      						
 					} else if(data.code=='204'){
 						this.$bus.$emit('toast', data.msg);	
 					}

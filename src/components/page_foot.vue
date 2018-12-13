@@ -33,13 +33,13 @@ export default {
         {
           iconfont: require("../assets/image/nav21.png"),
           iconfont1: require("../assets/image/nav22.png"),
-          name: "资产",
+          name: "e家公链",
           // route: '/assets'
         },
         {
           iconfont: require("../assets/image/nav31.png"),
           iconfont1: require("../assets/image/nav32.png"),
-          name: "商城",
+          name: "藏宝阁",
           // route: '/shoplist'
         }
       ]

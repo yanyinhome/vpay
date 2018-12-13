@@ -9,9 +9,12 @@
       </div>
       <div class="right" :class="{active: item.money>0}">
         <p>{{item.num}}</p>
-        <p>{{item.after_ban}}</p>
+        <p v-if="status!='3'">{{item.after_ban}}</p>
+        <p v-if="status=='3'">{{item.after_int}}</p>
       </div>
     </div>
+    <div class="mesnull" v-if="!log.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
+
   </div>
 </template>
 
@@ -36,7 +39,15 @@ export default {
     } else if (this.status == "2") {
       //转入记录
       this.name = "转入记录";
-      this.loading();
+      this.loading('2');
+    } else if (this.status == "3") {
+      //积分记录
+      this.name = "积分记录";
+      this.loadGrade('2');
+    } else if (this.status == "4") {
+      //余额记录
+      this.name = "余额记录";
+      this.loadGrade('1');
     }
   },
 
@@ -54,6 +65,28 @@ export default {
           if (data.code === "200") {
             this.log = data.data;
           } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "205") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    loadGrade(type) {
+      this.axios
+        .post("exchange/integrallog", {
+          token: this.token(),
+          type: type
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.log = data.data;
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "205") {
             this.$bus.$emit("toast", data.msg);
           }
         })

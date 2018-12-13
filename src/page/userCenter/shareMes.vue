@@ -31,13 +31,17 @@ export default {
   name: "shareMes",
   data() {
     return {
-      code: "12345",
+      code: "",
       url: ""
     };
   },
 
   computed: {},
-
+  // beforeRouteEnter(to, from, next) {
+  //   next(vm => {
+  //     vm.loading();      
+  //   });
+  // },
   created() {
     this.loading();
   },
@@ -45,6 +49,7 @@ export default {
   mounted() {},
 
   methods: {
+    // 生成二维码
     qrcode() {
       var canvas = document.getElementById("canvas");
       // const ctx = canvas.getContext('2d');
@@ -69,6 +74,7 @@ export default {
             this.code = data.data.UID;
             this.qrcode();
           } else if (data.code === "204") {
+            this.$router.push('index');
             this.$bus.$emit("toast", data.msg);
           }
         })

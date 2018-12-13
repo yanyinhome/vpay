@@ -2,9 +2,13 @@
   <div id="noticeSwiper">
     <div class="news" v-if="news.length > 0">
       <i class="iconfont icon-laba"/>
-      <ul class="marquee_list">
-        <li v-for="(item,index) in news" :key="index"  :class="{ marquee_top : animate }">{{item.title}}</li>
-      </ul>
+      <div class="marquee_box">
+        <ul class="marquee_list" :class="{marquee_top:animate}">
+          <li v-for="(item, index) in news" :key="index">
+            <span>{{item.title}}</span>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -17,17 +21,19 @@ export default {
     };
   },
   mounted() {
-    this.showMarquee();
+    if(this.news.length > 0){
+      setInterval(this.showMarquee, 3000);
+    }
   },
   props: ["news"],
   methods: {
-    showMarquee: function() {
+    showMarquee() {
       this.animate = true;
-      setInterval(() => {
+      setTimeout(() => {
         this.news.push(this.news[0]);
         this.news.shift();
         this.animate = false;
-      }, 2000);
+      }, 500);
     }
   }
 };
@@ -35,49 +41,69 @@ export default {
 <style lang='scss' scoped>
 #noticeSwiper {
   background-color: #14171a;
-  .news {
-    position: relative;
-    overflow: hidden;
-    padding: 0.1rem 0rem;
-    height: 0.84rem;
+  color: #fff;
+  div,
+  ul,
+  li,
+  span,
+  img {
+    margin: 0;
+    padding: 0;
+    display: flex;
     box-sizing: border-box;
-    background-color: #14171a;
+  }
+  .marquee {
+    width: 100%;
+    height: 50px;
+    align-items: center;
     color: #fff;
-    .iconfont {
-      line-height: 0.7rem;
-    }
-    ul {
-      padding-left: 0.3rem;
-      box-sizing: border-box;
-      width: 100%;
-      li {
-        // padding-left: 0.1rem;
-        white-space: nowrap;
-        width: 100%;
-        text-overflow: ellipsis;
-        height: 0.64rem;
-        line-height: 0.64rem;
-        font-size: 0.24rem;
-        font-size: 24px;
-        font-family: PingFangSC-Regular;
-        font-weight: 400;
-        color: rgba(241, 241, 241, 1);
-        display: block;
-        overflow: hidden;
-        padding: 0.1rem;
-      }
-    }
+    background-color: #b3effe;
+    display: flex;
+    box-sizing: border-box;
+  }
+  .marquee_title {
+    padding: 0 20px;
+    height: 30px;
+    font-size: 14px;
+    border-right: 1px solid #d8d8d8;
+    align-items: center;
+  }
+  .marquee_box {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin-top: 10px;
+    height: 30px;
+    overflow: hidden;
   }
   .marquee_list {
+    display: block;
     position: absolute;
-    top: 0px;
-    left: 0px;
-    transition: all 2s;
-    // margin-top: -0.84rem;
+    top: 0;
+    left: 0;
+    span {
+      font-size: 26px;
+    }
   }
   .marquee_top {
-    // transition: all 2s;
-    margin-top: -0.84rem;
+    transition: all 0.5s;
+    margin-top: -30px;
+  }
+  .marquee_list li {
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    padding-left: 20px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  }
+  .marquee_list li span {
+    padding: 0 2px;
+  }
+  .red {
+    color: #ff0101;
   }
 }
 </style>

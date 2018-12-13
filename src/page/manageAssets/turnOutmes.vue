@@ -2,8 +2,7 @@
   <div id="turnOutmes">
     <com-head :opacity="0">转出
       <router-link class="keepdata" tag="div" :to="{name:'turnOutlog',query:{status: '1'}}">
-  
-        <span>转出记录</span>
+        <!-- <span>转出记录</span> -->
       </router-link>
     </com-head>
     <div class="headimg">
@@ -27,7 +26,7 @@ export default {
     return {
       disabled: false,
       UID: this.$route.query.UID,
-      img: require("../../assets/image/zanshi/card.png"),
+      img: '',
       phone: "",
       money: "",
       password: "",

@@ -73,7 +73,7 @@ export default {
     z-index: 999;
     .alert_box {
       display: inline-block;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(77, 72, 72, 1);
       border-radius: 30px;
       animation-duration: 0.8s;
     }
