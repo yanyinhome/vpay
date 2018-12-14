@@ -2,7 +2,7 @@
   <div id="turnOutlog">
     <com-head :opacity="0">{{name}}</com-head>
     <!-- 转入记录 -->
-    <div class="chargeLog" v-for="item in log" :key="item.id">
+    <div v-if="status!='5'" class="chargeLog" v-for="item in log" :key="item.id">
       <div class="left">
         <p>{{item.content}}</p>
         <p>{{item.create_time}}</p>
@@ -11,6 +11,13 @@
         <p>{{item.num}}</p>
         <p v-if="status!='3'">{{item.after_ban}}</p>
         <p v-if="status=='3'">{{item.after_int}}</p>
+      </div>
+    </div>
+    <!-- 分享记录 -->
+    <div v-if="status=='5'" class="chargeLog" v-for="item in log" :key="item.id">
+      <div class="left">
+        <p>成功邀请了用户&nbsp;{{item.user_id}}</p>
+        <p>{{item.create_time}}</p>
       </div>
     </div>
     <div class="mesnull" v-if="!log.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
@@ -48,6 +55,10 @@ export default {
       //余额记录
       this.name = "余额记录";
       this.loadGrade('1');
+    } else if (this.status == "5") {
+      //分享记录
+      this.name = "分享记录";
+      this.loadShare();
     }
   },
 
@@ -94,12 +105,32 @@ export default {
           console.log(error);
         });
     },
+    loadShare() {
+      this.axios
+        .post("user/sharelog", {
+          token: this.token()
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.log = data.data;
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "205") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
   }
 };
 </script>
 <style lang='scss' scoped>
 #turnOutlog {
   padding-top: 82px;
+  color: #fff;
   .chargeLog {
     margin: 0 32px;
     height: 144px;

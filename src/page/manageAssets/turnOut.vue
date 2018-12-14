@@ -8,7 +8,7 @@
     </com-head>
     <!-- 转出 -->
     <div class="account">
-      <input type="text" v-model="account" placeholder="请输入对方账户">
+      <input type="text" v-model="account" placeholder="请输入对方UID">
       <com-button :click="submit">下一步</com-button>
     </div>
   </div>
@@ -33,7 +33,7 @@ export default {
   methods: {
     submit() {
       if (!this.account) {
-        this.$bus.$emit("toast", "请输入对方账户");
+        this.$bus.$emit("toast", "请输入对方UID");
       } else {
         this.axios
           .post("exchange/index", {

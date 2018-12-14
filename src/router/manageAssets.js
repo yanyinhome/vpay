@@ -7,6 +7,9 @@ import turnOutmes from '../page/manageAssets/turnOutmes.vue';   //转出信息
 import turnOutlog from '../page/manageAssets/turnOutlog.vue';   //转出记录  
 
 
+import sweepCode from '../page/manageAssets/sweepCode.vue';   //扫码  
+
+
 export default [
     {
         path: '/assets',
@@ -28,5 +31,15 @@ export default [
         path: '/turnOutlog',
         component: turnOutlog,
         name: 'turnOutlog'
+    },
+    
+    
+    
+    
+    
+    {
+        path: '/sweepCode',
+        component: sweepCode,
+        name: 'sweepCode'
     },
 ]

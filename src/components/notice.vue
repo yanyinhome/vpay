@@ -4,7 +4,7 @@
       <i class="iconfont icon-laba"/>
       <div class="marquee_box">
         <ul class="marquee_list" :class="{marquee_top:animate}">
-          <li v-for="(item, index) in news" :key="index">
+          <li v-for="(item, index) in news" :key="index" @click="noticeDetail(item.id)">
             <span>{{item.title}}</span>
           </li>
         </ul>
@@ -22,8 +22,9 @@ export default {
   },
   mounted() {
     if(this.news.length > 0){
-      setInterval(this.showMarquee, 3000);
     }
+      setInterval(this.showMarquee, 3000);
+
   },
   props: ["news"],
   methods: {
@@ -34,6 +35,9 @@ export default {
         this.news.shift();
         this.animate = false;
       }, 500);
+    },
+    noticeDetail(id) {
+      this.$router.push({name:"noticeDetail",query: {id,id}});
     }
   }
 };
@@ -64,7 +68,7 @@ export default {
   .marquee_title {
     padding: 0 20px;
     height: 30px;
-    font-size: 14px;
+    font-size: 30px;
     border-right: 1px solid #d8d8d8;
     align-items: center;
   }
@@ -82,7 +86,7 @@ export default {
     top: 0;
     left: 0;
     span {
-      font-size: 26px;
+      font-size: 30px;
     }
   }
   .marquee_top {
@@ -92,7 +96,7 @@ export default {
   .marquee_list li {
     height: 30px;
     line-height: 30px;
-    font-size: 14px;
+    font-size: 30px;
     padding-left: 20px;
     display: -webkit-box;
     -webkit-box-orient: vertical;

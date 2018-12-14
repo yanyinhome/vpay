@@ -4,17 +4,20 @@
     <!-- <button @click="shownav">左侧导航</button> -->
     <div class="index">
       <div class="indextop">
-        <div class="user" @click="shownav">
-          <div class="left">
-            <img :src="user.img">
-          </div>
-          <div class="right">
-            <p>UID：{{user.UID}}</p>
-            <p>
-              信用：
-              <img src="../assets/image/grade.png" v-for="(item,index) in grade" :key="index">
-            </p>
-          </div>
+        <div class="user">
+          <router-link class="boxmes" tag="div" to='userMessage'>
+            <div class="left">
+              <img :src="user.img">
+            </div>
+            <div class="right">
+              <p>UID：{{user.UID}}</p>
+              <p>
+                信用：
+                <img src="../assets/image/grade.png" v-for="(item,index) in grade" :key="index">
+              </p>
+            </div>
+          </router-link>
+          <i class="iconfont icon-sort"  @click="shownav"></i>
         </div>
         <div class="saoma">
           <div class="img">
@@ -36,7 +39,7 @@
 
       <noticeSwiper :news="news" class="gonggao"></noticeSwiper>
       <div class="turnto">
-        <p>账户余额操作</p>
+        <p><span>余额操作</span><span @click="yuoeLog">变动记录</span></p>
         <div class="box">
           <router-link class="item item1" tag="div" to="turnOut">
             <img src="../assets/image/out.png">转出
@@ -45,15 +48,23 @@
             <img src="../assets/image/shou.png">转入
           </router-link>
         </div>
+        <div class="box xia"  @click="warn">
+          <router-link class="item item1" tag="div" to="">
+            <img src="../assets/image/sell.png">提现
+          </router-link>
+          <router-link class="item" tag="div" to="">
+            <img src="../assets/image/buy.png">购买
+          </router-link>
+        </div>
       </div>
       <div class="turnto">
-        <p>积分余额操作</p>
-        <div class="box" @click="warn">
-          <div class="item item1">
-            <img src="../assets/image/buy.png">兑换
+        <p>积分操作</p>
+        <div class="box">
+          <div class="item item1" @click="warn">
+            <img src="../assets/image/duihuan.png">兑换
           </div>
-          <div class="item">
-            <img src="../assets/image/sell.png">记录
+          <div class="item" @click="gradeLog">
+            <img src="../assets/image/log.png">记录
           </div>
         </div>
       </div>
@@ -126,6 +137,15 @@ export default {
           console.log(error);
         });
     },
+    yuoeLog(){
+      this.$router.push({name:'turnOutlog',query:{status: '4'}});
+    },
+    gradeLog(){
+      this.$router.push({name:'turnOutlog',query:{status: '3'}});
+    },
+    saoma(){
+      this.$router.push('sweepCode');
+    },
     warn() {
       this.$bus.$emit("toast", "功能开发中");
     },
@@ -141,11 +161,16 @@ export default {
   .index {
     .indextop {
       height: 586px;
+      
       .user {
         display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .boxmes {
+          display: flex;
         justify-content: flex-start;
         align-items: center;
-        .left {
+.left {
           margin-right: 20px;
           width: 70px;
           height: 70px;
@@ -169,6 +194,11 @@ export default {
             height: 26px;
           }
         }
+      }
+       .icon-sort {
+         color: rgba(214, 174, 123, 1);
+         font-size: 60px;
+       } 
       }
       .saoma {
         color: #fff;
@@ -233,7 +263,10 @@ export default {
       background: rgba(42, 42, 42, 1);
       border-radius: 6px;
       p {
-        padding-left: 5px;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+        box-sizing: border-box;
         font-size: 26px;
         font-family: PingFangSC-Regular;
         font-weight: 400;
@@ -245,7 +278,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 26px 0 16px;
+        margin: 30px 0 16px;
         .item {
           width: 50%;
           text-align: center;
@@ -263,6 +296,9 @@ export default {
         .item1 {
           border-right: 1px solid rgba(68, 68, 68, 1);
         }
+      }
+      .xia {
+        margin-top: 40px;
       }
       .box1 {
         display: flex;

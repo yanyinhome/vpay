@@ -109,7 +109,6 @@ export default {
             }
             this.$router.push("index");
             this.$bus.$emit("toast", "登录成功");	
-            this.$router.go(0);                      						
 					} else if(data.code=='204'){
 						this.$bus.$emit('toast', data.msg);	
 					}
@@ -138,8 +137,9 @@ export default {
 				})
 				.then(({data})=>{
 					if (data.code=='200'){
-            this.$router.push("login");
-            this.$bus.$emit('toast', data.msg);	           						
+            // this.$router.push("login");
+            this.$bus.$emit('toast', data.msg);	
+            this.$router.go(0);                      						
 					} else if(data.code=='204'){
 						this.$bus.$emit('toast', data.msg);	
 					}

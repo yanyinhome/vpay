@@ -1,6 +1,6 @@
 <template>
   <div id='noticeDetail'>
-    <com-head :opacity='0'></com-head>
+    <com-head :opacity='0'>详情</com-head>
     <div class="notice">
         <div class="left">
             <p>{{news_title}}</p>

@@ -1,7 +1,8 @@
 <template>
   <div id="shareMes">
     <com-head :opacity="1">分享</com-head>
-    <p>Vpay</p>
+    <div class="keepdata" @click="shareLog">分享记录</div>
+    <p>三维e家</p>
     <p>一种新的生活方式</p>
     <div class="sharemes">
       <p>你的邀请码</p>
@@ -18,8 +19,8 @@
         <div class="img">
           <canvas id="canvas" width="100px" height="100px"></canvas>
         </div>
-        <p>扫码下载Vpay钱包</p>
-        <p>加入Vpay享受更多权益</p>
+        <p>扫码下载APP</p>
+        <p>加入三维e家，享受更多权益</p>
       </div>
     </div>
   </div>
@@ -49,6 +50,9 @@ export default {
   mounted() {},
 
   methods: {
+    shareLog(){
+      this.$router.push({name:'turnOutlog',query:{status: '5'}});
+    },
     // 生成二维码
     qrcode() {
       var canvas = document.getElementById("canvas");
@@ -102,9 +106,20 @@ export default {
   padding-top: 142px;
   text-align: center;
   box-sizing: border-box;
+  .keepdata {
+    width: 160px;
+    height: 80px;
+    text-align: center;
+    color: #d6ae7b;
+    line-height: 80px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100;
+  }
   p:nth-of-type(1) {
     text-align: center;
-    font-size: 86px;
+    font-size: 70px;
     font-family: Athelas-Bold;
     font-weight: bold;
     color: rgba(255, 255, 255, 1);
