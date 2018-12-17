@@ -48,11 +48,11 @@
             <img src="../assets/image/shou.png">转入
           </router-link>
         </div>
-        <div class="box xia"  @click="warn">
-          <router-link class="item item1" tag="div" to="">
+        <div class="box xia">
+          <router-link class="item item1" tag="div" :to="{name:'balanceBuy',query:{status: '1'}}">
             <img src="../assets/image/sell.png">提现
           </router-link>
-          <router-link class="item" tag="div" to="">
+          <router-link class="item" tag="div" :to="{name:'balanceBuy',query:{status: '2'}}">
             <img src="../assets/image/buy.png">购买
           </router-link>
         </div>
@@ -135,6 +135,24 @@ export default {
         })
         .catch(function(error) {
           console.log(error);
+        });
+    },
+    applyShop(){
+      this.$bus.$emit("comAlert", {
+          title: "暂无商铺",
+          info: "您还没有入住商铺，是否申请店铺入驻",
+          button: [
+            {
+              text: "确认",
+              callback: () => {
+                this.$router.push('applyShop');
+              }
+            },
+            {
+              text: "取消",
+              callback: () => {}
+            }
+          ]
         });
     },
     yuoeLog(){

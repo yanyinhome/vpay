@@ -55,21 +55,21 @@ Vue.prototype.$bus = new Vue();
 Vue.prototype.token = function () {
   if (localStorage.token) {
     var getToken = localStorage.getItem('token');
-  } 
+  }
   return getToken;
 };
 
 // 计算当前时间
 Vue.prototype.today = function () {
-  var time = new Date();      
-  var m = time.getMonth() + 1;   
-  var t = time.getFullYear() + "-" + m + "-"+ time.getDate() + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds()
+  var time = new Date();
+  var m = time.getMonth() + 1;
+  var t = time.getFullYear() + "-" + m + "-" + time.getDate() + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds()
   return t;
 };
 // 时间前半段
 Vue.prototype.nowTime = function () {
-  var time = new Date();      
-  var m = time.getMonth() + 1;   
+  var time = new Date();
+  var m = time.getMonth() + 1;
   var t = time.getFullYear() + "-" + m + "-"
   return t;
 };
@@ -78,15 +78,15 @@ Vue.prototype.$axios = axios;
 
 // 全局过滤器，手机号中间四位隐藏
 Vue.filter('hideNum', function (value) {
-  if (!value){
+  if (!value) {
     return;
   }
-  return value.replace(/(.*)/,'*');
+  return value.replace(/(.*)/, '*');
 });
 
 // 全局过滤器，手机号中间四位隐藏
 Vue.filter('hideTel', function (value) {
-  if (!value){
+  if (!value) {
     return;
   }
   if (typeof (value) !== 'string') {
@@ -95,20 +95,38 @@ Vue.filter('hideTel', function (value) {
   return value.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
 });
 
-  // 局部过滤器，隐藏地址
+// 局部过滤器，隐藏地址
 Vue.filter('hideAddress', function (value) {
-  if (!value){
+  if (!value) {
     return;
   }
   if (typeof value !== "string") {
     value = value.toString();
   }
   return value.slice(0, value.indexOf("市") + 1).concat("****");
-});  
+});
+
+// 全局过滤器，金额只能输入10的倍数
+Vue.prototype.moneyCheck = function () {
+  if (!this.money) {
+    return;
+  }
+  if (this.money % 10 == 0 || this.money == 0)
+    return;
+  else {
+    this.$bus.$emit('toast', '只能输入10的倍数');    
+    var i = Math.floor(this.money / 10);
+    if ((this.money - i * 10) > 5)
+      this.money =  (i + 1) * 10;
+    else
+    this.money =  i * 10;
+  }
+};
+
 
 // axios请求
 Vue.prototype.axios = axios.create({
-  baseURL: 'http://www.3wej.com/api/',
+  baseURL: 'http://swyj.cadhx.com/api/',
   timeout: 10000,
   withCredentials: false,
   transformRequest: [function (data) {
