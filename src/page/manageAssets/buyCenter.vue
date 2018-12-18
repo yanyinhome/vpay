@@ -9,15 +9,19 @@
         <p>{{item.UID}}</p>
         <p>
           信用：
-          <img src="../../assets/image/grade.png" v-for="(item,index) in grade" :key="index">
+          <img
+            src="../../assets/image/grade.png"
+            v-for="(item1,index) in item.credit*1"
+            :key="index"
+          >
         </p>
         <p>{{item.create_time}}</p>
       </div>
       <div class="box3">
-        <p>交易金额：{{item.num}}</p>
+        <p>金额：{{item.num}}</p>
         <!-- <p>实付金额：{{item.create_time}}</p> -->
         <div>
-          <button @click="show=true">买入</button>
+          <button @click="showAlert(item.rate,item.id)">买入</button>
         </div>
       </div>
       <div class="show" v-show="show">
@@ -35,7 +39,7 @@
             <input type="password" v-model="password" placeholder="请输入支付密码">
           </div>
           <div class="item item1 item2">
-            <button @click="buySome(item.id)">确定</button>
+            <button :disabled="isDisable" @click="buySome()">确定</button>
             <button @click="show=false">取消</button>
           </div>
         </div>
@@ -49,10 +53,12 @@ export default {
   name: "buyCenter",
   data() {
     return {
+      isDisable: false,
       show: false,
+      id: "",
       grade: [],
       message: [],
-      rate: "0.1",
+      rate: "",
       money: "",
       password: ""
     };
@@ -80,15 +86,12 @@ export default {
       this.axios
         .post("transaction/record", {
           token: this.token(),
-          type: "2"
+          type: "1"
         })
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
             this.message = data.data;
-            for (let index = 0; index < 5; index++) {
-              this.grade.push(1);
-            }
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -97,26 +100,45 @@ export default {
           console.log(error);
         });
     },
-    buySome(id) {
+    buySome() {
+      if (this.money) {
+        this.$bus.$emit("toast", "请输入金额");
+      } else if (this.password) {
+        this.$bus.$emit("toast", "请输入二级密码");
+      } else {
+        this.isDisable = true;
+        if (this.isDisable) {
+          this.$bus.$emit("toast", "不能重复操作");
+        }
+        setTimeout(() => {
+          this.isDisable = false;
+        }, 1000);
+        this.axios
+          .post("transaction/matching", {
+            token: this.token(),
+            type: "2",
+            num: this.money,
+            id: this.id
+          })
+          .then(({ data }) => {
+            console.log(data);
+            if (data.code === "200") {
+              this.show = false;
+              this.$router.go(-1);
+              this.$bus.$emit("toast", data.msg);
+            } else if (data.code === "204") {
+              this.$bus.$emit("toast", data.msg);
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    },
+    showAlert(rate, id) {
+      this.id = id;
+      this.rate = rate;
       this.show = true;
-      this.axios
-        .post("transaction/matching", {
-          token: this.token(),
-          type: "2",
-          num: this.payment,
-          id: id
-        })
-        .then(({ data }) => {
-          console.log(data);
-          if (data.code === "200") {
-            this.$bus.$emit("toast", data.msg);
-          } else if (data.code === "204") {
-            this.$bus.$emit("toast", data.msg);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
     }
   }
 };

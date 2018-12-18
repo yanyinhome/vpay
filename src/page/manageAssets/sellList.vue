@@ -3,23 +3,55 @@
     <com-head :opacity="0">{{name}}</com-head>
     <div class="sellList" v-for="(item,index) in message" :key="index">
       <div class="box1">
-        <img :src="img">
+        <img v-if="status=='1'" :src="img">
+        <img v-else :src="item.head_img">
       </div>
       <div class="box2">
-        <p>{{UID}}</p>
+        <p v-if="status=='1'">{{UID}}</p>
+        <p v-else>{{item.UID}}</p>
         <p>
           信用：
-          <img src="../../assets/image/grade.png" v-for="(item,index) in grade" :key="index">
+          <img
+            v-if="status==1"
+            src="../../assets/image/grade.png"
+            v-for="(item2,index) in grade"
+            :key="index"
+          >
+          <img
+            v-else
+            src="../../assets/image/grade.png"
+            v-for="item1 in item.credit*1"
+            :key="item1"
+          >
         </p>
         <p>{{item.create_time}}</p>
       </div>
       <div class="box3">
-        <p>交易金额：{{item.num}}</p>
+        <p>金额：{{item.num}}</p>
         <!-- <p>实付金额：{{item.create_time}}</p> -->
         <div>
           <button v-if="status==1" @click="cloce(index,item.id)">取消</button>
-          <button  v-if="status!=1" @click="cloce(index,item.id)">{{item.flag}}</button>
+          <button v-if="status==3" class="bgnone">已完成</button>
+          <button
+            :class="{bgnone: item.flag=='等待对方上传截图'}"
+            :disabled="item.flag=='等待对方上传截图'"
+            v-if="status==2"
+            @click="lookimgTo(item.id)"
+          >{{item.flag}}</button>
         </div>
+      </div>
+    </div>
+    <!-- 查看截图 -->
+    <div class="mask" v-if="mask">
+      <div class="box1">
+        <img :src="lookimg">
+      </div>
+      <div class="box3">
+        <button @click="sureReceive">确认收款</button>
+        <button @click="mask=false">取消</button>
+      </div>
+      <div class="box2" @click="mask=false">
+        <i class="iconfont icon-chahao"></i>
       </div>
     </div>
     <div class="mesnull" v-if="!message.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
@@ -31,16 +63,19 @@ export default {
   name: "sellList",
   data() {
     return {
+      mask: false,
       name: "",
       status: this.$route.query.status,
+      id: "",
       show: false,
       grade: [],
 
+      lookimg: "", //查看截图
       img: "",
       time: "",
       UID: "",
       message: [],
-      rate: "0.1",
+      rate: "",
       money: "",
       password: ""
     };
@@ -101,12 +136,7 @@ export default {
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
-            this.img = data.data.head_img;
-            this.UID = data.data.UID;
             this.message = data.data.log;
-            for (let index = 0; index < data.data.credit; index++) {
-              this.grade.push(1);
-            }
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           } else if (data.code === "205") {
@@ -126,15 +156,51 @@ export default {
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
-            this.img = data.data.head_img;
-            this.UID = data.data.UID;
             this.message = data.data.log;
-            for (let index = 0; index < data.data.credit; index++) {
-              this.grade.push(1);
-            }
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           } else if (data.code === "205") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    // 查看截图
+    lookimgTo(id) {
+      this.id = id;
+      this.axios
+        .post("transaction/see_dakuan", {
+          token: this.token(),
+          id: id
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.mask = true;
+            this.lookimg = data.data.imgurl;
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    // 确认收款
+    sureReceive() {
+      this.axios
+        .post("transaction/sub_order", {
+          token: this.token(),
+          id: this.id
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.$router.go(-1);
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           }
         })
@@ -192,7 +258,6 @@ export default {
       //   width: 220px;
       margin-left: 30px;
       font-size: 28px;
-
       p:nth-of-type(1) {
         font-size: 28px;
         font-family: PingFangSC-Regular;
@@ -239,6 +304,7 @@ export default {
         padding: 0 5px;
         margin-top: 20px;
         // width: 106px;
+        font-size: 26px;
         line-height: 48px;
         background: linear-gradient(
           90deg,
@@ -246,6 +312,67 @@ export default {
           rgba(238, 204, 153, 1) 100%
         );
         border-radius: 6px;
+      }
+      .bgnone {
+        background: none;
+        color: #d6ae7b;
+      }
+    }
+  }
+  .mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: calc(100vh);
+    z-index: 50;
+    background: rgba(4, 4, 15, 0.8);
+    .box1 {
+      margin: 300px auto;
+      width: 70vw;
+      height: 10vh;
+      min-height: 50vh;
+      border-radius: 10px;
+      overflow-y: scroll;
+      img {
+        width: 100%;
+      }
+    }
+    .box2 {
+      width: 100px;
+      height: 100px;
+      text-align: center;
+      line-height: 100px;
+      position: fixed;
+      top: 120px;
+      right: 60px;
+      color: #fff;
+      .iconfont {
+        font-size: 60px;
+      }
+    }
+    .box3 {
+      position: fixed;
+      bottom: 20vh;
+      left: 120px;
+      // margin: 0px auto;
+      button {
+        margin: auto;
+        padding: 0 5px;
+        width: 200px;
+        font-size: 26px;
+        line-height: 60px;
+        background: linear-gradient(
+          90deg,
+          rgba(214, 174, 123, 1) 0%,
+          rgba(238, 204, 153, 1) 100%
+        );
+        border-radius: 6px;
+        color: #fff;
+      }
+      button:nth-of-type(2) {
+        margin-left: 100px;
+        background: rgb(156, 156, 156);
       }
     }
   }

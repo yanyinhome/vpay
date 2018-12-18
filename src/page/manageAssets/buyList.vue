@@ -3,22 +3,41 @@
     <com-head :opacity="0">{{name}}</com-head>
     <div class="buyList" v-for="(item,index) in message" :key="index">
       <div class="box1">
-        <img :src="img">
+        <img v-if="status=='1'" :src="img">
+        <img v-else :src="item.head_img">
       </div>
       <div class="box2">
-        <p>{{UID}}</p>
+        <p v-if="status=='1'">{{UID}}</p>
+        <p v-else>{{item.UID}}</p>
         <p>
           信用：
-          <img src="../../assets/image/grade.png" v-for="(item,index) in grade" :key="index">
+          <img
+            v-if="status=='1'"
+            src="../../assets/image/grade.png"
+            v-for="(item1,index) in grade"
+            :key="index"
+          >
+          <img
+            v-else
+            src="../../assets/image/grade.png"
+            v-for="(item1,index) in item.credit*1"
+            :key="index"
+          >
         </p>
         <p>{{item.create_time}}</p>
       </div>
       <div class="box3">
-        <p>交易金额：{{item.num}}</p>
+        <p>金额：{{item.num}}</p>
         <!-- <p>实付金额：{{item.create_time}}</p> -->
         <div>
           <button v-if="status==1" @click="cloce(index,item.id)">取消</button>
-          <button v-if="status!=1" @click="cloce(index,item.id)">{{item.flag}}</button>
+          <button v-if="status==3" class="bgnone">已完成</button>
+          <button
+            :class="{bgnone: item.flag=='请等待对方确认'}"
+            :disabled="item.flag=='请等待对方确认'"
+            v-if="status==2"
+            @click="upload(item.id)"
+          >{{item.flag}}</button>
         </div>
       </div>
     </div>
@@ -101,12 +120,7 @@ export default {
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
-            this.img = data.data.head_img;
-            this.UID = data.data.UID;
             this.message = data.data.log;
-            for (let index = 0; index < data.data.credit; index++) {
-              this.grade.push(1);
-            }
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           } else if (data.code === "205") {
@@ -126,12 +140,7 @@ export default {
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
-            this.img = data.data.head_img;
-            this.UID = data.data.UID;
             this.message = data.data.log;
-            for (let index = 0; index < data.data.credit; index++) {
-              this.grade.push(1);
-            }
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           } else if (data.code === "205") {
@@ -141,6 +150,9 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    upload(id) {
+      this.$router.push({ name: "uploadImg", query: { id: id } });
     },
     cloce(index, id) {
       this.axios
@@ -239,6 +251,7 @@ export default {
         padding: 0 5px;
         margin-top: 20px;
         // width: 106px;
+        font-size: 26px;
         height: 48px;
         background: linear-gradient(
           90deg,
@@ -246,6 +259,10 @@ export default {
           rgba(238, 204, 153, 1) 100%
         );
         border-radius: 6px;
+      }
+      .bgnone {
+        background: none;
+        color: #d6ae7b;
       }
     }
   }

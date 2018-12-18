@@ -114,7 +114,7 @@ Vue.prototype.moneyCheck = function () {
   if (this.money % 10 == 0 || this.money == 0)
     return;
   else {
-    this.$bus.$emit('toast', '只能输入10的倍数');    
+    this.$bus.$emit('toast', '金额只能输入10的倍数');    
     var i = Math.floor(this.money / 10);
     if ((this.money - i * 10) > 5)
       this.money =  (i + 1) * 10;

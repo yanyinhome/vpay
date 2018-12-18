@@ -60,9 +60,9 @@
       <div class="turnto">
         <p>积分操作</p>
         <div class="box">
-          <div class="item item1" @click="warn">
+          <router-link class="item item1" tag="div" to="translateIntegral">
             <img src="../assets/image/duihuan.png">兑换
-          </div>
+          </router-link>
           <div class="item" @click="gradeLog">
             <img src="../assets/image/log.png">记录
           </div>
@@ -170,7 +170,11 @@ export default {
     shownav() {
       this.$bus.$emit("navlist");
     }
-  }
+  },
+  // 销毁解绑
+  beforeDestroy: function () {
+    this.$bus.$emit('comAlert');
+  },
 };
 </script>
 <style lang='scss' scoped>

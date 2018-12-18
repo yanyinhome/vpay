@@ -139,7 +139,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     .left {
-      width: 400px;
+      width: 450px;
       p:nth-of-type(1) {
         // padding-top: 20px;
         font-size: 28px;
