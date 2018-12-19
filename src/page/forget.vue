@@ -93,7 +93,8 @@ export default {
 					  this.timer();
             this.$bus.$emit('toast', data.msg);	           						
 					} else if(data.code=='204'){
-						this.$bus.$emit('toast', data.msg);	
+            this.$bus.$emit('toast', data.msg);	
+            this.isSend = false;            
 					}
         })
         .catch(function(error) {

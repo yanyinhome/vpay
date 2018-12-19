@@ -45,6 +45,7 @@
         </div>
       </div>
     </div>
+    <div v-if="!message.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
   </div>
 </template>
 
@@ -101,15 +102,15 @@ export default {
         });
     },
     buySome() {
-      if (this.money) {
+      if (!this.money) {
         this.$bus.$emit("toast", "请输入金额");
-      } else if (this.password) {
+      } else if (!this.password) {
         this.$bus.$emit("toast", "请输入二级密码");
       } else {
-        this.isDisable = true;
         if (this.isDisable) {
           this.$bus.$emit("toast", "不能重复操作");
         }
+        this.isDisable = true;       
         setTimeout(() => {
           this.isDisable = false;
         }, 1000);

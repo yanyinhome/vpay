@@ -1,7 +1,7 @@
 <template>
   <div id="applyShop">
     <com-head :opacity="1">申请店铺</com-head>
-    <div class="userMessage">
+    <div class="userMessage" v-if="!applyStatus">
       <div class="item">
         <span>店铺名称</span>
         <input type="text" v-model="name" placeholder="请设置店铺名称">
@@ -25,13 +25,32 @@
         </div>
       </div>
       <div class="shop">
-    <div class="item">
-        <span>请选择店铺类别</span>
-        <input type="text" v-model="name" placeholder="请选择店铺类别">
+        <div class="item">
+          <span>店铺类别</span>
+          <input type="text" v-model="shoptype" placeholder="请选择店铺类别">
+        </div>
+        <div class="navbox">
+          <div
+            class="box"
+            @click="navAcitive(item,index)"
+            :class="{active: active==index}"
+            v-for="(item,index) in nav"
+            :key="index"
+          >{{item}}</div>
+        </div>
+        <p>* 仅可选择一种类别</p>
       </div>
+      <div class="warn">提醒：后台需要对店铺申请进行审核，1-3个工作日内审核完毕。</div>
+      <com-button :click="submit">确定申请</com-button>
     </div>
+
+    <div id='cookerCheck' v-if="applyStatus">
+      <div class="box1"><img src="../../assets/image/shenhe.png"></div>
+      <p>正在审核店铺</p>
     </div>
-    
+
+
+
   </div>
 </template>
 
@@ -40,10 +59,23 @@ export default {
   name: "applyShop",
   data() {
     return {
-      name: "",
+      applyStatus: false,
+      active: "-1",
       yulan: "",
       picValue: "",
-      newimg: ""
+      newimg: "",
+
+      name: "",
+      shoptype: "",
+      nav: [
+        "日常用品",
+        "日常用品",
+        "日常用品",
+        "日常用品",
+        "日常用品",
+        "日常用品",
+        "日常用品"
+      ]
     };
   },
 
@@ -63,6 +95,11 @@ export default {
       if (!files.length) return;
       this.picValue = files[0];
       this.imgPreview(this.picValue);
+    },
+    submit() {},
+    navAcitive(item, index) {
+      this.active = index;
+      this.shoptype = item;
     }
   }
 };
@@ -72,10 +109,6 @@ export default {
   padding-top: 100px;
   position: relative;
   background-color: #f6f6f6;
-  #pageHead {
-    background-color: #fff;
-    color: #000;
-  }
   .userMessage {
     width: 100%;
     box-sizing: border-box;
@@ -87,7 +120,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #eee;
+      // border-bottom: 1px solid #eee;
       background-color: #fff;
       input {
         width: 300px;
@@ -103,9 +136,9 @@ export default {
         justify-content: space-between;
         align-items: center;
         .touxiang {
-          width: 80px;
-          height: 80px;
-          border-radius: 40px;
+          width: 100px;
+          height: 100px;
+          border-radius: 6px;
           overflow: hidden;
           img {
             width: 100%;
@@ -157,15 +190,76 @@ export default {
       }
     }
     .item:nth-of-type(2) {
-      border-bottom: 1px solid #eee;
+      // border-bottom: 1px solid #eee;
     }
-    .shop {
-      background-color: #fff;
-      .item {
-          border-bottom: 1px solid #000;
+  }
+  .shop {
+    background-color: #fff;
+    .item {
+      margin: 20px 30px 0;
+      padding: 0;
+      border-bottom: 1Px solid #ddd;
+    }
+    .navbox {
+      padding: 20px 16px 0;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: wrap;
+      .box {
+        margin: 10px 14px;
+        width: 147px;
+        line-height: 60px;
+        text-align: center;
+        border-radius: 4px;
+        border: 2px solid rgba(214, 174, 123, 1);
+        font-size: 26px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: rgba(214, 174, 123, 1);
       }
+      .active {
+        background: rgba(214, 174, 123, 1);
+        color: #fff;
+      }
+    }
+    p {
+      text-align: right;
+      padding-right: 30px;
+      font-size: 24px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: rgba(136, 136, 136, 1);
+      line-height: 80px;
+    }
   }
+  .warn {
+    margin-top: 20px;
+    margin-bottom: 200px;
+    padding: 0 30px;
+    font-size: 26px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(102, 102, 102, 1);
+    line-height: 40px;
   }
-  
+  #cookerCheck {
+    text-align: center;
+    .box1 {
+      width: 372px;
+      height: 308px;
+      margin: 0 auto;
+      margin-top: 20vh;
+      overflow: hidden;
+      img {
+        width: 100%;
+      }
+    }
+    p:nth-of-type(1) {
+      font-size: 30px;
+      line-height: 100px;
+    }
+  }
 }
 </style>

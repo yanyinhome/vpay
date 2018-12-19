@@ -9,7 +9,11 @@
         <p>{{item.UID}}</p>
         <p>
           信用：
-          <img src="../../assets/image/grade.png" v-for="(item,index) in  item.credit*1" :key="index">
+          <img
+            src="../../assets/image/grade.png"
+            v-for="(item,index) in  item.credit*1"
+            :key="index"
+          >
         </p>
         <p>{{item.create_time}}</p>
       </div>
@@ -41,6 +45,7 @@
         </div>
       </div>
     </div>
+    <div v-if="!message.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
   </div>
 </template>
 
@@ -95,43 +100,43 @@ export default {
           console.log(error);
         });
     },
-    buySome() { 
-      if (this.money) {
+    buySome() {
+      if (!this.money) {
         this.$bus.$emit("toast", "请输入金额");
-      } else if (this.password) {
+      } else if (!this.password) {
         this.$bus.$emit("toast", "请输入二级密码");
       } else {
-        this.isDisable = true;
         if (this.isDisable) {
           this.$bus.$emit("toast", "不能重复操作");
-      }
+        }
+        this.isDisable = true;
         setTimeout(() => {
           this.isDisable = false;
         }, 1000);
 
-      this.axios
-        .post("transaction/matching", {
-          token: this.token(),
-          type: "1",
-          num: this.money,
-          id: this.id
-        })
-        .then(({ data }) => {
-          console.log(data);
-          if (data.code === "200") {
-            this.show = false;
-            this.$router.go(-1);
-            this.$bus.$emit("toast", data.msg);
-          } else if (data.code === "204") {
-            this.$bus.$emit("toast", data.msg);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+        this.axios
+          .post("transaction/matching", {
+            token: this.token(),
+            type: "1",
+            num: this.money,
+            id: this.id
+          })
+          .then(({ data }) => {
+            console.log(data);
+            if (data.code === "200") {
+              this.show = false;
+              this.$router.go(-1);
+              this.$bus.$emit("toast", data.msg);
+            } else if (data.code === "204") {
+              this.$bus.$emit("toast", data.msg);
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
       }
     },
-    showAlert(rate,id){
+    showAlert(rate, id) {
       this.id = id;
       this.rate = rate;
       this.show = true;

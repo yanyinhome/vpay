@@ -1,11 +1,12 @@
 <template>
   <div id="sweepCode">
-    <com-head :opacity="0">扫一扫</com-head>    
+    <com-head :opacity="0">扫一扫</com-head>
     <div class="scan">
       <div id="bcid">
         <div style="height:40%"></div>
         <p class="tip">...载入中...</p>
       </div>
+      <p class="code">将二维码放入框内</p>
       <footer>
         <mt-button type="primary" @click="startRecognize">1.创建控件</mt-button>
         <mt-button type="primary" @click="startScan">2.开始扫描</mt-button>
@@ -22,15 +23,25 @@ export default {
   name: "sweepCode",
   data() {
     return {
-      codeUrl: "http://app.3wej.com/turnOutmes?UID=BZ5Zib"
+      codeUrl: ""
     };
   },
 
   computed: {},
 
+  // beforeRouteEnter(to, from, next) {
+  //   next(vm => {
+  //     vm.startRecognize();
+  //   });
+  // },
+  activated(){
+    this.startRecognize();
+  },
   created() {},
 
-  mounted() {},
+  mounted() {
+    this.startScan();
+  },
 
   methods: {
     //创建扫描控件
@@ -39,7 +50,6 @@ export default {
       if (!window.plus) return;
       scan = new plus.barcode.Barcode("bcid");
       scan.onmarked = onmarked;
-      console.log(scan);
       function onmarked(type, result, file) {
         switch (type) {
           case plus.barcode.QR:
@@ -57,107 +67,62 @@ export default {
         }
         var result = result.replace(/\n/g, "");
         that.codeUrl = result;
-        alert(result);
+        // alert(result);
+        window.location.href = result;
         that.closeScan();
       }
     },
     //开始扫描
     startScan() {
-      console.log(1);
       if (!window.plus) return;
       scan.start();
     },
     //关闭扫描
     cancelScan() {
-      console.log(2);
       if (!window.plus) return;
       scan.cancel();
     },
     //关闭条码识别控件
     closeScan() {
-      console.log(3);
       if (!window.plus) return;
       scan.close();
     }
-
-    // startRecognize() {
-    //   document.getElementById("bcid").style.display = "block";
-    //   document.getElementsByClassName("scanCode")[0].style.display = "none";
-
-    //   let that = this;
-    //   if (!window.plus) return;
-    //   scan = new plus.barcode.Barcode("bcid");
-    //   scan.onmarked = onmarked;
-    //     console.log("11");
-
-    //   setTimeout(function() {
-    //     that.startScan1();
-    //   }, 100);
-
-    //   function onmarked(type, result, file) {
-    //     console.log("type");
-
-    //     switch (type) {
-    //       case plus.barcode.QR:
-    //         type = "QR";
-    //         break;
-    //       case plus.barcode.EAN13:
-    //         type = "EAN13";
-    //         break;
-    //       case plus.barcode.EAN8:
-    //         type = "EAN8";
-    //         break;
-    //       default:
-    //         type = "其它" + type;
-    //         break;
-    //     }
-    //     result = result.replace(/\n/g, "");
-    //     that.codeUrl = result;
-    //     alert(that.codeUrl);
-    //     if (that.codeUrl) {
-    //       that.cancelScan1();
-    //       that.closeScan1();
-    //     }
-    //   }
-    // },
-    // //开始扫描
-    // startScan1() {
-    //     console.log("开始扫描");
-    //   if (!window.plus) return;
-    //   scan.start();
-    // },
-    // //关闭扫描
-    // cancelScan1() {
-    //     console.log("关闭扫描");
-
-    //   if (!window.plus) return;
-    //   scan.cancel();
-    // },
-    // //关闭条码识别控件
-    // closeScan1() {
-    //     console.log("关闭条码识别控件");
-
-    //   document.getElementById("bcid").style.display = "none";
-    //   document.getElementsByClassName("scanCode")[0].style.display = "block";
-    //   if (!window.plus) return;
-    //   scan.close();
+  },
+  beforeDestroy() {
+    this.cancelScan();
+    this.closeScan();
+  },
+  beforeRouteLeave(to, from, next) {
+    //B是B弹框的v-model值
+    // if (this.B) {
+    //   this.B= false;
+    //   next(false);
+    // } else {
+    //   next();
     // }
+    // this.cancelScan();
+    // this.closeScan();
   }
+  // 销毁解绑
+  // beforeDestroy () {
+  //   this.$bus.$emit('comAlert');
+  // },
 };
 </script>
 <style lang='scss' scoped>
 #sweepCode {
-  padding-top: 100px;
+  padding-top: 82px;
   color: #fff;
   .scan {
     height: 100%;
     #bcid {
       width: 100%;
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 3rem;
+      // position: absolute;
+      // left: 0;
+      // right: 0;
+      // top: 0;
+      // bottom: 3rem;
+      height: 60vh;
       text-align: center;
       background: #000;
     }
@@ -169,6 +134,11 @@ export default {
       line-height: 2rem;
       z-index: 2;
     }
+  }
+  .code {
+    text-align: center;
+    color: #d6ae7b;
+    line-height: 120px;
   }
   footer {
     width: 100%;

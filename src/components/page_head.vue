@@ -1,5 +1,5 @@
 <template>
-  <div id="pageHead" :class="{'page_head_opacity': opacity}">
+  <div id="pageHead" :class="{'page_head_opacity': opacity=='1','bg_opacity':opacity=='2'}">
     <p class="iconfont icon-shangyiye" @click="clickBack"></p>
     <slot></slot>
   </div>
@@ -50,6 +50,9 @@ export default {
       background: #fff;
       color: #000;
     }
-
+    &.bg_opacity {
+      background: none;
+      color: #fff;
+    }
   }
 </style>

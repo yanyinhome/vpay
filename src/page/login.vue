@@ -81,10 +81,10 @@ export default {
 
   methods: {
     submitTo(){
-      if (this.login === true ) {
+      if (this.login == true ) {
         //登录
         this.loginSubmit();
-      } else if (this.register === true) {
+      } else if (this.register == true) {
         //注册
         this.resSubmit();
       }
@@ -130,14 +130,13 @@ export default {
       } else {
         this.axios.post('register/reg',{
           password: this.loginpass.replace(/\s/g,''),
-          sale_code: this.safepass,
+          sale_code: this.safepass.replace(/\s/g,''),
           phone: this.tel,
-          pid: this.code,
+          pid: this.code.replace(/\s/g,''),
           param: this.verify,
 				})
 				.then(({data})=>{
 					if (data.code=='200'){
-            // this.$router.push("login");
             this.$bus.$emit('toast', data.msg);	
             this.$router.go(0);                      						
 					} else if(data.code=='204'){
@@ -169,6 +168,7 @@ export default {
 					  this.timer();
             this.$bus.$emit('toast', data.msg);	           						
 					} else if(data.code=='204'){
+            this.isSend = false;
 						this.$bus.$emit('toast', data.msg);	
 					}
         })

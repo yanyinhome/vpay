@@ -5,7 +5,8 @@
       <div class="headimg">买</div>
       <p>买入余额数量</p>
       <p>{{num}}</p>
-      <p>实付金额：
+      <p>
+        实付金额：
         <span>{{price}}</span>
       </p>
     </div>
@@ -38,15 +39,25 @@
       <p>打款截图</p>
     </div>
     <div class="uploadbox">
-       <p>* 完成打款后请上传打款截图，以作为打款凭证</p>
-       <div class="upload"  @click="portrait">
-          <div class="yulan" v-if="yulan"><img :src="yulan"></div>
-            <input class="imginp" ref="portrait" name="imgurl" id="imgurl" type='file' accept="image/*" @change="shangchuan"/>
-            <div class="box" v-if="!yulan">
-              <i class="iconfont icon-add"></i>
-              <span>上传截图</span>
-            </div>
+      <p>* 完成打款后请上传打款截图，以作为打款凭证</p>
+      <div class="upload" @click="portrait">
+        <div class="yulan" v-if="yulan">
+          <img :src="yulan">
         </div>
+        <input
+          class="imginp"
+          ref="portrait"
+          name="imgurl"
+          id="imgurl"
+          type="file"
+          accept="image/*"
+          @change="shangchuan"
+        >
+        <div class="box" v-if="!yulan">
+          <i class="iconfont icon-add"></i>
+          <span>上传截图</span>
+        </div>
+      </div>
     </div>
     <com-button :click="submitImg">提交</com-button>
   </div>
@@ -58,9 +69,9 @@ export default {
   data() {
     return {
       id: this.$route.query.id,
-      num: '',
-      price: '',
-      sell_UID: '',
+      num: "",
+      price: "",
+      sell_UID: "",
       phone: "",
       open_bank: "",
       bank_num: "",
@@ -82,7 +93,7 @@ export default {
   },
 
   methods: {
-      loading() {
+    loading() {
       this.axios
         .post("transaction/dakuanview", {
           token: this.token(),
@@ -107,8 +118,8 @@ export default {
           console.log(error);
         });
     },
-    submitImg(){
-       this.axios
+    submitImg() {
+      this.axios
         .post("transaction/dakuan", {
           token: this.token(),
           id: this.id,
@@ -125,9 +136,9 @@ export default {
         })
         .catch(error => {
           console.log(error);
-        }); 
+        });
     },
-     // 头像单击事件
+    // 头像单击事件
     portrait() {
       this.$refs.portrait.click(); // 获取ref为portrait的元素相当于获取id为portrait的元素
     },
@@ -136,7 +147,7 @@ export default {
       if (!files.length) return;
       this.picValue = files[0];
       this.imgPreview(this.picValue);
-    },
+    }
   }
 };
 </script>
@@ -221,23 +232,23 @@ export default {
     }
   }
   .uploadbox {
-      p {
-font-size:24px;
-font-family:PingFangSC-Medium;
-font-weight:500;
-color:rgba(236,0,0,1);
-line-height:100px;
-padding-left: 30px;
-      }
-      .upload {
-      width:560px;
-        height:320px;
-        margin: auto;
-        border-radius:10px;
-        border:1Px dashed rgba(153,153,153,1);
+    p {
+      font-size: 24px;
+      font-family: PingFangSC-Medium;
+      font-weight: 500;
+      color: rgba(236, 0, 0, 1);
+      line-height: 100px;
+      padding-left: 30px;
+    }
+    .upload {
+      width: 560px;
+      height: 320px;
+      margin: auto;
+      border-radius: 10px;
+      border: 1px dashed rgba(153, 153, 153, 1);
       .yulan {
-        width:560px;
-        height:320px;
+        width: 560px;
+        height: 320px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -262,13 +273,13 @@ padding-left: 30px;
           font-size: 28px;
           font-family: PingFangSC-Regular;
           font-weight: 400;
-          color:rgba(153,153,153,1);          
+          color: rgba(153, 153, 153, 1);
           line-height: 60px;
         }
         .iconfont {
           font-size: 100px;
           font-weight: 700;
-          color:rgba(153,153,153,1);
+          color: rgba(153, 153, 153, 1);
         }
       }
     }

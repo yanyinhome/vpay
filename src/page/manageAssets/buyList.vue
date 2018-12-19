@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div class="mesnull" v-if="!message.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
+    <div v-if="!message.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
   </div>
 </template>
 
@@ -248,7 +248,7 @@ export default {
         line-height: 40px;
       }
       button {
-        padding: 0 5px;
+        padding: 0 10px;
         margin-top: 20px;
         // width: 106px;
         font-size: 26px;

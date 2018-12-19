@@ -17,10 +17,10 @@
               </p>
             </div>
           </router-link>
-          <i class="iconfont icon-sort"  @click="shownav"></i>
+          <i class="iconfont icon-sort" @click="shownav"></i>
         </div>
         <div class="saoma">
-          <div class="img">
+          <div class="img"  @click="warn">
             <img src="../assets/image/saoma.png">
           </div>
           <p>扫码支付</p>
@@ -49,20 +49,29 @@
           </router-link>
         </div>
         <div class="box xia">
-          <router-link class="item item1" tag="div" :to="{name:'balanceBuy',query:{status: '1'}}">
+          <!-- <router-link class="item item1" tag="div" :to="{name:'balanceBuy',query:{status: '1'}}">
             <img src="../assets/image/sell.png">提现
           </router-link>
           <router-link class="item" tag="div" :to="{name:'balanceBuy',query:{status: '2'}}">
             <img src="../assets/image/buy.png">购买
-          </router-link>
+          </router-link> -->
+          <div class="item item1"  @click="warn">
+            <img src="../assets/image/sell.png">提现
+          </div>
+          <div class="item"  @click="warn">
+            <img src="../assets/image/buy.png">购买
+          </div>
         </div>
       </div>
       <div class="turnto">
         <p>积分操作</p>
         <div class="box">
-          <router-link class="item item1" tag="div" to="translateIntegral">
+          <!-- <router-link class="item item1" tag="div" to="translateIntegral">
             <img src="../assets/image/duihuan.png">兑换
-          </router-link>
+          </router-link> -->
+          <div class="item item1" @click="warn">
+            <img src="../assets/image/duihuan.png">兑换
+          </div>
           <div class="item" @click="gradeLog">
             <img src="../assets/image/log.png">记录
           </div>

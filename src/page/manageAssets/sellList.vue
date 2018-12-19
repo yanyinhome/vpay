@@ -54,7 +54,7 @@
         <i class="iconfont icon-chahao"></i>
       </div>
     </div>
-    <div class="mesnull" v-if="!message.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
+    <div v-if="!message.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
   </div>
 </template>
 
@@ -358,7 +358,7 @@ export default {
       // margin: 0px auto;
       button {
         margin: auto;
-        padding: 0 5px;
+        padding: 0 10px;
         width: 200px;
         font-size: 26px;
         line-height: 60px;

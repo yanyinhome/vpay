@@ -20,7 +20,7 @@
         <p>{{item.create_time}}</p>
       </div>
     </div>
-    <div class="mesnull" v-if="!log.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
+    <div v-if="!log.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
 
   </div>
 </template>

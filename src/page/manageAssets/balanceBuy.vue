@@ -191,7 +191,7 @@ export default {
       margin-top: 20px;
       margin-left: 30px;
       width: 210px;
-      height: 60px;
+      line-height: 60px;
       background: rgba(42, 42, 42, 1);
       border-radius: 10px;
       box-sizing: border-box;
@@ -227,7 +227,7 @@ export default {
     .money {
       margin: 10px 20px;
       width: 180px;
-      height: 60px;
+      line-height: 60px;
       background: rgba(42, 42, 42, 1);
       border-radius: 10px;
       box-sizing: border-box;
