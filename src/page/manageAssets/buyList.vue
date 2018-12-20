@@ -9,18 +9,19 @@
       <div class="box2">
         <p v-if="status=='1'">{{UID}}</p>
         <p v-else>{{item.UID}}</p>
-        <p>
+        <p v-if="status=='1'">
           信用：
           <img
-            v-if="status=='1'"
             src="../../assets/image/grade.png"
             v-for="(item1,index) in grade"
             :key="index"
           >
+        </p>
+        <p v-if="status!='1'">
+          信用：
           <img
-            v-else
             src="../../assets/image/grade.png"
-            v-for="(item1,index) in item.credit*1"
+            v-for="(item1,index) in (item.credit*1)"
             :key="index"
           >
         </p>

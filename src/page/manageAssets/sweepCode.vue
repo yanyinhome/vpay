@@ -29,17 +29,22 @@ export default {
 
   computed: {},
 
-  // beforeRouteEnter(to, from, next) {
-  //   next(vm => {
-  //     vm.startRecognize();
-  //   });
-  // },
-  activated(){
-    this.startRecognize();
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (from.name != "index") {
+        vm.startRecognize();
+        vm.startScan();
+      }
+    });
   },
-  created() {},
+
+  created() {
+    this.startRecognize();
+    this.startScan();
+  },
 
   mounted() {
+    this.startRecognize();
     this.startScan();
   },
 
@@ -93,15 +98,10 @@ export default {
     this.closeScan();
   },
   beforeRouteLeave(to, from, next) {
-    //B是B弹框的v-model值
-    // if (this.B) {
-    //   this.B= false;
-    //   next(false);
-    // } else {
-    //   next();
-    // }
-    // this.cancelScan();
-    // this.closeScan();
+    if (to.name == "index") {
+      this.closeScan();
+      this.$router.go(0);
+    }
   }
   // 销毁解绑
   // beforeDestroy () {

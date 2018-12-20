@@ -157,6 +157,7 @@ export default {
       }
     }
     .right {
+      text-align: right;
       p:nth-of-type(1) {
         font-size: 28px;
         color: #fff;

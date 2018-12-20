@@ -12,6 +12,10 @@ import './assets/js/component';
 import './assets/js/compress';
 require('animate.css');
 
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
+
 //引入mint-ui
 import Mint from 'mint-ui';
 import 'mint-ui/lib/style.css';
@@ -44,7 +48,7 @@ Vue.prototype.$bus = new Vue();
 //         } else {
 //           next();
 //         }
-//       })
+//       }) 
 //       .catch(function (error) {
 //         console.log(error);
 //       });
@@ -95,7 +99,7 @@ Vue.filter('hideTel', function (value) {
   return value.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
 });
 
-// 局部过滤器，隐藏地址
+// 过滤器，隐藏地址
 Vue.filter('hideAddress', function (value) {
   if (!value) {
     return;
@@ -104,6 +108,20 @@ Vue.filter('hideAddress', function (value) {
     value = value.toString();
   }
   return value.slice(0, value.indexOf("市") + 1).concat("****");
+});
+
+// 等级
+Vue.filter('gradeTo', function (value) {
+  if (!value) {
+    return;
+  }
+  if (typeof value !== "string") {
+    value = value.toString();
+    for (let i = 0; i < value; i++) {
+      this.grade.push(1);
+    }
+  }
+  return this.grade;
 });
 
 // 全局过滤器，金额只能输入10的倍数
@@ -126,8 +144,8 @@ Vue.prototype.moneyCheck = function () {
 
 // axios请求
 Vue.prototype.axios = axios.create({
-  // baseURL: 'http://swyj.cadhx.com/api/',
-  baseURL: 'http://www.3wej.com/api/',
+  baseURL: 'http://swyj.cadhx.com/api/',
+  // baseURL: 'http://www.3wej.com/api/',
   timeout: 10000,
   withCredentials: false,
   transformRequest: [function (data) {

@@ -12,6 +12,9 @@
           <input type="password" v-model="password" placeholder="请输入登录密码">
         </div>
         <router-link class="forget" tag="div" to="forget">忘记密码？</router-link>
+        <div class="jiantou" @click="loginSubmit">
+          <img src="../assets/image/jiantou.png">
+        </div>
       </div>
       <!-- 注册 -->
       <div class="logininp" v-if="register">
@@ -43,10 +46,10 @@
           <i class="iconfont icon-yaoqingma"/>
           <input type="text" v-model="code" placeholder="请输入邀请码">
         </div>
-      </div>
-      <div class="jiantou" @click="submitTo">
-        <img src="../assets/image/jiantou.png">
-      </div>
+        <div class="jiantou" @click="resSubmit">
+          <img src="../assets/image/jiantou.png">
+        </div>
+      </div>     
     </div>
   </div>
 </template>
@@ -64,7 +67,6 @@ export default {
       sendSMSTime: 0,
       isSend: false,
 
-      // name: "",
       loginpass: "",
       safepass: "",
       tel: "",
@@ -80,15 +82,6 @@ export default {
   mounted() {},
 
   methods: {
-    submitTo(){
-      if (this.login == true ) {
-        //登录
-        this.loginSubmit();
-      } else if (this.register == true) {
-        //注册
-        this.resSubmit();
-      }
-    }, 
     loginSubmit(){
       if (!this.phone){
         this.$bus.$emit('toast', '请输入手机号');       

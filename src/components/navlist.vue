@@ -226,7 +226,7 @@ export default {
         border-radius: 55px;
         overflow: hidden;
         img {
-          height: 100%;
+          width: 100%;
         }
       }
       .phone {

@@ -1,6 +1,7 @@
 <template>
   <div id="shoplist">
     <com-head :opacity="2"></com-head>
+    <router-link tag="div" to="shopOrder" class="keepdata">订单管理</router-link>
     <div class="shopMes">
       <div class="upload" @click="portrait">
         <div class="yulan" v-if="yulan">
@@ -63,7 +64,7 @@
       <div v-if="!message.length" style="margin-top: 15vh; text-align: center;">暂无信息</div>
     </div>
      
-    <div class="addgoods"><img src="../../assets/image/addgoods.png"></div>
+    <router-link tag="div" to="addGoods" class="addgoods"><img src="../../assets/image/addgoods.png"></router-link>
     <!-- 更多 -->
     <div class="morenav" v-if="navhandel">
       <div class="page_foot_inner">
@@ -126,6 +127,17 @@ export default {
 #shoplist {
   background-color: #f6f6f6;
   color: #fff;
+  .keepdata {
+    width: 160px;
+    height: 80px;
+    text-align: center;
+    color: #fff;
+    line-height: 80px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100;
+  }
   .shopMes {
     width: 750px;
     height: 560px;

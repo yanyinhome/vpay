@@ -24,7 +24,8 @@ export default [
     {
         path: '/index',
         component: index,
-        name: 'index'
+        name: 'index',
+        meta: {keepAlive: false}
     },{
         path: '/',
         component: login,

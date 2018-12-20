@@ -75,6 +75,7 @@ export default [
     {
         path: '/sweepCode',
         component: sweepCode,
-        name: 'sweepCode'
+        name: 'sweepCode',
+        meta: {keepAlive: false}
     },
 ]
