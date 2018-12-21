@@ -5,7 +5,7 @@
     <div class="index">
       <div class="indextop">
         <div class="user">
-          <router-link class="boxmes" tag="div" to='userMessage'>
+          <router-link class="boxmes" tag="div" to="userMessage">
             <div class="left">
               <img :src="user.img">
             </div>
@@ -20,7 +20,7 @@
           <i class="iconfont icon-sort" @click="shownav"></i>
         </div>
         <div class="saoma">
-          <div class="img"  @click="warn">
+          <div class="img" @click="warn">
             <img src="../assets/image/saoma.png">
           </div>
           <p>扫码支付</p>
@@ -39,7 +39,10 @@
 
       <noticeSwiper :news="news" class="gonggao"></noticeSwiper>
       <div class="turnto">
-        <p><span>余额操作</span><span @click="yuoeLog">变动记录</span></p>
+        <p>
+          <span>余额操作</span>
+          <span @click="yuoeLog">变动记录</span>
+        </p>
         <div class="box">
           <router-link class="item item1" tag="div" to="turnOut">
             <img src="../assets/image/out.png">转出
@@ -54,11 +57,11 @@
           </router-link>
           <router-link class="item" tag="div" :to="{name:'balanceBuy',query:{status: '2'}}">
             <img src="../assets/image/buy.png">购买
-          </router-link> -->
-          <div class="item item1"  @click="warn">
+          </router-link>-->
+          <div class="item item1" @click="warn">
             <img src="../assets/image/sell.png">提现
           </div>
-          <div class="item"  @click="warn">
+          <div class="item" @click="warn">
             <img src="../assets/image/buy.png">购买
           </div>
         </div>
@@ -68,7 +71,7 @@
         <div class="box">
           <!-- <router-link class="item item1" tag="div" to="translateIntegral">
             <img src="../assets/image/duihuan.png">兑换
-          </router-link> -->
+          </router-link>-->
           <div class="item item1" @click="warn">
             <img src="../assets/image/duihuan.png">兑换
           </div>
@@ -146,32 +149,32 @@ export default {
           console.log(error);
         });
     },
-    applyShop(){
+    applyShop() {
       this.$bus.$emit("comAlert", {
-          title: "暂无商铺",
-          info: "您还没有入住商铺，是否申请店铺入驻",
-          button: [
-            {
-              text: "确认",
-              callback: () => {
-                this.$router.push('applyShop');
-              }
-            },
-            {
-              text: "取消",
-              callback: () => {}
+        title: "暂无商铺",
+        info: "您还没有入住商铺，是否申请店铺入驻",
+        button: [
+          {
+            text: "确认",
+            callback: () => {
+              this.$router.push("applyShop");
             }
-          ]
-        });
+          },
+          {
+            text: "取消",
+            callback: () => {}
+          }
+        ]
+      });
     },
-    yuoeLog(){
-      this.$router.push({name:'turnOutlog',query:{status: '4'}});
+    yuoeLog() {
+      this.$router.push({ name: "turnOutlog", query: { status: "4" } });
     },
-    gradeLog(){
-      this.$router.push({name:'turnOutlog',query:{status: '3'}});
+    gradeLog() {
+      this.$router.push({ name: "turnOutlog", query: { status: "3" } });
     },
-    saoma(){
-      this.$router.push('sweepCode');
+    saoma() {
+      this.$router.push("sweepCode");
     },
     warn() {
       this.$bus.$emit("toast", "功能开发中");
@@ -181,9 +184,9 @@ export default {
     }
   },
   // 销毁解绑
-  beforeDestroy: function () {
-    this.$bus.$emit('comAlert');
-  },
+  beforeDestroy: function() {
+    this.$bus.$emit("comAlert");
+  }
 };
 </script>
 <style lang='scss' scoped>
@@ -192,44 +195,43 @@ export default {
   .index {
     .indextop {
       height: 586px;
-      
       .user {
         display: flex;
         justify-content: space-between;
         align-items: center;
         .boxmes {
           display: flex;
-        justify-content: flex-start;
-        align-items: center;
-.left {
-          margin-right: 20px;
-          width: 70px;
-          height: 70px;
-          border-radius: 35px;
-          overflow: hidden;
-          img {
-            width: 100%;
-          }
-        }
-        .right p {
-          font-size: 26px;
-          font-family: PingFangSC-Regular;
-          font-weight: 400;
-          color: rgba(214, 174, 123, 1);
-          line-height: 36px;
-          display: flex;
+          justify-content: flex-start;
           align-items: center;
-          img {
-            display: inline-block;
-            width: 26px;
-            height: 26px;
+          .left {
+            margin-right: 20px;
+            width: 70px;
+            height: 70px;
+            border-radius: 35px;
+            overflow: hidden;
+            img {
+              width: 100%;
+            }
+          }
+          .right p {
+            font-size: 26px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(214, 174, 123, 1);
+            line-height: 36px;
+            display: flex;
+            align-items: center;
+            img {
+              display: inline-block;
+              width: 26px;
+              height: 26px;
+            }
           }
         }
-      }
-       .icon-sort {
-         color: rgba(214, 174, 123, 1);
-         font-size: 60px;
-       } 
+        .icon-sort {
+          color: rgba(214, 174, 123, 1);
+          font-size: 60px;
+        }
       }
       .saoma {
         color: #fff;

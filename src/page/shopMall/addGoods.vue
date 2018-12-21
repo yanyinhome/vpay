@@ -159,7 +159,7 @@ export default {
         width: 690px;
         margin: auto;
         padding: 10px;
-        border: 1px solid rgba(238, 238, 238, 1);
+        border: 1Px solid rgba(238, 238, 238, 1);
         box-sizing: border-box;
       }
       .number {

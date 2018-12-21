@@ -313,7 +313,7 @@ export default {
     // border:1Px solid rgba(221,221,221,1);
     table,
     tr {
-      border: 1px solid rgba(221, 221, 221, 1);
+      border: 1Px solid rgba(221, 221, 221, 1);
       line-height: 70px;
     }
     td {

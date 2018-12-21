@@ -245,7 +245,7 @@ export default {
       height: 320px;
       margin: auto;
       border-radius: 10px;
-      border: 1px dashed rgba(153, 153, 153, 1);
+      border: 1Px dashed rgba(153, 153, 153, 1);
       .yulan {
         width: 560px;
         height: 320px;

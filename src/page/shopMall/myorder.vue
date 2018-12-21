@@ -1,0 +1,301 @@
+<template>
+  <div id="shopOrder">
+    <com-head :opacity="1">我的订单</com-head>
+    <div class="nav">
+      <div
+        v-for="(item,index) in orderlist"
+        :key="index"
+        :class="{active: status==index}"
+        @click="listSelect(index)"
+      >{{item}}</div>
+    </div>
+    <div class="order" v-for="(item,index) in message" :key="item.order_id">
+      <div class="orderCenter">
+        <div class="box1">
+          <img :src="item.image1">
+        </div>
+        <div class="box2">
+          <p>{{item.book}}</p>
+          <p>{{item.book}}</p>
+          <p>
+            <span>{{item.book_sign}}</span>
+            <span>x{{item.number}}</span>
+          </p>
+        </div>
+      </div>
+      <div class="orderFoot">
+        <!-- <div class="sumprice">共{{item.number}}件商品(包含运费) 合计：¥{{ item.number * item.order_pay_price}}</div> -->
+        <button class="noborder" v-if="status=='0'">去付款</button>
+        <button class="noborder" v-if="status=='1'" @click="warning(item.id)">提醒发货</button>
+        <button v-if="status=='2'||status=='3'" @click="lookwuliu(index)">查看物流</button>
+        <button class="noborder" v-if="status=='2'" @click="sureReceive(item.id)">确定收货</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "shopOrder",
+  data() {
+    return {
+      mask: false,
+      status: 0,
+      search: "",
+      message: [
+        {
+          order_create_time: "120212",
+          order_create_time: "120212",
+          order_create_time: "120212",
+          status: "2",
+          book: "120212",
+          book_sign: "120212",
+          order_pay_price: "120212",
+          number: "120212",
+          image1: require("../../assets/image/zanshi/touxiang.jpg")
+        },
+        {
+          order_create_time: "120212",
+          order_create_time: "120212",
+          order_create_time: "120212",
+          status: "2",
+          book: "120212",
+          book_sign: "120212",
+          order_pay_price: "120212",
+          number: "120212",
+          image1: require("../../assets/image/zanshi/touxiang.jpg")
+        }
+      ],
+      server: [
+        "",
+        "待发货",
+        "待收货",
+        "交易已完成",
+        "删除订单",
+        "确认收货",
+        "查看物流"
+      ],
+      orderlist: ["待付款", "待发货", "待收货", "已完成"]
+    };
+  },
+
+  computed: {},
+
+  created() {},
+
+  mounted() {
+    this.loading("0");
+  },
+
+  methods: {
+    loading(type) {
+      this.axios
+        .post("user/order", {
+          token: this.token(),
+          status: type
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.message = data.data;
+          } else if (data.code === "201") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    // 删除订单
+    warning(id) {
+      this.$bus.$emit("comAlert", {
+        info: "已提醒买家发货",
+        button: [
+          {
+            text: "确认",
+            callback: () => {
+              this.axios
+                .post("user/orderout", {
+                  order_id: id
+                })
+                .then(({ data }) => {
+                  console.log(data);
+                  if (data.code === "200") {
+                    this.$bus.$emit("toast", data.msg);
+                    this.message.splice(index, 1);
+                  } else if (data.code === "201") {
+                    this.$bus.$emit("toast", data.msg);
+                  }
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
+            }
+          }
+        ]
+      });
+    },
+    // 确定收货
+    sureReceive(id, index) {
+      this.$bus.$emit("comAlert", {
+        info: "确定收货?",
+        button: [
+          {
+            text: "确认",
+            callback: () => {
+              this.axios
+                .post("user/overorder", {
+                  order_id: id
+                })
+                .then(({ data }) => {
+                  console.log(data);
+                  if (data.code === "200") {
+                    this.$bus.$emit("toast", data.msg);
+                    this.message.splice(index, 1);
+                  } else if (data.code === "201") {
+                    this.$bus.$emit("toast", data.msg);
+                  }
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
+            }
+          },
+          {
+            text: "取消",
+            callback: () => {}
+          }
+        ]
+      });
+    },
+    // 查看物流
+    lookwuliu(index) {
+      console.log(this.message[index].tracking_number);
+      this.$bus.$emit("comAlert", {
+        title: "物流单号",
+        info: this.message[index].tracking_number,
+        button: [
+          {
+            text: "确认",
+            callback: () => {}
+          }
+        ]
+      });
+    },
+    listSelect(index) {
+      console.log(index);
+      this.status = index;
+      this.loading(index);
+    }
+  }
+};
+</script>
+<style lang='scss' scoped>
+#shopOrder {
+  padding-top: 172px;
+  background-color: #f6f6f6;
+  .nav {
+    position: fixed;
+    top: 82px;
+    width: 750px;
+    height: 90px;
+    background: #fff;
+    color: #000;
+    border-top: 1Px solid #cbcbcb;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+    div {
+      width: 22%;
+      margin: 0 3%;
+      height: 90px;
+      font-size: 26px;
+      text-align: center;
+      line-height: 90px;
+      color: #666;
+      position: relative;
+    }
+    .active {
+      color: rgba(214, 174, 123, 1);
+      border-bottom: 4px solid rgba(214, 174, 123, 1);
+      box-sizing: border-box;
+    }
+  }
+  .order {
+    margin-top: 20px;
+    width: 750px;
+    padding: 10px 30px;
+    background: rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+
+    .orderCenter {
+      margin: 20px 0px;
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      // align-items: center;
+      border-bottom: 1Px solid #cbcbcb;
+      .box1 {
+        width: 186px;
+        max-height: 186px;
+        border-radius: 6px;
+        overflow: hidden;
+        img {
+          width: 100%;
+        }
+      }
+      .box2 {
+        width: 500px;
+        margin-left: 30px;
+        p:nth-of-type(1) {
+          font-size: 30px;
+          line-height: 40px;
+          color: #000;
+          line-height: 60px;
+        }
+        p:nth-of-type(2) {
+          font-size: 26px;
+          color: #999;
+          line-height: 40px;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        p:nth-of-type(3) {
+          font-size: 28px;
+          color: #000;
+          line-height: 60px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+      }
+    }
+    .orderFoot {
+      text-align: right;
+      padding-bottom: 20px;
+      box-sizing: border-box;
+      font-size: 26px;
+      .sumprice {
+        line-height: 70px;
+        margin: 10px auto;
+
+        text-align: right;
+        color: rgba(34, 34, 34, 1);
+        font-size: 26px;
+      }
+      button {
+        margin-left: 20px;
+        padding: 5px 15px;
+        font-size: 26px;
+        color: rgb(0, 0, 0);
+        background: rgba(255, 255, 255, 1);
+        border-radius: 25px;
+        border: 1Px solid rgba(151, 151, 151, 1);
+      }
+    }
+  }
+}
+</style>

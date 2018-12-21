@@ -215,7 +215,7 @@ export default {
       font-family: PingFangSC-Regular;
       font-weight: 400;
       line-height: 90px;
-      border-bottom: 1px solid rgba(68, 68, 68, 1);
+      border-bottom: 1Px solid rgba(68, 68, 68, 1);
       span:nth-of-type(2) {
         color: #999;
       }

@@ -120,7 +120,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      // border-bottom: 1px solid #eee;
+      // border-bottom: 1Px solid #eee;
       background-color: #fff;
       input {
         width: 300px;
@@ -190,7 +190,7 @@ export default {
       }
     }
     .item:nth-of-type(2) {
-      // border-bottom: 1px solid #eee;
+      // border-bottom: 1Px solid #eee;
     }
   }
   .shop {

@@ -15,6 +15,8 @@ import butFoot from '../../components/button_foot';
 import navlist from '../../components/navlist';
 // 公告文字轮播
 import notice from '../../components/notice';
+// 省市县三级联动
+import addressSelect from '../../components/addressSelect';
 
 // 挂载全局组件
 Vue.component('comButton', comButton);
@@ -25,3 +27,4 @@ Vue.component('comTime', comTime);
 Vue.component('butFoot', butFoot);
 Vue.component('navlist', navlist);
 Vue.component('noticeSwiper', notice);
+Vue.component('addressSelect', addressSelect);

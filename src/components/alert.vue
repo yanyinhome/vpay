@@ -76,27 +76,28 @@ export default {
     overflow: hidden;
     .alert_title {
       color: #000;
-      line-height: 90px;
-      font-size: 30px;
+      line-height: 110px;
+      font-size: 36px;
       font-weight: 700;
     }
     .alert_info {
-      font-size: 26px;
+      line-height: 110px;
+      font-size: 36px;
       color: #000;
     }
     .alert_inbox {
-      font-size: 26px;
+      font-size: 36px;
       color: #000;
     }
     .alert_btn {
       margin-top: 40px;
       display: flex;
       justify-content: space-between;
-      border-top: 1px solid #eee;
+      border-top: 1Px solid #eee;
       .alert_buttons {
         width: 295px;
-        height: 86px;
-        line-height: 86px;
+        height: 118px;
+        line-height: 118px;
         color: #fff;
         font-size: 30px;
         background: #ffffff;
@@ -105,22 +106,24 @@ export default {
         }
         &:nth-child(2) {
           color: #888;
-          border-left: 1px solid #eee;
+          border-left: 1Px solid #eee;
         }
       }
       .alert_button {
         width: 400px;
         margin: 0 auto;
-        height: 78px;
-        line-height: 78px;
+        height: 110px;
+        line-height: 110px;
         color: #888;
-        font-size: 28px;
+        font-size: 36px;
         border-radius: 39px;
-        background: linear-gradient(
-          90deg,
-          rgba(234, 205, 163, 1) 0%,
-          rgba(214, 174, 123, 1) 100%
-        );
+        color:rgba(214,175,124,1);
+        background: none;
+        // background: linear-gradient(
+        //   90deg,
+        //   rgba(234, 205, 163, 1) 0%,
+        //   rgba(214, 174, 123, 1) 100%
+        // );
         // @include bgChangeStyle();
       }
     }

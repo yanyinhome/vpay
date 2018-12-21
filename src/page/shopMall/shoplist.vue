@@ -19,7 +19,7 @@
       </div>
       <p>
         {{name}}
-        <i class="iconfont icon-bianji"/>
+        <router-link  class="iconfont icon-bianji" tag="span" to="modifyShopname"></router-link>
       </p>
       <p>{{time}}</p>
       <div class="number">
@@ -108,7 +108,6 @@ export default {
 
   methods: {
     goodHandel(){
-
     },
     // 头像单击事件
     portrait() {
@@ -152,7 +151,7 @@ export default {
       height: 100px;
       margin: auto;
       border-radius: 50px;
-      border: 1px dashed rgba(153, 153, 153, 1);
+      border: 1Px dashed rgba(153, 153, 153, 1);
       .yulan {
         width: 100px;
         height: 100px;
@@ -243,7 +242,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #cbcbcb;
+      border-bottom: 1Px solid #cbcbcb;
       .img {
         width: 130px;
         height: 130px;

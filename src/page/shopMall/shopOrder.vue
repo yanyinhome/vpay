@@ -28,40 +28,77 @@
           <img :src="item.image1">
         </div>
         <div class="box2">
-          <p>
-            {{item.book}}
-            <i class="iconfont icon-xiayi"/>
-          </p>
+          <p><span>{{item.book}}</span><span>&yen;{{item.order_pay_price}}</span></p>
+          <p><span>{{item.book_sign}}</span><span>x{{item.number}}</span></p>
           <p>{{item.book_sign}}</p>
-        </div>
-        <div class="box3">
-          <p>&yen;{{item.order_pay_price}}</p>
-          <p>x{{item.number}}</p>
         </div>
       </div>
       <div class="orderFoot">
-        <div class="sumprice">共{{item.number}}件商品 合计：¥{{ item.number * item.order_pay_price}}</div>
-        <button class="noborder" v-if="item.status=='1'">已下单，等待商家发货</button>
+        <div class="sumprice">共{{item.number}}件商品(包含运费) 合计：¥{{ item.number * item.order_pay_price}}</div>
+        <button class="noborder" v-if="item.status=='1'">发货</button>
         <button v-if="item.status=='2'" @click="lookwuliu(index)">查看物流</button>
         <button
           class="evaluate"
-          v-if="item.status=='2'"
+          v-if="item.status=='3'"
           @click="surereceive(item.order_id,index)"
         >确定收货</button>
-        <button v-if="item.status=='3'" @click="delorder(item.order_id,index)">删除订单</button>
       </div>
     </div>
     <!-- 发货 -->
     <div class="mask" v-if="mask">
       <div class="box1">
+        <div class="topmes">
+          <div class="left">
+            <img src="../../assets/image/shouhuo.png" alt>
+          </div>
+          <div class="right">
+            <p>
+              <span>买家姓名</span>
+              <span>买家姓名</span>
+            </p>
+            <p>河南省郑州市金水区北三环瀚海北金</p>
+          </div>
+        </div>
+        <div class="cenmes">
+          <p>
+            <span>商品名字</span>
+            <span>x1</span>
+          </p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+          <p class="gong">共计3件商品</p>
+        </div>
+        <div class="footmes">
+          <p>订单编号：</p>
+          <p>下单时间：22</p>
+          <p>付款时间：</p>
+        </div>
+        <button class="btn" @click="submit">确定发货</button>
 
-      </div>
-      <div class="box3">
-        <button @click="sureReceive">确认收款</button>
-        <button @click="mask=false">取消</button>
-      </div>
-      <div class="box2" @click="mask=false">
-        <i class="iconfont icon-chahao"></i>
+        <div class="close" @click="mask=false">
+          <i class="iconfont icon-chahao"></i>
+        </div>
       </div>
     </div>
   </div>
@@ -74,8 +111,28 @@ export default {
     return {
       mask: false,
       status: 0,
-      search: '',
-      message: [],
+      search: "",
+      message: [{
+              order_create_time: '120212',
+              order_create_time: '120212',
+              order_create_time: '120212',
+              status: '2',
+              book: '120212',
+              book_sign: '120212',
+              order_pay_price: '120212',
+              number: '120212',
+              image1: require('../../assets/image/zanshi/touxiang.jpg')
+          },{
+              order_create_time: '120212',
+              order_create_time: '120212',
+              order_create_time: '120212',
+              status: '2',
+              book: '120212',
+              book_sign: '120212',
+              order_pay_price: '120212',
+              number: '120212',
+              image1: require('../../assets/image/zanshi/touxiang.jpg')
+          },],
       server: [
         "",
         "待发货",
@@ -226,7 +283,7 @@ export default {
   padding-top: 82px;
   background-color: #fff;
   .item {
-    margin: 20px 30px;
+    margin: 20px 30px 106px;
     padding: 0 30px;
     box-sizing: border-box;
     line-height: 90px;
@@ -311,25 +368,25 @@ export default {
     background: rgba(255, 255, 255, 1);
     border-radius: 20px;
     .orderTop {
-      margin: 0 32px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 24px;
       color: #666;
       line-height: 66px;
+      border-bottom: 1Px solid #f6f6f6;
       .box2 {
-        color: #ff7a13;
+        color: #F10F0F;
       }
     }
     .orderCenter {
-      margin: 20px 30px;
+      margin: 20px 0px;
       display: flex;
       justify-content: space-between;
       //   align-items: center;
       .box1 {
-        width: 120px;
-        height: 156px;
+        width: 130px;
+        height: 130px;
         border-radius: 6px;
         overflow: hidden;
         img {
@@ -337,65 +394,58 @@ export default {
         }
       }
       .box2 {
-        width: 300px;
+        width: 560px;
         margin-left: 30px;
         p:nth-of-type(1) {
-          margin-top: 10px;
-          font-size: 30px;
+          font-size: 28px;
           line-height: 40px;
-          color: #222;
+          color: #000;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          span:nth-of-type(2) {
+color: #999;
+          }
         }
         p:nth-of-type(2) {
           font-size: 24px;
-          color: #666;
+          color: #999;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          line-height: 40px;
+        }
+        p:nth-of-type(3) {
+          font-size: 24px;
+          color: #999;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
-        }
-      }
-      .box3 {
-        width: 160px;
-        text-align: right;
-        color: #666;
-        font-size: 28px;
-        p:nth-of-type(1) {
-          margin-top: 10px;
-          color: #222;
-          font-size: 24px;
+          line-height: 60px;
         }
       }
     }
     .orderFoot {
       text-align: right;
-      margin: 0px 30px;
       padding-bottom: 20px;
       box-sizing: border-box;
       font-size: 26px;
       .sumprice {
         line-height: 70px;
         margin: 10px auto;
-        border-bottom: 1px solid #f6f6f6;
+        border-bottom: 1Px solid #f6f6f6;
         text-align: right;
         color: rgba(34, 34, 34, 1);
         font-size: 26px;
       }
       button {
         margin: 20px 0 10px 20px;
-        background: none;
         padding: 10px 20px;
         font-size: 26px;
-        border-radius: 24px;
-        color: #999;
-        border: 1px solid #999;
-      }
-      .evaluate {
-        color: #ff7a13;
-        border: 1px solid #ff7a13;
-      }
-      .noborder {
-        color: #999;
-        border: none;
+        border-radius: 10px;
+        color: rgb(0, 0, 0);
+background:rgba(214,174,123,1);
       }
     }
   }
@@ -406,53 +456,109 @@ export default {
     width: 100vw;
     height: calc(100vh);
     z-index: 101;
-    background: rgba(4, 4, 15, 0.8);
+    background: rgba(0, 0, 0, 0.5);
     .box1 {
-      margin: 300px auto;
-      width: 70vw;
-      height: 10vh;
-      min-height: 50vh;
-      border-radius: 10px;
-      overflow-y: scroll;
-      img {
-        width: 100%;
+      margin: 200px auto;
+      width: 630px;
+      padding-bottom: 10px;
+      border-radius: 20px;
+      background-color: #fff;
+      position: relative;
+      .topmes {
+        margin: 0 30px;
+        padding: 60px 0 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1Px solid rgba(203, 203, 203, 1);
+        .left {
+          width: 50px;
+          height: 58px;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .right {
+          margin-left: 20px;
+          width: 500px;
+          p:nth-of-type(1) {
+            font-size: 28px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(0, 0, 0, 1);
+            line-height: 40px;
+          }
+          p:nth-of-type(2) {
+            font-size: 24px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(102, 102, 102, 1);
+            line-height: 60px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+          }
+        }
       }
-    }
-    .box2 {
-      width: 100px;
-      height: 100px;
-      text-align: center;
-      line-height: 100px;
-      position: fixed;
-      top: 120px;
-      right: 60px;
-      color: #fff;
-      .iconfont {
-        font-size: 60px;
+      .cenmes {
+        height: 250px;
+        overflow: auto;
+        margin: 0 30px;
+        border-bottom: 1Px solid rgba(203, 203, 203, 1);
+        padding: 10px 0;
+        p:nth-of-type(1) {
+          font-size: 26px;
+          font-family: PingFangSC-Regular;
+          font-weight: 400;
+          color: rgba(136, 136, 136, 1);
+          line-height: 50px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .gong {
+          font-size: 26px;
+          font-family: PingFangSC-Regular;
+          font-weight: 400;
+          color: rgb(0, 0, 0);
+        }
       }
-    }
-    .box3 {
-      position: fixed;
-      bottom: 20vh;
-      left: 120px;
-      // margin: 0px auto;
-      button {
-        margin: auto;
-        padding: 0 10px;
-        width: 200px;
-        font-size: 26px;
-        line-height: 60px;
+      .footmes {
+        margin: 0 30px;
+        padding: 10px 0;
+        p {
+          font-size: 28px;
+          font-family: PingFangSC-Regular;
+          font-weight: 400;
+          color: rgba(102, 102, 102, 1);
+          line-height: 50px;
+        }
+      }
+      .btn {
+        display: block;
+        margin: 80px auto;
+        width: 520px;
+        height: 70px;
         background: linear-gradient(
           90deg,
           rgba(214, 174, 123, 1) 0%,
-          rgba(238, 204, 153, 1) 100%
+          rgba(234, 205, 163, 1) 100%
         );
-        border-radius: 6px;
-        color: #fff;
+        border-radius: 36px;
       }
-      button:nth-of-type(2) {
-        margin-left: 100px;
-        background: rgb(156, 156, 156);
+      .close {
+        width: 100px;
+        line-height: 100px;
+        text-align: center;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        .iconfont {
+          font-size: 40px;
+          color: #666;
+        }
       }
     }
   }

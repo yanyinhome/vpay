@@ -81,7 +81,7 @@ export default {
     height: 88px;
     width: 528px;
     display: flex;
-    border: 1px solid #ddd;
+    border: 1Px solid #ddd;
   }
   .item {
     flex-basis: 25%;
@@ -90,7 +90,7 @@ export default {
     line-height: 88px;
   }
   .item:not(:last-of-type) {
-    border-right: 1px solid #ddd;
+    border-right: 1Px solid #ddd;
   }
   input {
     position: absolute;

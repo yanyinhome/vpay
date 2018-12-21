@@ -248,7 +248,7 @@ export default {
           margin-top: 20px;
           height: 80px;
           line-height: 80px;
-          border-bottom: 1px solid #666;
+          border-bottom: 1Px solid #666;
           input {
             margin-left: 20px;
             color: #fff;
