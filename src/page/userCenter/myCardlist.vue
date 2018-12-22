@@ -222,7 +222,7 @@ export default {
 };
 </script>
 <style lang='scss'>
-@import url(../../assets/scss/swiper-3.4.0.min.css);
+// @import url(../../assets/scss/swiper-3.4.0.min.css);
 #myCardlist {
   padding-top: 82px;
   background-color: #fff;

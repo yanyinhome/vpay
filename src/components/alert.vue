@@ -99,7 +99,7 @@ export default {
         height: 118px;
         line-height: 118px;
         color: #fff;
-        font-size: 30px;
+        font-size: 36px;
         background: #ffffff;
         &:nth-child(1) {
           color: rgba(214, 174, 123, 1);

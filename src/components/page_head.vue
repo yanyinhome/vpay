@@ -43,7 +43,8 @@ export default {
       position: absolute;
       top: 0;
       left: 0;
-      width: 120px;
+      width: 90px;
+      padding-right: 50px;
       font-size: 40px;
     }
     &.page_head_opacity {
