@@ -6,7 +6,9 @@
         <i class="iconfont icon-sousuo"></i>
       </span>
       <input type="text" v-model="search" placeholder="请输入你想要搜索的物品或商家" autofocus="autofocus">
+      <i class="iconfont icon-shanchu" @click="delectValue"></i>      
     </div>
+    <div class="keepdata" @click="sureSearch">确定</div>
     <div class="hot">
       <p>热门搜索</p>
       <div class="hotnav">
@@ -40,6 +42,7 @@ export default {
   name: "search",
   data() {
     return {
+      search: '',
       hotnav: [
         { nav: "热门" },
         { nav: "热门" },
@@ -79,6 +82,12 @@ export default {
           }
         ]
       });
+      },
+      delectValue(){
+        this.search = '';
+      },
+      sureSearch(){
+
       }
   }
 };
@@ -87,6 +96,17 @@ export default {
 #search {
   background-color: #fff;
   padding-top: 82px;
+   .keepdata {
+    width: 140px;
+    height: 80px;
+    text-align: center;
+    color: #000;
+    line-height: 80px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100;
+  }
   .item {
     position: fixed;
     top: 11px;
@@ -101,10 +121,13 @@ export default {
       font-size: 34px;
       color: #999;
     }
+    .icon-shanchu{
+      color: #999;
+    }
     input {
       padding-left: 10px;
       line-height: 60px;
-      width: 500px;
+      width: 400px;
       background: none;
       font-size: 26px;
       color: #fff;
@@ -119,7 +142,6 @@ export default {
       color: #888;
       font-size: 28px;
     }
-
     input::-moz-placeholder {
       /* Mozilla Firefox 19+ */
       color: #888;
@@ -134,7 +156,6 @@ export default {
   }
   .hot {
     padding: 0 20px;
-
     p {
       margin-top: 20px;
       font-size: 32px;
@@ -168,7 +189,7 @@ export default {
       font-weight: 500;
       color: rgba(0, 0, 0, 1);
       line-height: 80px;
-      border-bottom: 1px solid #cbcbcb;
+      border-bottom: 1Px solid #cbcbcb;
       display: flex;
       justify-content: space-between;
       .icon-iconfont-shanchu {

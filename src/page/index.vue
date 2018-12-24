@@ -12,8 +12,8 @@
             <div class="right">
               <p>UID：{{user.UID}}</p>
               <p>
-                信用：
-                <img src="../assets/image/grade.png" v-for="(item,index) in grade" :key="index">
+                注册币：{{grade}}
+                <!-- <img src="../assets/image/grade.png" v-for="(item,index) in grade" :key="index"> -->
               </p>
             </div>
           </router-link>
@@ -69,12 +69,12 @@
       <div class="turnto">
         <p>积分操作</p>
         <div class="box">
-          <!-- <router-link class="item item1" tag="div" to="translateIntegral">
+          <router-link class="item item1" tag="div" to="translateIntegral">
             <img src="../assets/image/duihuan.png">兑换
-          </router-link>-->
-          <div class="item item1" @click="warn">
+          </router-link>
+          <!-- <div class="item item1" @click="warn">
             <img src="../assets/image/duihuan.png">兑换
-          </div>
+          </div> -->
           <div class="item" @click="gradeLog">
             <img src="../assets/image/log.png">记录
           </div>
@@ -138,9 +138,10 @@ export default {
             this.balance = data.data.balance;
             this.integral = data.data.integral;
             this.news = data.data.news;
-            for (let index = 0; index < data.data.credit; index++) {
-              this.grade.push(1);
-            }
+            this.grade = data.data.credit;
+            // for (let index = 0; index < data.data.credit; index++) {
+            //   this.grade.push(1);
+            // }
           } else if (data.code == "204") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -196,10 +197,16 @@ export default {
     .indextop {
       height: 586px;
       .user {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        width: 100%;
+        position: fixed;
+        top: 0px;
+        left: 30px;
+        background: #14171A;
+        // display: flex;
+        // justify-content: space-between;
+        // align-items: center;
         .boxmes {
+          padding-top: 20px;
           display: flex;
           justify-content: flex-start;
           align-items: center;
@@ -229,12 +236,16 @@ export default {
           }
         }
         .icon-sort {
+          position: fixed;
+          top: 30px;
+          right: 30px;
           color: rgba(214, 174, 123, 1);
           font-size: 60px;
         }
       }
       .saoma {
         color: #fff;
+        padding-top: 70px;
         .img {
           margin: auto;
           margin-top: 70px;
@@ -305,7 +316,7 @@ export default {
         font-weight: 400;
         color: rgba(234, 205, 163, 1);
         line-height: 60px;
-        border-bottom: 1px solid rgba(68, 68, 68, 1);
+        border-bottom: 1Px solid rgba(68, 68, 68, 1);
       }
       .box {
         display: flex;
@@ -327,7 +338,7 @@ export default {
           }
         }
         .item1 {
-          border-right: 1px solid rgba(68, 68, 68, 1);
+          border-right: 1Px solid rgba(68, 68, 68, 1);
         }
       }
       .xia {

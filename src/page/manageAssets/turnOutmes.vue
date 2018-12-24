@@ -12,8 +12,9 @@
     <p>{{phone}}</p>
     <div class="account">
       <input type="text" v-model="money" placeholder="请输入转出金额">
+      <div class="jihuo" v-if="status=='1'">* 激活用户需要<span>{{currency}}</span>注册币，<span>{{balance}}</span>余额。</div>
       <input type="password" v-model="password" placeholder="请输入支付密码">
-      <p>* 确定转出前请核对转出用户信息</p>
+      <p>* 确定转出前请核对转出用户信息。</p>
       <com-button :disabled='disabled' :click="submit">确定转出</com-button>
     </div>
   </div>
@@ -26,6 +27,8 @@ export default {
     return {
       disabled: false,
       UID: this.$route.query.UID,
+      status: '',
+      rate: '',
       img: '',
       phone: "",
       money: "",
@@ -33,7 +36,14 @@ export default {
     };
   },
 
-  computed: {},
+  computed: {
+    currency: function() {
+      return (this.money * this.rate)/100;
+    },
+    balance: function() {
+      return (this.money * (1-this.rate/100));
+    },
+  },
 
   created() {},
 
@@ -54,6 +64,8 @@ export default {
             this.img = data.data.head_img;
             this.UID = data.data.UID;
             this.phone = data.data.phone;
+            this.rate = data.data.can_use;
+            this.status = data.data.rank;
           } else if (data.code == "204") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -145,9 +157,20 @@ export default {
     width: 690px;
     height: 80px;
     margin: 80px auto;
+    padding-top: 30px;
+    .jihuo {
+      margin-top: 20px;
+      text-align: left;
+      // line-height: 80px;
+      font-size: 24px;
+      span {
+        padding: 0 10px;
+        color: #D6AE7B;
+      }
+    }
     input {
       padding-left: 30px;
-      margin-top: 30px;
+      margin-top: 20px;
       box-sizing: border-box;
       width: 100%;
       line-height: 80px;
@@ -155,6 +178,9 @@ export default {
       border-radius: 10px;
       color: #fff;
     }  
+    // input:nth-of-type(1) {
+    //   margin-bottom: 30px;
+    // }
       input::-webkit-input-placeholder {
         /* WebKit browsers */
         color: #999;

@@ -37,7 +37,7 @@
         <p>店铺</p>
       </div>
       <div class="box2">
-        <button>立即支付</button>
+        <button>立即购买</button>
       </div>
     </div>
   </div>
@@ -104,22 +104,7 @@ export default {
       height: 100%;
     }
   }
-  .iconfont {
-    font-size: 40px;
-    line-height: 40px;
-    color: rgba(102, 102, 102, 1);
-  }
-  button {
-    width: 360px;
-    height: 70px;
-    background: linear-gradient(
-      90deg,
-      rgba(214, 174, 123, 1) 0%,
-      rgba(234, 205, 163, 1) 100%
-    );
-    border-radius: 38px;
-    font-size: 24px;
-  }
+
   .lunbo {
     width: 750px;
     //  height: 750px;
@@ -238,6 +223,11 @@ export default {
       padding: 10px 0;
       width: 186px;
       box-sizing: border-box;
+      .iconfont {
+        font-size: 44px;
+        line-height: 50px;
+        color: rgba(102, 102, 102, 1);
+      }
       p {
         line-height: 30px;
         color: rgba(102, 102, 102, 1);
@@ -245,7 +235,19 @@ export default {
     }
     .box2 {
       width: 564px;
-      border-left: 1px solid rgba(153, 153, 153, 1);
+      font-size: 24px;
+      border-left: 1Px solid rgba(153, 153, 153, 1);
+      button {
+        width: 360px;
+        height: 70px;
+        background: linear-gradient(
+          90deg,
+          rgba(214, 174, 123, 1) 0%,
+          rgba(234, 205, 163, 1) 100%
+        );
+        border-radius: 38px;
+        font-size: 24px;
+      }
     }
   }
 }

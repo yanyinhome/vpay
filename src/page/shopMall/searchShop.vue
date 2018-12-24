@@ -19,7 +19,7 @@
       </router-link>
       <div class="right2">
         <p>店铺商品</p>
-        <p>信用：</p>
+        <p>339件</p>
       </div>
     </div>
     <div class="goods">
@@ -153,7 +153,7 @@ export default {
       font-size: 26px;
       font-family: PingFangSC-Regular;
       font-weight: 400;
-      //   border-left: 1px solid rgba(153, 153, 153, 1);
+      //   border-left: 1Px solid rgba(153, 153, 153, 1);
       text-align: center;
       position: relative;
       &:after {
@@ -168,7 +168,7 @@ export default {
       }
       p:nth-of-type(2) {
         color: #d6ae7b;
-        line-height: 50px;
+        line-height: 40px;
       }
     }
   }

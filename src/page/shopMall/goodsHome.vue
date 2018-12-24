@@ -7,17 +7,18 @@
         </div>
         <div class="right">
           <p>UID：{{user.UID}}</p>
-          <p>
+          <p>注册币：{{user.grade}}</p>
+          <!-- <p>
             信用：
             <img src="../../assets/image/grade.png" v-for="(item,index) in grade" :key="index">
-          </p>
+          </p>-->
         </div>
       </router-link>
-      <i class="iconfont icon-sousuo"></i>
+      <router-link class="iconfont icon-sousuo" tag="i" to="goodsCLassification"></router-link>
     </div>
     <div class="goods">
       <div class="item">
-        <div class="img">
+        <div class="img" @click="toGooddetail">
           <img src>
         </div>
         <div class="detail">
@@ -41,9 +42,9 @@ export default {
     return {
       user: {
         img: "",
-        UID: ""
-      },
-      grade: []
+        UID: "",
+        grade: ""
+      }
     };
   },
 
@@ -66,9 +67,7 @@ export default {
           if (data.code == "200") {
             this.user.img = data.data.head_img;
             this.user.UID = data.data.UID;
-            for (let index = 0; index < data.data.credit; index++) {
-              this.grade.push(1);
-            }
+            this.grade = data.data.credit;
           } else if (data.code == "204") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -76,18 +75,25 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
+    },
+    toGooddetail(id) {
+      this.$router.push({ name: "goodDetail" });
     }
   }
 };
 </script>
 <style lang='scss' scoped>
 #goodsHome {
-  padding: 20px 30px 150px;
+  padding: 90px 30px 150px;
   .user {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    left: 30px;
+    background: #14171a;
+     
     .boxmes {
+      padding-top: 20px;
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -117,6 +123,9 @@ export default {
       }
     }
     .icon-sousuo {
+      position: fixed;
+      top: 30px;
+      right: 30px;
       color: #fff;
       font-size: 40px;
     }

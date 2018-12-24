@@ -87,7 +87,7 @@ export default {
       color: #999;
     }
     .search {
-        display: inline-block;
+      display: inline-block;
       width: 490px;
       input {
       padding-left: 10px;
@@ -120,7 +120,6 @@ export default {
       font-size: 28px;
     }
     }
-    
   }
   .leftnav {
     position: fixed;
@@ -142,6 +141,8 @@ export default {
     }
     .active {
       color: #d6ae7b;
+      background-color: #fff;
+      font-size: 32px;
       border-left: 4px solid #d6ae7b;
       box-sizing: border-box;
     }
@@ -153,7 +154,7 @@ export default {
     // background-color: red;
     .goodtype {
     margin: 0 20px;
-      border-bottom: 1px solid rgba(196, 196, 196, 1);
+      border-bottom: 1Px solid rgba(196, 196, 196, 1);
       .title {
         line-height: 100px;
         font-size: 24px;
