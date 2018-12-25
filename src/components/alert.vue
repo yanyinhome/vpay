@@ -81,7 +81,7 @@ export default {
       font-weight: 700;
     }
     .alert_info {
-      line-height: 110px;
+      line-height: 60px;
       font-size: 36px;
       color: #000;
     }

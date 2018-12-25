@@ -52,18 +52,18 @@
           </router-link>
         </div>
         <div class="box xia">
-          <!-- <router-link class="item item1" tag="div" :to="{name:'balanceBuy',query:{status: '1'}}">
+          <router-link class="item item1" tag="div" :to="{name:'balanceBuy',query:{status: '1'}}">
             <img src="../assets/image/sell.png">提现
           </router-link>
           <router-link class="item" tag="div" :to="{name:'balanceBuy',query:{status: '2'}}">
             <img src="../assets/image/buy.png">购买
-          </router-link>-->
-          <div class="item item1" @click="warn">
+          </router-link>
+          <!-- <div class="item item1" @click="warn">
             <img src="../assets/image/sell.png">提现
           </div>
           <div class="item" @click="warn">
             <img src="../assets/image/buy.png">购买
-          </div>
+          </div>-->
         </div>
       </div>
       <div class="turnto">
@@ -74,7 +74,7 @@
           </router-link>
           <!-- <div class="item item1" @click="warn">
             <img src="../assets/image/duihuan.png">兑换
-          </div> -->
+          </div>-->
           <div class="item" @click="gradeLog">
             <img src="../assets/image/log.png">记录
           </div>
@@ -93,6 +93,11 @@
         </div>
       </div>
     </div>
+    <div class="hongbao" @click="releaseToday">
+      <div class="box" :class="{active:animate}">
+        <img src="../assets/image/hongbao.png">
+      </div>
+    </div>
     <com-foot :select="0"></com-foot>
   </div>
 </template>
@@ -104,6 +109,7 @@ export default {
   name: "index",
   data() {
     return {
+      animate: false,
       user: {
         img: "",
         UID: ""
@@ -111,20 +117,38 @@ export default {
       balance: "",
       integral: "",
       balance: "",
-      grade: [],
+      grade: '',
       news: []
     };
   },
 
   computed: {},
-
-  created() {},
+// beforeRouteEnter(to, from, next) {
+//     next(vm => {
+//       console.log(from.name);
+//       if (from.name == "sweepCode") {
+//         vm.$router.go(0);
+//         console.log('页面刷新');
+//       }
+//     });
+//   },
+  created() {
+    setInterval(() => {
+      this.animateShow();
+    }, 2000);
+  },
 
   mounted() {
     this.loading();
   },
 
   methods: {
+    animateShow() {
+      this.animate = true;
+      setTimeout(() => {
+        this.animate = false;
+      }, 1000);
+    },
     loading() {
       this.axios
         .post("/user/index", {
@@ -139,9 +163,6 @@ export default {
             this.integral = data.data.integral;
             this.news = data.data.news;
             this.grade = data.data.credit;
-            // for (let index = 0; index < data.data.credit; index++) {
-            //   this.grade.push(1);
-            // }
           } else if (data.code == "204") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -168,6 +189,33 @@ export default {
         ]
       });
     },
+    // 今日释放
+    releaseToday() {
+      this.axios
+        .post("/user/red_envelopes", {
+          token: this.token()
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code == "200") {
+            this.$bus.$emit("comAlert", {
+              title: "积分释放",
+              info: data.data.message + "至余额" + data.data.money,
+              button: [
+                {
+                  text: "确认",
+                  callback: () => {}
+                }
+              ]
+            });
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     yuoeLog() {
       this.$router.push({ name: "turnOutlog", query: { status: "4" } });
     },
@@ -192,20 +240,22 @@ export default {
 </script>
 <style lang='scss' scoped>
 #index {
-  padding: 20px 30px 150px;
+  padding: 40px 30px 250px;
   .index {
     .indextop {
       height: 586px;
       .user {
         width: 100%;
+        // padding-top: 20px;
         position: fixed;
         top: 0px;
         left: 30px;
-        background: #14171A;
+        background: #14171a;
         // display: flex;
         // justify-content: space-between;
         // align-items: center;
         .boxmes {
+          width: 450px;
           padding-top: 20px;
           display: flex;
           justify-content: flex-start;
@@ -366,6 +416,25 @@ export default {
     .turnto1 {
       padding: 0px;
       background: rgba(42, 42, 42, 0);
+    }
+  }
+  .hongbao {
+    // s
+    position: fixed;
+    bottom: 150px;
+    right: 30px;
+    .box {
+      width: 120px;
+      height: 132px;
+      transition: all 1s;
+      transform: scale(0.8, 0.8);
+      img {
+        width: 100%;
+      }
+    }
+    .active {
+      transition: all 1s;
+      transform: scale(1.4, 1.4);
     }
   }
 }

@@ -1,9 +1,9 @@
 <template>
   <div id="sweepCode">
     <com-head :opacity="0">扫一扫</com-head>
-    <div class="scan">
+    <div class="scan" v-if="show">
       <div id="bcid">
-        <div style="height:40%"></div>
+        <div style="height:40%,width:100%"></div>
         <p class="tip">...载入中...</p>
       </div>
       <p class="code">将二维码放入框内</p>
@@ -23,6 +23,7 @@ export default {
   name: "sweepCode",
   data() {
     return {
+      show: true,
       codeUrl: ""
     };
   },
@@ -31,9 +32,11 @@ export default {
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      if (from.name != "index") {
-        vm.startRecognize();
-        vm.startScan();
+      if (from.name != 'index') {
+        alert(vm.token())
+        vm.$router.push('index');
+      }else {
+         alert(vm.token());  
       }
     });
   },
@@ -94,15 +97,16 @@ export default {
     }
   },
   beforeDestroy() {
-    this.cancelScan();
+    // this.cancelScan();
     this.closeScan();
+    this.show = false;
   },
-  beforeRouteLeave(to, from, next) {
-    if (to.name == "index") {
-      this.closeScan();
-      this.$router.go(0);
-    }
-  }
+  // beforeRouteLeave(to, from, next) {
+  //   if (to.name == "index") {
+  //     this.closeScan();
+  //     this.$router.go(0);
+  //   }
+  // }
   // 销毁解绑
   // beforeDestroy () {
   //   this.$bus.$emit('comAlert');

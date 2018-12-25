@@ -119,7 +119,8 @@ export default {
             token: this.token(),
             type: "1",
             num: this.money,
-            id: this.id
+            id: this.id,
+            sale_code: this.password
           })
           .then(({ data }) => {
             console.log(data);
