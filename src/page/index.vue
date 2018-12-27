@@ -117,21 +117,21 @@ export default {
       balance: "",
       integral: "",
       balance: "",
-      grade: '',
+      grade: "",
       news: []
     };
   },
 
   computed: {},
-// beforeRouteEnter(to, from, next) {
-//     next(vm => {
-//       console.log(from.name);
-//       if (from.name == "sweepCode") {
-//         vm.$router.go(0);
-//         console.log('页面刷新');
-//       }
-//     });
-//   },
+  // beforeRouteEnter(to, from, next) {
+  //     next(vm => {
+  //       console.log(from.name);
+  //       if (from.name == "sweepCode") {
+  //         vm.$router.go(0);
+  //         console.log('页面刷新');
+  //       }
+  //     });
+  //   },
   created() {
     setInterval(() => {
       this.animateShow();
@@ -170,24 +170,6 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
-    },
-    applyShop() {
-      this.$bus.$emit("comAlert", {
-        title: "暂无商铺",
-        info: "您还没有入住商铺，是否申请店铺入驻",
-        button: [
-          {
-            text: "确认",
-            callback: () => {
-              this.$router.push("applyShop");
-            }
-          },
-          {
-            text: "取消",
-            callback: () => {}
-          }
-        ]
-      });
     },
     // 今日释放
     releaseToday() {
@@ -265,6 +247,9 @@ export default {
             width: 70px;
             height: 70px;
             border-radius: 35px;
+            display: flex;
+        justify-content: center;
+        align-items: center;
             overflow: hidden;
             img {
               width: 100%;
@@ -352,8 +337,6 @@ export default {
       margin-top: 20px;
       padding: 10px;
       box-sizing: border-box;
-      // width:690px;
-      // height:172px;
       background: rgba(42, 42, 42, 1);
       border-radius: 6px;
       p {
@@ -419,7 +402,6 @@ export default {
     }
   }
   .hongbao {
-    // s
     position: fixed;
     bottom: 150px;
     right: 30px;

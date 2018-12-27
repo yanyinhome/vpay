@@ -120,8 +120,47 @@ export default {
     },
     toStore() {
       this.navout();
-      this.$bus.$emit("toast", "功能开发中");
-      // this.$router.push("myStore");
+      // this.$bus.$emit("toast", "功能开发中");
+      this.axios
+        .post("/shop/my_shop", {
+          token: this.token()
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.$router.push("shoplist"); 
+          } else if (data.code === "201") {
+            this.$router.push({name:"applyShop",query: {applyStatus: true}}); 
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "202") {
+            this.$router.push({name:"applyShop",query: {applyStatus: false}}); 
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "205") {
+            this.applyShop();
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    applyShop() {
+      this.$bus.$emit("comAlert", {
+        title: "暂无商铺",
+        info: "您还没有入住商铺，是否申请？",
+        button: [
+          {
+            text: "确认",
+            callback: () => {
+            this.$router.push({name:"applyShop",query: {applyStatus: false}});               
+            }
+          },
+          {
+            text: "取消",
+            callback: () => {}
+          }
+        ]
+      });
     },
     toOrder() {
       this.navout();
@@ -224,6 +263,9 @@ export default {
         height: 100px;
         border: 1Px solid #222;
         border-radius: 55px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         overflow: hidden;
         img {
           width: 100%;

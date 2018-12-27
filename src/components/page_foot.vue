@@ -40,7 +40,7 @@ export default {
           iconfont: require("../assets/image/nav31.png"),
           iconfont1: require("../assets/image/nav32.png"),
           name: "藏宝阁",
-          // route: '/shoplist'
+          route: '/goodsHome'
         }
       ]
     };

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-Vue.prototype.imgPreview = function (file) {
+Vue.prototype.imgPreview = function (file,imgNum) {
     let self = this;
     let Orientation;
     //去获取拍照时的信息，解决拍出来的照片旋转问题
@@ -22,16 +22,18 @@ Vue.prototype.imgPreview = function (file) {
             // console.log(result)
             //判断图片是否大于100K,是就直接上传，反之压缩图片
             if (this.result.length <= 100 * 1024) {
-                self.newimg = this.result; //赋值 压缩后的base64图片
+                // self.newimg = this.result; //赋值 压缩后的base64图片
+                self.imgNum1[imgNum] = this.result; //赋值 压缩后的base64图片
                 // this.postImg();
-                console.log(self.newimg);
+                // console.log(self.newimg);
             } else {
                 img.onload = function () {
                     let data = self.compress(img, Orientation);
                     self.headerImage1 = data;
-                    self.newimg = data; //赋值 压缩后的base64图片
+                    // self.newimg = data; //赋值 压缩后的base64图片
+                    self.imgNum1[imgNum] = data; //赋值 压缩后的base64图片
                     // this.postImg();
-                    console.log(self.newimg);
+                    // console.log(self.newimg);
                     //self.$bus.$emit('toast','已上传');
                 };
             }
@@ -96,11 +98,11 @@ Vue.prototype.imgPreview = function (file) {
         }
         //进行最小压缩
         let ndata = canvas.toDataURL("image/jpeg", 0.1);
-        console.log("压缩前：" + initSize);
-        console.log("压缩后：" + ndata.length);
-        console.log(
-            "压缩率：" + ~~((100 * (initSize - ndata.length)) / initSize) + "%"
-        );
+        // console.log("压缩前：" + initSize);
+        // console.log("压缩后：" + ndata.length);
+        // console.log(
+        //     "压缩率：" + ~~((100 * (initSize - ndata.length)) / initSize) + "%"
+        // );
         tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0;
         //this.newdata1=ndata
         return ndata;

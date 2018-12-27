@@ -17,6 +17,7 @@ import navlist from '../../components/navlist';
 import notice from '../../components/notice';
 // 省市县三级联动
 import addressSelect from '../../components/addressSelect';
+import toast from '../../components/toast';
 
 // 挂载全局组件
 Vue.component('comButton', comButton);
@@ -28,3 +29,4 @@ Vue.component('butFoot', butFoot);
 Vue.component('navlist', navlist);
 Vue.component('noticeSwiper', notice);
 Vue.component('addressSelect', addressSelect);
+Vue.component('toast', toast);

@@ -32,12 +32,12 @@
     </div>
     <div class="detail">——&nbsp;商品详情&nbsp;——</div>
     <div class="footBuy">
-      <div class="box1">
+      <div class="box1" @click="Tostore">
         <i class="iconfont icon-dianpu1"/>
         <p>店铺</p>
       </div>
-      <div class="box2">
-        <button>立即购买</button>
+      <div class="box2" @click="buyTopay">
+        <button @click="buyTopay">立即购买</button>
       </div>
     </div>
   </div>
@@ -50,6 +50,7 @@ export default {
   name: "goodDetail",
   data() {
     return {
+      id: '',
       name: "xx小铺",
       images: [
         require("../../assets/image/zanshi/111.jpg"),
@@ -82,6 +83,12 @@ export default {
   mounted() {},
 
   methods: {
+    buyTopay(){
+      this.$router.push({name:'payment',query: {id: this.id}});
+    },
+    Tostore(){
+      this.$router.push({name:'shopDetail'});
+    },
     gone() {
       this.$router.go(-1);
     }

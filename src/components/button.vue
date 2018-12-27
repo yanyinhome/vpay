@@ -1,10 +1,16 @@
 <template>
-  <button class="com_button" :class="{'com_button_click': isClick}" @click="buttonClick">
+<div>
+ <button class="com_button" :class="{'com_button_click': isClick}" :disabled="isClick" @click="buttonClick">
     <slot>确认</slot>
-  </button>
+  </button> 
+  <toast></toast>
+
+</div>
+  
 </template>
 
 <script>
+import toast from './toast';
 export default {
   name: "comButton",
   data() {
@@ -14,11 +20,15 @@ export default {
   },
   methods: {
     buttonClick() {
+      // if(this.isClick){
+      //   this.$bus.$emit("toast", '不能重复操作');
+      // } 
+      this.click();
       this.isClick = true;
       setTimeout(() => {
         this.isClick = false;
-      }, 100);
-      this.click();
+      }, 1500);
+      
     }
   },
   props: ["click"]

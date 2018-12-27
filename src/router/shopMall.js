@@ -13,9 +13,10 @@ import modifyShopname from '../page/shopMall/modifyShopname.vue';    //修改店
 import goodsHome from '../page/shopMall/goodsHome.vue';    //商城
 import goodsCLassification from '../page/shopMall/goodsCLassification.vue';    //商品分类
 import search from '../page/shopMall/search.vue';    //搜索
+import shopDetail from '../page/shopMall/shopDetail.vue';    //进入店铺详情
 import searchShop from '../page/shopMall/searchShop.vue';    //搜索店铺结果
 import goodDetail from '../page/shopMall/goodDetail.vue';    //商品购买详情
-import payment from '../page/shopMall/payment.vue';    //立即支付
+import payment from '../page/shopMall/payment.vue';          //立即支付
 import buySuccess from '../page/shopMall/buySuccess.vue';    //购买成功
 
 
@@ -60,6 +61,10 @@ export default [
         path: '/search',
         component: search,
         name: 'search'
+    },{
+        path: '/shopDetail',
+        component: shopDetail,
+        name: 'shopDetail'
     },{
         path: '/searchShop',
         component: searchShop,

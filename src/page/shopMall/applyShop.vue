@@ -6,6 +6,16 @@
         <span>店铺名称</span>
         <input type="text" v-model="name" placeholder="请设置店铺名称">
       </div>
+      <div class="item">
+        <span>联系电话</span>
+        <input type="text" v-model="phone" placeholder="请输入店家手机号">
+      </div>
+      <div class="item1">
+        <span>店铺地址：</span>
+      </div>
+      <div class="beizhu">
+        <textarea style="resize:none" border placeholder="请设置店铺地址" v-model="address" rows="5"></textarea>
+      </div>
       <div class="box1" @click="portrait">
         <span>店铺头像</span>
         <input
@@ -36,7 +46,7 @@
             :class="{active: active==index}"
             v-for="(item,index) in nav"
             :key="index"
-          >{{item}}</div>
+          >{{item.name}}</div>
         </div>
         <p>* 仅可选择一种类别</p>
       </div>
@@ -44,13 +54,12 @@
       <com-button :click="submit">确定申请</com-button>
     </div>
 
-    <div id='cookerCheck' v-if="applyStatus">
-      <div class="box1"><img src="../../assets/image/shenhe.png"></div>
+    <div id="cookerCheck" v-if="applyStatus">
+      <div class="box1">
+        <img src="../../assets/image/shenhe.png">
+      </div>
       <p>正在审核店铺</p>
     </div>
-
-
-
   </div>
 </template>
 
@@ -59,14 +68,17 @@ export default {
   name: "applyShop",
   data() {
     return {
-      applyStatus: false,
+      applyStatus: this.$route.query.applyStatus,
       active: "-1",
       yulan: "",
       picValue: "",
       newimg: "",
 
       name: "",
+      ia: '',
       shoptype: "",
+      phone: "",
+      address: "",
       nav: [
         "日常用品",
         "日常用品",
@@ -83,9 +95,64 @@ export default {
 
   created() {},
 
-  mounted() {},
+  mounted() {
+    this.loading();
+  },
 
   methods: {
+    loading() {
+      this.axios
+        .post("/shop/app_view", {
+          token: this.token()
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.nav = data.data;
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "205") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    submit() {
+      let regTel = /^(1[3-9])\d{9}$/;
+      if (!this.name) {
+        this.$bus.$emit("toast", "请设置店铺名称");
+      } else if (!this.phone) {
+        this.$bus.$emit("toast", "手机号不能为空");
+      } else if (!regTel.test(this.phone)) {
+        this.$bus.$emit("toast", "手机号码不合法");
+      } else if (!this.shoptype) {
+        this.$bus.$emit("toast", "请选择的店铺类别");
+      } else {
+        this.axios
+          .post("/shop/shop_application", {
+            token: this.token(),
+            shop_name: this.name,
+            img: this.newimg,
+            flag: this.id,
+            address: this.address,
+            phone: this.phone
+          })
+          .then(({ data }) => {
+            console.log(data);
+            if (data.code === "200") {
+              this.$bus.$emit("toast", data.msg);
+              this.applyStatus = true;
+            } else if (data.code === "204") {
+              this.$bus.$emit("toast", data.msg);
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+    },
     // 头像单击事件
     portrait() {
       this.$refs.portrait.click(); // 获取ref为portrait的元素相当于获取id为portrait的元素
@@ -96,10 +163,10 @@ export default {
       this.picValue = files[0];
       this.imgPreview(this.picValue);
     },
-    submit() {},
     navAcitive(item, index) {
       this.active = index;
-      this.shoptype = item;
+      this.shoptype = item.name;
+      this.id = item.id;
     }
   }
 };
@@ -153,7 +220,8 @@ export default {
     .item {
       padding: 0 30px;
       box-sizing: border-box;
-      margin-top: 20px;
+      // margin-top: 20px;
+      border-bottom: 1Px solid #ddd;
       display: flex;
       justify-content: space-between;
       line-height: 100px;
@@ -170,27 +238,43 @@ export default {
         margin-right: 0;
         color: #666;
       }
-      input::-webkit-input-placeholder {
-        /* WebKit browsers */
-        color: #888;
-      }
-      input:-moz-placeholder {
-        /* Mozilla Firefox 4 to 18 */
-        color: #888;
-      }
+      // input::-webkit-input-placeholder {
+      //   /* WebKit browsers */
+      //   color: #888;
+      // }
+      // input:-moz-placeholder {
+      //   /* Mozilla Firefox 4 to 18 */
+      //   color: #888;
+      // }
 
-      input::-moz-placeholder {
-        /* Mozilla Firefox 19+ */
-        color: #888;
-      }
+      // input::-moz-placeholder {
+      //   /* Mozilla Firefox 19+ */
+      //   color: #888;
+      // }
 
-      input:-ms-input-placeholder {
-        /* Internet Explorer 10+ */
-        color: #888;
-      }
+      // input:-ms-input-placeholder {
+      //   /* Internet Explorer 10+ */
+      //   color: #888;
+      // }
     }
-    .item:nth-of-type(2) {
-      // border-bottom: 1Px solid #eee;
+    .item1 {
+      padding: 0 30px;
+      line-height: 90px;
+      font-size: 28px;
+      background-color: #fff;
+    }
+    .beizhu {
+      position: relative;
+      // margin-bottom: 20px;
+      text-align: center;
+      background-color: #fff;
+      textarea {
+        width: 690px;
+        margin: auto;
+        padding: 10px;
+        border: 1Px solid rgba(238, 238, 238, 1);
+        box-sizing: border-box;
+      }
     }
   }
   .shop {

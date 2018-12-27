@@ -18,28 +18,28 @@
         >
       </div>
       <p>
-        {{name}}
+        {{shop.shop_name}}
         <router-link  class="iconfont icon-bianji" tag="span" to="modifyShopname"></router-link>
       </p>
-      <p>{{time}}</p>
+      <p>开铺时间：{{shop.create_time}}</p>
       <div class="number">
         <div class="box">
           <p>浏览人数</p>
-          <p>0</p>
+          <p>{{shop.view}}</p>
         </div>|
         <div class="box">
           <p>今日收益</p>
-          <p>0</p>
+          <p>{{today}}</p>
         </div>|
         <div class="box">
           <p>总收益</p>
-          <p>0</p>
+          <p>{{total}}</p>
         </div>
       </div>
       <div class="nav">
         <div class="box">
           待发货
-          <span>0</span>
+          <span>{{fahuo}}</span>
         </div>
         <div class="box">已完成</div>
       </div>
@@ -96,7 +96,12 @@ export default {
       newimg: "",
       name: "店铺名称",
       time: "2018-12",
-      message: []
+      message: [],
+      shop:{},
+      today: '',
+      total: '',
+      wancheng: '',
+      fahuo: ''
     };
   },
 
@@ -104,9 +109,33 @@ export default {
 
   created() {},
 
-  mounted() {},
+  mounted() {
+    this.loading();
+  },
 
   methods: {
+    loading(){
+      this.axios
+        .post("/shop/my_shop", {
+          token: this.token()
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.shop = data.data.shop;
+            this.yulan = data.data.shop.img;
+            this.today = data.data.today;
+            this.total = data.data.total;
+            this.fahuo = data.data.fahuo;
+            this.wancheng = data.data.wancheng;
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     goodHandel(){
     },
     // 头像单击事件
@@ -151,6 +180,7 @@ export default {
       height: 100px;
       margin: auto;
       border-radius: 50px;
+      overflow: hidden;
       border: 1Px dashed rgba(153, 153, 153, 1);
       .yulan {
         width: 100px;

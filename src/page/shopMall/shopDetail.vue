@@ -8,27 +8,29 @@
       <input type="text" v-model="search" placeholder="请输入你想要搜索的物品或商家" autofocus="autofocus">
     </div>
     <div class="user">
-      <router-link class="boxmes" tag="div" to="shopDetail">
+      <router-link class="boxmes" tag="div" to="shoplist">
         <div class="left">
           <img src="../../assets/image/card1.png">
         </div>
         <div class="right">
           <p>{{name}}</p>
-          <p>商品：</p>
           <p>申请时间：</p>
-          <p>进入店铺</p>
         </div>
       </router-link>
+      <div class="right2">
+        <p>店铺商品</p>
+        <p>339件</p>
+      </div>
     </div>
     <div class="goods">
-      <div class="item" v-for="item in goods" :key="item">
-        <div class="img"  @click="toGooddetail(item.id)">
+      <div class="item">
+        <div class="img">
           <img src>
         </div>
         <div class="detail">
           <p>少油烟锅具套装</p>
           <p>七件套：欧式精铸炒锅+ Carat钻石汤锅+Carat钻石</p>
-          <p @click="toGoodpay(item.id)">
+          <p>
             <span>&yen;599</span>
             <span class="iconfont icon-gouwuche"></span>
           </p>
@@ -43,8 +45,7 @@ export default {
   name: "searchShop",
   data() {
     return {
-      name: "1",
-      goods: []
+      name: ""
     };
   },
 
@@ -67,10 +68,10 @@ export default {
 <style lang='scss' scoped>
 #searchShop {
   width: 750px;
-  background-color: #f6f6f6;
+  background-color: #fff;
   padding-top: 82px;
   color: #fff;
-  // background-image: url("../../assets/image/shopbg1.png");
+  background-image: url("../../assets/image/shopbg1.png");
   background-repeat: no-repeat;
   background-size: 750px 450px;
   .iteminp {
@@ -119,57 +120,39 @@ export default {
     }
   }
   .user {
-    margin: 20px 30px;
-    background-color: #fff;
+    padding: 10px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    // background-color: #14171a;
+
     .boxmes {
       display: flex;
       justify-content: space-between;
-      // align-items: center;
-      border-radius: 10px;
-      box-shadow: 2px 5px 50px #999;
+      align-items: center;
       .left {
-        width: 300px;
-        height: 300px;
-        padding: 20px;
-        box-sizing: border-box;
-        border-radius: 10px;
+        margin-right: 20px;
+        width: 120px;
+        height: 120px;
+        border-radius: 2px;
         overflow: hidden;
         img {
           width: 100%;
         }
       }
-      .right {
-        padding: 20px;
-        box-sizing: border-box;
-        width: 380px;
-        color: #000;
-      }
-      .right p:nth-of-type(1) {
-        font-size: 26px;
+      .right p {
+        font-size: 30px;
         font-family: PingFangSC-Regular;
         font-weight: 400;
-        color: #000;
-        line-height: 60px;
+        color: rgba(255, 255, 255, 1);
+        line-height: 50px;
       }
-      .right p:nth-of-type(2),.right p:nth-of-type(3), {
+      .right p:nth-of-type(2) {
         font-size: 26px;
         font-family: PingFangSC-Regular;
         font-weight: 400;
         color: rgba(153, 153, 153, 1);
         line-height: 50px;
-      }
-      .right p:nth-of-type(4) {
-        margin-top: 20px;
-        margin-left: 60px;
-        width: 200px;
-        text-align: center;
-        font-size: 26px;
-        background-color: #D6AE7B;
-        font-family: PingFangSC-Regular;
-        font-weight: 400;
-        color: #fff;
-        border-radius: 10px;
-        line-height: 70px;
       }
     }
     .right2 {

@@ -14,7 +14,7 @@
           </p>-->
         </div>
       </router-link>
-      <router-link class="iconfont icon-sousuo" tag="i" to="goodsCLassification"></router-link>
+      <router-link class="iconfont icon-sousuo" tag="i" to="search"></router-link>
     </div>
     <div class="goods">
       <div class="item">
@@ -141,9 +141,11 @@ export default {
       height: 548px;
       background: rgba(42, 42, 42, 1);
       border-radius: 8px;
+      overflow: hidden;
       .img {
         width: 334px;
         height: 334px;
+        background-color: #fff;
         overflow: hidden;
         img {
           width: 100%;
