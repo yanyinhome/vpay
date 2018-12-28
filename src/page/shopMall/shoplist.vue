@@ -19,7 +19,7 @@
       </div>
       <p>
         {{shop.shop_name}}
-        <router-link  class="iconfont icon-bianji" tag="span" to="modifyShopname"></router-link>
+        <router-link  class="iconfont icon-bianji" tag="span" :to="{name:'modifyShopname',query:{id: shop.id}}"></router-link>
       </p>
       <p>开铺时间：{{shop.create_time}}</p>
       <div class="number">
@@ -38,47 +38,47 @@
       </div>
       <div class="nav">
         <div class="box">
-          待发货
-          <span>{{fahuo}}</span>
+          <span class="navzi">待发货</span>
+          <span class="navshu">{{fahuo}}</span>
         </div>
-        <div class="box">已完成</div>
+        <div class="box"><span class="navzi">已完成</span><span class="navshu">{{wancheng}}</span></div>
       </div>
     </div>
-
-    <div class="goodslist">
-      <div class="item">
-        <div class="img"></div>
+  
+    <div class="goodslist" v-if="!listshow">
+      <div class="item" v-for="(item,index) in message" :key="item.id">
+        <div class="img"><img :src="item.img" alt=""></div>
         <div class="goodsmes">
-          <p>名称</p>
+          <p>{{item.shop_name}}</p>
           <p>
             售价：
-            <span>&yen;000</span>
+            <span>&yen;{{item.price}}</span>
           </p>
           <p>
-            <span>库存：</span>
-            <span>销量：</span>
-            <i @click="goodHandel" class="iconfont icon-gengduo"/>
+            <span>库存：{{item.stock}}</span>
+            <span>销量：{{item.sale_num}}</span>
+            <i @click="goodHandel(item.id,index,item.is_top)" class="iconfont icon-gengduo"/>
           </p>
         </div>
       </div>
-      <div v-if="!message.length" style="margin-top: 15vh; text-align: center;">暂无信息</div>
+      <div v-if="!message.length" style="margin-top: 15vh; text-align: center;">暂无商品信息</div>
     </div>
      
     <router-link tag="div" to="addGoods" class="addgoods"><img src="../../assets/image/addgoods.png"></router-link>
     <!-- 更多 -->
-    <div class="morenav" v-if="navhandel">
+    <div class="morenav" v-if="navhandel" @click="navhandel=false">
       <div class="page_foot_inner">
-        <div class="page_foot_nav">
+        <div class="page_foot_nav" @click="delectGood">
           <div> <i class="iconfont icon-iconfont-shanchu"/></div>
           <p class="page_foot_name">删除</p>
         </div>
-        <div  class="page_foot_nav">
+        <div  class="page_foot_nav" @click="rewriteGood">
           <div> <i class="iconfont icon-bianji"/></div>
           <p class="page_foot_name">编辑</p>
         </div>
-        <div class="page_foot_nav">
+        <div class="page_foot_nav"  @click="topGood">
           <div> <i class="iconfont icon-zhiding"/></div>
-          <p class="page_foot_name">置顶</p>
+          <p class="page_foot_name">{{istopzi}}</p>
         </div>
       </div>
     </div>
@@ -90,18 +90,23 @@ export default {
   name: "shoplist",
   data() {
     return {
+      listshow: false,
       navhandel: false,
       yulan: "",
       picValue: "",
-      newimg: "",
-      name: "店铺名称",
-      time: "2018-12",
+      imgbase: [],
+      name: "",
+      time: "",
       message: [],
       shop:{},
       today: '',
       total: '',
       wancheng: '',
-      fahuo: ''
+      fahuo: '',
+      goodid: '',
+      goodindex: '',
+      istop: '',
+      istopzi: '',
     };
   },
 
@@ -128,6 +133,7 @@ export default {
             this.total = data.data.total;
             this.fahuo = data.data.fahuo;
             this.wancheng = data.data.wancheng;
+            this.message = data.data.goods;
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -136,7 +142,82 @@ export default {
           console.log(error);
         });
     },
-    goodHandel(){
+    goodHandel(id,index,istop){
+      istop =='1'? this.istopzi='取消置顶':this.istopzi='置顶';
+      this.goodid = id;
+      this.goodindex = index;
+      this.istop = istop;
+      this.navhandel = true;
+    },
+    // 删除
+    delectGood(){
+      this.axios
+        .post("/shop/del_goods", {
+          token: this.token(),
+          id: this.goodid
+        })
+        .then(({ data }) => {
+          console.log(data);
+          this.navhandel = false;
+          if (data.code === "200") {
+            this.message.splice(this.goodindex,1);
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    // 编辑
+    rewriteGood(){
+
+    },
+    // 置顶,取消
+    topGood(){
+      if (this.istop == '1') {
+        // 取消
+        this.axios
+        .post("/shop/cancel_top", {
+          token: this.token(),
+          id: this.goodid
+        })
+        .then(({ data }) => {
+          console.log(data);
+          this.navhandel = false;
+          if (data.code === "200") {
+            this.$router.go(0);
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      } else if (this.istop == '2') {
+        // 置顶
+        this.axios
+        .post("/shop/is_top", {
+          token: this.token(),
+          id: this.goodid
+        })
+        .then(({ data }) => {
+          console.log(data);
+          this.navhandel = false;
+          if (data.code === "200") {
+            this.$router.go(0);
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      }
+      
     },
     // 头像单击事件
     portrait() {
@@ -146,8 +227,31 @@ export default {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.picValue = files[0];
-      this.imgPreview(this.picValue);
-    }
+      this.imgPreview(this.picValue,'0');
+      setTimeout(() => {
+        this.uploadImg();
+      }, 100); 
+    },
+    // 上传图片请求
+    uploadImg(){
+      this.axios
+        .post("/shop/upshop_img", {
+          token: this.token(),
+          id: this.shop.id,
+          img: this.imgbase[0]
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.$bus.$emit("toast", data.msg);            
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
   }
 };
 </script>
@@ -249,7 +353,7 @@ export default {
         font-family: PingFangSC-Regular;
         font-weight: 400;
         color: rgba(0, 0, 0, 1);
-        span {
+        .navshu {
           display: inline-block;
           margin-left: 10px;
           width: 42px;
@@ -259,6 +363,12 @@ export default {
           color: #fff;
           line-height: 42px;
           font-size: 24px;
+        }
+        .navzi {
+          padding: 5px;
+        }
+        .active {
+          border-bottom: 2Px solid rgba(214, 174, 123, 1);
         }
       }
     }
@@ -328,10 +438,14 @@ export default {
   }
   .morenav {
     position: fixed;
-    top: 100vh;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 15, 15,0.2);
+    top: 0vh;
     left: 50%;
     width: 750px;
     margin-left: -375px;
+    z-index: 99;
     .page_foot_inner {
       position: fixed;
       bottom: 196px;
@@ -339,6 +453,7 @@ export default {
       width: 100%;
       height: 110px;
       background: #888;
+      z-index: 100;
       .page_foot_nav {
         margin-top: 16px;
         width: 250px;

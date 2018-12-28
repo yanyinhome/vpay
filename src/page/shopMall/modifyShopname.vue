@@ -5,7 +5,7 @@
     <div class="modifyShopname">
       <div class="item">
         <span>店铺名称</span>
-        <input type="text" v-model="nmae" placeholder="请输入店铺名">
+        <input type="text" v-model="name" placeholder="请输入店铺名">
       </div>
     </div>
   </div>
@@ -16,7 +16,7 @@ export default {
   name: "modifyShopname",
   data() {
     return {
-      nmae: ''
+      name: ''
     };
   },
 
@@ -25,37 +25,20 @@ export default {
   created() {},
 
   mounted() {
-    this.loading();
   },
   methods: {
-    loading() {
-      this.axios
-        .post("user/upmessge", {
-          token: this.token()
-        })
-        .then(({ data }) => {
-          console.log(data);
-          if (data.code === "200") {
-            this.nmae = data.data.nmae;
-          } else if (data.code === "204") {
-            this.$bus.$emit("toast", data.msg);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
     keepdata() {
       this.axios
-        .post("user/editheadimg", {
+        .post("shop/upshop_name", {
           token: this.token(),
-          head_img: this.newimg
+          id: this.$route.query.id,
+          name: this.name
         })
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
-            this.$router.push("index");
             this.$bus.$emit("toast", data.msg);
+            this.$router.push('shoplist');
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -63,8 +46,7 @@ export default {
         .catch(error => {
           console.log(error);
         });
-    },
-    
+    }, 
   }
 };
 </script>

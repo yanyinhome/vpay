@@ -21,10 +21,9 @@ export default {
     };
   },
   mounted() {
-    if(this.news.length > 0){
+    if (this.news.length > 0) {
     }
-      setInterval(this.showMarquee, 3000);
-
+    setInterval(this.showMarquee, 3000);
   },
   props: ["news"],
   methods: {
@@ -37,7 +36,7 @@ export default {
       }, 500);
     },
     noticeDetail(id) {
-      this.$router.push({name:"noticeDetail",query: {id,id}});
+      this.$router.push({ name: "noticeDetail", query: { id, id } });
     }
   }
 };
@@ -69,7 +68,7 @@ export default {
     padding: 0 20px;
     height: 30px;
     font-size: 30px;
-    border-right: 1Px solid #d8d8d8;
+    border-right: 1px solid #d8d8d8;
     align-items: center;
   }
   .marquee_box {

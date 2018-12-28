@@ -9,48 +9,54 @@
         <input type="text" v-model="search" placeholder="请输入商品名称">
       </div>
       <div class="nav">
-        <div
-          v-for="(item,index) in orderlist"
-          :key="index"
-          :class="{active: status==index}"
-          @click="listSelect(index)"
-        >
-          {{item.name}}
-          <span v-if="item.num>0">{{item.num}}</span>
+        <div :class="{active: status=='0'}" @click="listSelect1()">
+          待付款
+        </div>
+        <div :class="{active: status=='1'}" @click="listSelect2()">
+          待发货
+          <span v-if="fa>0">{{fa}}</span>
+        </div>
+        <div :class="{active: status=='2'}" @click="listSelect3()">
+          待收货
+          <span v-if="shou>0">{{shou}}</span>
+        </div>
+        <div :class="{active: status=='3'}" @click="listSelect4()">
+          已完成
         </div>
       </div>
+     
     </div>
-
+    <div v-if="!message.length" style="margin-top: 15vh; text-align: center;">暂无订单信息</div>
     <div class="order" v-for="(item,index) in message" :key="item.order_id">
       <div class="orderTop">
-        <div class="box1">下单时间：{{item.order_create_time}}</div>
-        <div class="box2">{{server[item.status]}}</div>
+        <div class="box1">{{item.buyname}}</div>
+        <div class="box2">{{orderlist[status]}}</div>
       </div>
       <div class="orderCenter">
         <div class="box1">
-          <img :src="item.image1">
+          <img :src="item.imgurl">
         </div>
         <div class="box2">
           <p>
-            <span>{{item.book}}</span>
-            <span>&yen;{{item.order_pay_price}}</span>
+            <span>{{item.goodsname}}</span>
+            <span>&yen;{{item.price}}</span>
           </p>
           <p>
-            <span>{{item.book_sign}}</span>
-            <span>x{{item.number}}</span>
+            <span>{{item.create_time}}</span>
+            <span>x{{item.num}}</span>
           </p>
-          <p>{{item.book_sign}}</p>
+          <p>{{item.content}}</p>
         </div>
       </div>
       <div class="orderFoot">
-        <div class="sumprice">共{{item.number}}件商品(包含运费) 合计：¥{{ item.number * item.order_pay_price}}</div>
-        <button class="noborder" v-if="item.status=='1'">发货</button>
-        <button v-if="item.status=='2'" @click="lookwuliu(index)">查看物流</button>
+        <div class="sumprice">共{{item.number}}件商品，合计：¥{{ item.num * item.price}}</div>
+        <button class="noborder" @click="fahuoMes(item.id)" v-if="status=='1'">发货</button>
+        <button v-if="status=='2'||status=='3'" @click="lookwuliu(index)">查看物流</button>
         <button
           class="evaluate"
-          v-if="item.status=='3'"
+          v-if="status=='3'"
           @click="surereceive(item.order_id,index)"
-        >确定收货</button>
+        >订单详情</button>
       </div>
     </div>
     <!-- 发货 -->
@@ -62,48 +68,25 @@
           </div>
           <div class="right">
             <p>
-              <span>买家姓名</span>
-              <span>买家姓名</span>
+              <span>{{fahuomes.name}}</span>
+              <span>{{fahuomes.phone}}</span>
             </p>
-            <p>河南省郑州市金水区北三环瀚海北金</p>
+            <p>{{fahuomes.province+fahuomes.city+fahuomes.area+fahuomes.address}}</p>
           </div>
         </div>
         <div class="cenmes">
           <p>
-            <span>商品名字</span>
-            <span>x1</span>
+            <span>{{fahuolist.goodname}}：{{fahuolist.price}}</span>
+            <span>x{{fahuolist.num}}</span>
           </p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
-          <p class="gong">共计3件商品</p>
+          <!-- <p class="gong">共计3件商品</p> -->
         </div>
         <div class="footmes">
-          <p>订单编号：</p>
-          <p>下单时间：22</p>
-          <p>付款时间：</p>
+          <p>订单编号：{{fahuolist.order_number}}</p>
+          <p>下单时间：{{fahuolist.create_time}}</p>
+          <p>付款时间：{{fahuolist.pay_time}}</p>
         </div>
-        <button class="btn" @click="submit">确定发货</button>
+        <button class="btn" @click="sureFahuo">确定发货</button>
 
         <div class="close" @click="mask=false">
           <i class="iconfont icon-chahao"></i>
@@ -119,92 +102,28 @@ export default {
   data() {
     return {
       mask: false,
-      status: 0,
+      status: '0',
+      fa: '',
+      shou: '',
       search: "",
+      orderid: '', //订单id
+      fahuomes: {},
+      fahuolist: [],
+      orderlist: ['待付款','待发货','待收货','已完成'],
       message: [
-        {
-          order_create_time: "120212",
-          order_create_time: "120212",
-          order_create_time: "120212",
-          status: "2",
-          book: "120212",
-          book_sign: "120212",
-          order_pay_price: "120212",
-          number: "120212",
-          image1: require("../../assets/image/zanshi/touxiang.jpg")
-        },
-        {
-          order_create_time: "120212",
-          order_create_time: "120212",
-          order_create_time: "120212",
-          status: "2",
-          book: "120212",
-          book_sign: "120212",
-          order_pay_price: "120212",
-          number: "120212",
-          image1: require("../../assets/image/zanshi/touxiang.jpg")
-        },
-        {
-          order_create_time: "120212",
-          order_create_time: "120212",
-          order_create_time: "120212",
-          status: "2",
-          book: "120212",
-          book_sign: "120212",
-          order_pay_price: "120212",
-          number: "120212",
-          image1: require("../../assets/image/zanshi/touxiang.jpg")
-        },
-        {
-          order_create_time: "120212",
-          order_create_time: "120212",
-          order_create_time: "120212",
-          status: "2",
-          book: "120212",
-          book_sign: "120212",
-          order_pay_price: "120212",
-          number: "120212",
-          image1: require("../../assets/image/zanshi/touxiang.jpg")
-        },
-        {
-          order_create_time: "120212",
-          order_create_time: "120212",
-          order_create_time: "120212",
-          status: "2",
-          book: "120212",
-          book_sign: "120212",
-          order_pay_price: "120212",
-          number: "120212",
-          image1: require("../../assets/image/zanshi/touxiang.jpg")
-        }
+        // {
+        //   order_create_time: "120212",
+        //   order_create_time: "120212",
+        //   order_create_time: "120212",
+        //   status: "2",
+        //   book: "120212",
+        //   book_sign: "120212",
+        //   order_pay_price: "120212",
+        //   number: "120212",
+        //   image1: require("../../assets/image/zanshi/touxiang.jpg")
+        // },
+        
       ],
-      server: [
-        "",
-        "待发货",
-        "待收货",
-        "交易已完成",
-        "删除订单",
-        "确认收货",
-        "查看物流"
-      ],
-      orderlist: [
-        {
-          name: "全部",
-          num: "0"
-        },
-        {
-          name: "待发货",
-          num: "1"
-        },
-        {
-          name: "待收货",
-          num: "0"
-        },
-        {
-          name: "已完成",
-          num: "99"
-        }
-      ]
     };
   },
 
@@ -213,20 +132,48 @@ export default {
   created() {},
 
   mounted() {
-    this.loading("0");
+    this.loading("1");
   },
 
   methods: {
     loading(type) {
       this.axios
-        .post("user/order", {
+        .post("/shop/order_list", {
           token: this.token(),
           status: type
         })
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
-            this.message = data.data;
+            this.message = data.data.order;
+            this.fa = data.data.fa;
+            this.shou= data.data.shou;
+          } else if (data.code === "201") {
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "205") {
+            this.fa = data.data.fa;
+            this.shou= data.data.shou;
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    // 发货
+    fahuoMes(id){
+      this.orderid = id;
+      this.mask = true;
+      this.axios
+        .post("/shop/fahuoview", {
+          token: this.token(),
+          id: id
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.fahuomes = data.data.address;
+            this.fahuolist = data.data.order;
           } else if (data.code === "201") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -235,71 +182,8 @@ export default {
           console.log(error);
         });
     },
-    // 删除订单
-    delorder(id, index) {
-      this.$bus.$emit("comAlert", {
-        title: "确定删除",
-        button: [
-          {
-            text: "确认",
-            callback: () => {
-              this.axios
-                .post("user/orderout", {
-                  order_id: id
-                })
-                .then(({ data }) => {
-                  console.log(data);
-                  if (data.code === "200") {
-                    this.$bus.$emit("toast", data.msg);
-                    this.message.splice(index, 1);
-                  } else if (data.code === "201") {
-                    this.$bus.$emit("toast", data.msg);
-                  }
-                })
-                .catch(function(error) {
-                  console.log(error);
-                });
-            }
-          },
-          {
-            text: "取消",
-            callback: () => {}
-          }
-        ]
-      });
-    },
-    // 确定收货
-    surereceive(id, index) {
-      this.$bus.$emit("comAlert", {
-        title: "确定删除",
-        button: [
-          {
-            text: "确认",
-            callback: () => {
-              this.axios
-                .post("user/overorder", {
-                  order_id: id
-                })
-                .then(({ data }) => {
-                  console.log(data);
-                  if (data.code === "200") {
-                    this.$bus.$emit("toast", data.msg);
-                    this.message.splice(index, 1);
-                  } else if (data.code === "201") {
-                    this.$bus.$emit("toast", data.msg);
-                  }
-                })
-                .catch(function(error) {
-                  console.log(error);
-                });
-            }
-          },
-          {
-            text: "取消",
-            callback: () => {}
-          }
-        ]
-      });
+    sureFahuo(){
+
     },
     // 查看物流
     lookwuliu(index) {
@@ -315,10 +199,21 @@ export default {
         ]
       });
     },
-    listSelect(index) {
-      console.log(index);
-      this.status = index;
-      this.loading(index);
+    listSelect1() {
+      this.loading('1');  
+      this.status = '0';
+    },
+    listSelect2() {
+      this.loading('2');  
+      this.status = '1';
+    },
+    listSelect3() {
+      this.loading('3');
+      this.status = '2';
+    },
+    listSelect4() {
+      this.loading('4');
+      this.status = '3';
     }
   }
 };
@@ -554,7 +449,7 @@ export default {
         }
       }
       .cenmes {
-        height: 250px;
+        // height: 250px;
         overflow: auto;
         margin: 0 30px;
         border-bottom: 1Px solid rgba(203, 203, 203, 1);

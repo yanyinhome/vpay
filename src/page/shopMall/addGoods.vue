@@ -59,7 +59,7 @@ export default {
   name: "addGoods",
   data() {
     return {
-      name: "名字",
+      name: "",
       price: "",
       num: "",
       content: "",
@@ -86,7 +86,26 @@ export default {
 
   methods: {
     submitTo(){
-
+      this.axios
+        .post("/shop/my_shop", {
+          token: this.token(),
+          name: this.name,
+          price: this.price,
+          stock: this.num,
+          content: this.content,
+          img: this.img,
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);

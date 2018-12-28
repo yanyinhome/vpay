@@ -22,24 +22,8 @@
         </div>
       </div>
 
-      <div class="box1" @click="portrait2">
-        <span>头像</span>
-        <input
-          class="imginp"
-          ref="portrait2"
-          name="imgLocal"
-          id="imgLocal"
-          type="file"
-          accept="image/*"
-          @change="shangchuan2"
-        >
-        <div class="tou">
-          <div class="touxiang">
-            <img :src="yulan">
-          </div>
-          <i class="iconfont icon-next"></i>
-        </div>
-      </div>
+      
+      
       <div class="item">
         <span>手机号</span>
         <input type="text" v-model="phone" readonly="readonly">
@@ -54,10 +38,10 @@ export default {
   data() {
     return {
       phone: "",
-      yulan: [],
+      yulan: '',
       picValue: "",
       newimg: "",
-      imgNum1: []
+      imgbase: [],
     };
   },
 
@@ -88,24 +72,23 @@ export default {
         });
     },
     keepdata() {
-      console.log(this.yulan);
-      // this.axios
-      //   .post("user/editheadimg", {
-      //     token: this.token(),
-      //     head_img: this.newimg
-      //   })
-      //   .then(({ data }) => {
-      //     console.log(data);
-      //     if (data.code === "200") {
-      //       this.$router.push("index");
-      //       this.$bus.$emit("toast", data.msg);
-      //     } else if (data.code === "204") {
-      //       this.$bus.$emit("toast", data.msg);
-      //     }
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //   });
+      this.axios
+        .post("user/editheadimg", {
+          token: this.token(),
+          head_img: this.imgbase[0]
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.$router.push("index");
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     // 头像单击事件
     portrait() {
@@ -117,16 +100,15 @@ export default {
       this.picValue = files[0];
       this.imgPreview(this.picValue,'0');
     },
-    portrait2() {
-      this.$refs.portrait2.click(); // 获取ref为portrait的元素相当于获取id为portrait的元素
-    },
-    shangchuan2(e) {
-      let files = e.target.files || e.dataTransfer.files;
-      if (!files.length) return;
-      this.picValue = files[0];
-      this.imgPreview(this.picValue,'1');
-    },
-    
+    // portrait2() {
+    //   this.$refs.portrait2.click(); // 获取ref为portrait的元素相当于获取id为portrait的元素
+    // },
+    // shangchuan2(e) {
+    //   let files = e.target.files || e.dataTransfer.files;
+    //   if (!files.length) return;
+    //   this.picValue = files[0];
+    //   this.imgPreview(this.picValue,'1');
+    // },   
   }
 };
 </script>

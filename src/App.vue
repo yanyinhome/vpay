@@ -2,7 +2,7 @@
   <div id="app" ref="app">
     <router-view class="children_view"/>
     <!-- 彈出信息 -->
-    <!-- <toast></toast> -->
+    <toast></toast>
     <alert></alert>
   </div>
 </template>
