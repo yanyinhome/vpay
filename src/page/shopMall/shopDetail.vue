@@ -1,5 +1,5 @@
 <template>
-  <div id="searchShop">
+  <div id="shopDetail">
     <com-head :opacity="0"></com-head>
     <div class="iteminp">
       <span>
@@ -8,30 +8,30 @@
       <input type="text" v-model="search" placeholder="请输入你想要搜索的物品或商家" autofocus="autofocus">
     </div>
     <div class="user">
-      <router-link class="boxmes" tag="div" to="shoplist">
+      <div class="boxmes">
         <div class="left">
-          <img src="../../assets/image/card1.png">
+          <img :src="shop.img">
         </div>
         <div class="right">
-          <p>{{name}}</p>
-          <p>申请时间：</p>
+          <p>{{shop.shop_name}}</p>
+          <p>申请时间：{{shop.create_time}}</p>
         </div>
-      </router-link>
+      </div>
       <div class="right2">
         <p>店铺商品</p>
-        <p>339件</p>
+        <p>{{count}}件</p>
       </div>
     </div>
     <div class="goods">
-      <div class="item">
+      <div class="item" v-for="item in goods" :key="item.id">
         <div class="img">
-          <img src>
+          <img :src="item.imgurl">
         </div>
         <div class="detail">
-          <p>少油烟锅具套装</p>
-          <p>七件套：欧式精铸炒锅+ Carat钻石汤锅+Carat钻石</p>
+          <p>{{item.name}}</p>
+          <p>{{item.content}}</p>
           <p>
-            <span>&yen;599</span>
+            <span>&yen;{{item.price}}</span>
             <span class="iconfont icon-gouwuche"></span>
           </p>
         </div>
@@ -42,10 +42,13 @@
 
 <script>
 export default {
-  name: "searchShop",
+  name: "shopDetail",
   data() {
     return {
-      name: ""
+      count: "",
+      search: '',
+      shop: {},
+      goods: [],
     };
   },
 
@@ -53,9 +56,31 @@ export default {
 
   created() {},
 
-  mounted() {},
+  mounted() {
+    this.loading();
+  },
 
   methods: {
+    loading() {
+      this.axios
+        .post("/shop/shop_goods", {
+          token: this.token(),
+          id: this.$route.query.shopid
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code == "200") {
+            this.count = data.data.count;
+            this.shop = data.data.shop;
+            this.goods = data.data.goods;
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     toGooddetail(id){
       this.$router.push({name:'goodDetail',query: {id: id}});
     },
@@ -66,7 +91,7 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-#searchShop {
+#shopDetail {
   width: 750px;
   background-color: #fff;
   padding-top: 82px;
@@ -136,6 +161,8 @@ export default {
         height: 120px;
         border-radius: 2px;
         overflow: hidden;
+        display: flex;
+        align-items: center;
         img {
           width: 100%;
         }

@@ -11,32 +11,32 @@
         <div class="swiper-pagination" slot="pagination"></div>
       </swiper>
       <p>
-        <span>少油烟锅具套少油烟锅具套少油烟锅具套少油烟锅具套少油烟锅具套少油烟锅具套少油烟锅具套少油烟锅具套少油烟锅具套少油烟锅具套少油烟锅具套少油烟锅具套少油烟锅具套少油烟锅具套</span>
-        <span>599</span>
+        <span>{{goods.name}}</span>
+        <span>￥{{goods.price}}</span>
       </p>
-      <p>七件套：欧式精铸炒锅+ Carat钻石汤锅+Carat钻石多用锅+简雅式玻璃调味瓶系列*</p>
+      <p>{{goods.content}}</p>
     </div>
     <div class="user">
-      <router-link class="boxmes" tag="div" to="shoplist">
+      <router-link class="boxmes" tag="div" :to="{name:'shopDetail',query:{shopid: shop.id}}">
         <div class="left">
-          <img src="../../assets/image/card1.png">
+          <img :src="shop.img">
         </div>
         <div class="right">
           <p>
-            <span>{{name}}</span>
+            <span>{{shop.shop_name}}</span>
             <span>进入店铺</span>
           </p>
-          <p>申请时间：</p>
+          <p>申请时间：{{shop.create_time}}</p>
         </div>
       </router-link>
     </div>
     <div class="detail">——&nbsp;商品详情&nbsp;——</div>
     <div class="footBuy">
-      <div class="box1" @click="Tostore">
+      <router-link  class="box1" tag="div" :to="{name:'shopDetail',query:{shopid: shop.id}}">
         <i class="iconfont icon-dianpu1"/>
         <p>店铺</p>
-      </div>
-      <div class="box2" @click="buyTopay">
+      </router-link>
+      <div class="box2">
         <button @click="buyTopay">立即购买</button>
       </div>
     </div>
@@ -50,13 +50,13 @@ export default {
   name: "goodDetail",
   data() {
     return {
-      id: '',
-      name: "xx小铺",
+      goods: {},
+      shop: {},
       images: [
-        require("../../assets/image/zanshi/111.jpg"),
-        require("../../assets/image/zanshi/222.jpg"),
-        require("../../assets/image/zanshi/111.jpg"),
-        require("../../assets/image/zanshi/222.jpg")
+        // require("../../assets/image/zanshi/111.jpg"),
+        // require("../../assets/image/zanshi/222.jpg"),
+        // require("../../assets/image/zanshi/111.jpg"),
+        // require("../../assets/image/zanshi/222.jpg")
       ],
       // swiper配置
       swiperOption: {
@@ -80,14 +80,33 @@ export default {
 
   created() {},
 
-  mounted() {},
-
+  mounted() {
+   this.loading();
+  },
   methods: {
+    //商品详情
+    loading() {
+      this.axios
+        .post("/shop/goods_info", {
+          token: this.token(),
+          id: this.$route.query.id
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code == "200") {
+            this.images = data.data.imgurl;
+            this.shop = data.data.shop;
+            this.goods = data.data.goods;
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     buyTopay(){
       this.$router.push({name:'payment',query: {id: this.id}});
-    },
-    Tostore(){
-      this.$router.push({name:'shopDetail'});
     },
     gone() {
       this.$router.go(-1);
@@ -113,6 +132,7 @@ export default {
   }
 
   .lunbo {
+    margin-top: 30px;
     width: 750px;
     //  height: 750px;
     background-color: #fff;
@@ -177,6 +197,8 @@ export default {
         height: 120px;
         border-radius: 2px;
         overflow: hidden;
+        display: flex;
+        align-items: center;
         img {
           width: 100%;
         }

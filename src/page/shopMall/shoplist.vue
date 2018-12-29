@@ -1,7 +1,7 @@
 <template>
   <div id="shoplist">
     <com-head :opacity="2"></com-head>
-    <router-link tag="div" to="shopOrder" class="keepdata">订单管理</router-link>
+    <router-link tag="div" :to="{name: 'shopOrder',query: {status: '0'}}" class="keepdata">订单管理</router-link>
     <div class="shopMes">
       <div class="upload" @click="portrait">
         <div class="yulan" v-if="yulan">

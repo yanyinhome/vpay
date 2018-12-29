@@ -3,15 +3,13 @@
     <com-head :opacity="1">订单管理</com-head>
     <div class="fixed">
       <div class="item">
-        <span>
-          <i class="iconfont icon-sousuo"></i>
-        </span>
         <input type="text" v-model="search" placeholder="请输入商品名称">
+        <div class="sousuo" @click="searchOrder">
+          <i class="iconfont icon-sousuo"></i>
+        </div>
       </div>
       <div class="nav">
-        <div :class="{active: status=='0'}" @click="listSelect1()">
-          待付款
-        </div>
+        <div :class="{active: status=='0'}" @click="listSelect1()">待付款</div>
         <div :class="{active: status=='1'}" @click="listSelect2()">
           待发货
           <span v-if="fa>0">{{fa}}</span>
@@ -20,14 +18,11 @@
           待收货
           <span v-if="shou>0">{{shou}}</span>
         </div>
-        <div :class="{active: status=='3'}" @click="listSelect4()">
-          已完成
-        </div>
+        <div :class="{active: status=='3'}" @click="listSelect4()">已完成</div>
       </div>
-     
     </div>
     <div v-if="!message.length" style="margin-top: 15vh; text-align: center;">暂无订单信息</div>
-    <div class="order" v-for="(item,index) in message" :key="item.order_id">
+    <div class="order" v-for="(item,index) in message" :key="index">
       <div class="orderTop">
         <div class="box1">{{item.buyname}}</div>
         <div class="box2">{{orderlist[status]}}</div>
@@ -51,12 +46,8 @@
       <div class="orderFoot">
         <div class="sumprice">共{{item.number}}件商品，合计：¥{{ item.num * item.price}}</div>
         <button class="noborder" @click="fahuoMes(item.id)" v-if="status=='1'">发货</button>
-        <button v-if="status=='2'||status=='3'" @click="lookwuliu(index)">查看物流</button>
-        <button
-          class="evaluate"
-          v-if="status=='3'"
-          @click="surereceive(item.order_id,index)"
-        >订单详情</button>
+        <button v-if="status=='2'||status=='3'" @click="lookwuliu(item.id)">查看物流</button>
+        <button class="evaluate" v-if="status=='3'" @click="surereceive(item.id)">订单详情</button>
       </div>
     </div>
     <!-- 发货 -->
@@ -76,7 +67,7 @@
         </div>
         <div class="cenmes">
           <p>
-            <span>{{fahuolist.goodname}}：{{fahuolist.price}}</span>
+            <span>{{fahuolist.goodname}}：￥{{fahuolist.price}}</span>
             <span>x{{fahuolist.num}}</span>
           </p>
           <!-- <p class="gong">共计3件商品</p> -->
@@ -85,6 +76,9 @@
           <p>订单编号：{{fahuolist.order_number}}</p>
           <p>下单时间：{{fahuolist.create_time}}</p>
           <p>付款时间：{{fahuolist.pay_time}}</p>
+          <div class="item">快递单号：
+            <input type="text" v-model="number" placeholder="请输入快递单号">
+          </div>
         </div>
         <button class="btn" @click="sureFahuo">确定发货</button>
 
@@ -102,14 +96,15 @@ export default {
   data() {
     return {
       mask: false,
-      status: '0',
-      fa: '',
-      shou: '',
+      status: "0",
+      fa: "",
+      shou: "",
       search: "",
-      orderid: '', //订单id
+      orderid: "", //订单id
+      number: "",
       fahuomes: {},
       fahuolist: [],
-      orderlist: ['待付款','待发货','待收货','已完成'],
+      orderlist: ["待付款", "待发货", "待收货", "已完成"],
       message: [
         // {
         //   order_create_time: "120212",
@@ -122,8 +117,7 @@ export default {
         //   number: "120212",
         //   image1: require("../../assets/image/zanshi/touxiang.jpg")
         // },
-        
-      ],
+      ]
     };
   },
 
@@ -147,12 +141,12 @@ export default {
           if (data.code === "200") {
             this.message = data.data.order;
             this.fa = data.data.fa;
-            this.shou= data.data.shou;
+            this.shou = data.data.shou;
           } else if (data.code === "201") {
             this.$bus.$emit("toast", data.msg);
           } else if (data.code === "205") {
             this.fa = data.data.fa;
-            this.shou= data.data.shou;
+            this.shou = data.data.shou;
             this.$bus.$emit("toast", data.msg);
           }
         })
@@ -161,7 +155,7 @@ export default {
         });
     },
     // 发货
-    fahuoMes(id){
+    fahuoMes(id) {
       this.orderid = id;
       this.mask = true;
       this.axios
@@ -182,38 +176,106 @@ export default {
           console.log(error);
         });
     },
-    sureFahuo(){
-
+    // 确认发货
+    sureFahuo() {
+      this.axios
+        .post("/shop/fahuo", {
+          token: this.token(),
+          id: this.orderid,
+          express_num: this.number
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.mask = false;
+            this.listSelect2();
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "201") {
+            this.mask = false;
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
     // 查看物流
-    lookwuliu(index) {
-      console.log(this.message[index].tracking_number);
-      this.$bus.$emit("comAlert", {
-        title: "物流单号",
-        info: this.message[index].tracking_number,
-        button: [
-          {
-            text: "确认",
-            callback: () => {}
+    lookwuliu(id) {
+      this.axios
+        .post("/shop/look_express", {
+          token: this.token(),
+          id: id
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.$bus.$emit("comAlert", {
+              title: "物流单号",
+              info: data.data,
+              button: [
+                {
+                  text: "确认",
+                  callback: () => {}
+                }
+              ]
+            });
+          } else if (data.code === "201") {
+            this.$bus.$emit("toast", data.msg);
           }
-        ]
-      });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    // 搜索商品
+    searchOrder(){
+      this.axios
+        .post("/shop/order_list", {
+          token: this.token(),
+          keyword: this.search,
+          status: parseInt(this.status)+1,
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.message = data.data.order;
+            this.fa = data.data.fa;
+            this.shou = data.data.shou;
+          } else if (data.code === "201") {
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "205") {
+            this.fa = data.data.fa;
+            this.shou = data.data.shou;
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    // 订单详情
+    surereceive(id){
+      this.$router.push({name: 'shopOrderDetail',query:{id,id}})
     },
     listSelect1() {
-      this.loading('1');  
-      this.status = '0';
+      this.message = [];
+      this.loading("1");
+      this.status = "0";
     },
     listSelect2() {
-      this.loading('2');  
-      this.status = '1';
+      this.message = [];
+      this.loading("2");
+      this.status = "1";
     },
     listSelect3() {
-      this.loading('3');
-      this.status = '2';
+      this.message = [];
+      this.loading("3");
+      this.status = "2";
     },
     listSelect4() {
-      this.loading('4');
-      this.status = '3';
+      this.message = [];
+      this.loading("4");
+      this.status = "3";
     }
   }
 };
@@ -229,19 +291,26 @@ export default {
     padding: 20px 0 0;
     .item {
       margin: 0px 30px;
-      padding: 0 30px;
+      padding-left: 30px;
       box-sizing: border-box;
-      line-height: 90px;
+      line-height: 70px;
       background: rgba(235, 235, 235, 1);
       border-radius: 10px;
-      span {
-        font-size: 34px;
+      .sousuo {
+        display: inline-block;
+        width: 100px;
+        height: 70px;
         color: #999;
+        text-align: center;
+
+        .iconfont{
+        font-size: 40px;
+        }
       }
       input {
         padding-left: 10px;
-        line-height: 90px;
-        width: 550px;
+        line-height: 70px;
+        width: 530px;
         background: rgba(235, 235, 235, 1);
         font-size: 26px;
       }
@@ -320,7 +389,7 @@ export default {
       font-size: 24px;
       color: #666;
       line-height: 66px;
-      border-bottom: 1Px solid #f0f0f0;
+      border-bottom: 1px solid #f0f0f0;
       .box2 {
         color: #f10f0f;
       }
@@ -377,7 +446,7 @@ export default {
       padding-bottom: 20px;
       box-sizing: border-box;
       font-size: 26px;
-      border-bottom: 1Px solid #cbcbcb;
+      border-bottom: 1px solid #cbcbcb;
       .sumprice {
         line-height: 70px;
         margin: 10px auto;
@@ -416,7 +485,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        border-bottom: 1Px solid rgba(203, 203, 203, 1);
+        border-bottom: 1px solid rgba(203, 203, 203, 1);
         .left {
           width: 50px;
           height: 58px;
@@ -452,7 +521,7 @@ export default {
         // height: 250px;
         overflow: auto;
         margin: 0 30px;
-        border-bottom: 1Px solid rgba(203, 203, 203, 1);
+        border-bottom: 1px solid rgba(203, 203, 203, 1);
         padding: 10px 0;
         p:nth-of-type(1) {
           font-size: 26px;
@@ -480,6 +549,14 @@ export default {
           font-weight: 400;
           color: rgba(102, 102, 102, 1);
           line-height: 50px;
+        }
+        .item {
+          color: rgba(102, 102, 102, 1);
+          line-height: 60px;
+          input {
+            line-height: 50px;
+            border: 1px solid rgba(102, 102, 102, 0.5);
+          }
         }
       }
       .btn {

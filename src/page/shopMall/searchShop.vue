@@ -8,33 +8,34 @@
       <input type="text" v-model="search" placeholder="请输入你想要搜索的物品或商家" autofocus="autofocus">
     </div>
     <div class="user">
-      <router-link class="boxmes" tag="div" to="shopDetail">
+      <router-link class="boxmes" v-for="item in shop" :key="item.id" :to="{name:'shopDetail',query:{shopid: item.id}}">
         <div class="left">
-          <img src="../../assets/image/card1.png">
+          <img :src="item.img">
         </div>
         <div class="right">
-          <p>{{name}}</p>
-          <p>商品：</p>
-          <p>申请时间：</p>
+          <p>{{item.shop_name}}</p>
+          <p>商品：{{shop.name}}</p>
+          <p>申请时间：{{item.create_time}}</p>
           <p>进入店铺</p>
         </div>
       </router-link>
     </div>
     <div class="goods">
-      <div class="item" v-for="item in goods" :key="item">
+      <div class="item" v-for="item in goods" :key="item.id">
         <div class="img"  @click="toGooddetail(item.id)">
-          <img src>
+          <img :src="item.imgurl">
         </div>
         <div class="detail">
-          <p>少油烟锅具套装</p>
-          <p>七件套：欧式精铸炒锅+ Carat钻石汤锅+Carat钻石</p>
+          <p>{{item.name}}</p>
+          <p>{{item.content}}</p>
           <p @click="toGoodpay(item.id)">
-            <span>&yen;599</span>
+            <span>&yen;{{item.price}}</span>
             <span class="iconfont icon-gouwuche"></span>
           </p>
         </div>
       </div>
     </div>
+    <div v-if="!shop.length&&!goods.length" style="margin-top: 30vh; text-align: center; color: #888;">暂无搜索信息</div>
   </div>
 </template>
 
@@ -43,8 +44,10 @@ export default {
   name: "searchShop",
   data() {
     return {
-      name: "1",
-      goods: []
+      id: this.$route.query.id,
+      shop: [],
+      goods: [],
+      search: this.$route.query.keyword
     };
   },
 
@@ -52,9 +55,31 @@ export default {
 
   created() {},
 
-  mounted() {},
+  mounted() {  
+    this.loading();
+  },
 
   methods: {
+    // 搜索
+    loading() {
+      this.axios
+        .post("/shop/serch_goods", {
+          token: this.token(),
+          keyword: this.$route.query.keyword
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code == "200") {
+            this.shop = data.data.shop;
+            this.goods = data.data.goods;
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     toGooddetail(id){
       this.$router.push({name:'goodDetail',query: {id: id}});
     },
@@ -122,11 +147,12 @@ export default {
     margin: 20px 30px;
     background-color: #fff;
     .boxmes {
+      margin-top: 20px;
       display: flex;
       justify-content: space-between;
       // align-items: center;
       border-radius: 10px;
-      box-shadow: 2px 5px 50px #999;
+      box-shadow: 2px 0px 30px #999;
       .left {
         width: 300px;
         height: 300px;
@@ -134,6 +160,8 @@ export default {
         box-sizing: border-box;
         border-radius: 10px;
         overflow: hidden;
+        display: flex;
+        align-items: center;
         img {
           width: 100%;
         }

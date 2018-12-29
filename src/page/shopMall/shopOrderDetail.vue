@@ -9,10 +9,10 @@
         </div>
         <div class="right">
           <p>
-            <span>买家姓名</span>
-            <span>买家姓名</span>
+            <span>{{message2.UID}}</span>
+            <span>{{message2.phone}}</span>
           </p>
-          <p>河南省郑州市金水区北三环瀚海北金</p>
+          <p>{{message2.address}}</p>
         </div>
       </div>
       <div class="topmes">
@@ -21,26 +21,25 @@
         </div>
         <div class="right">
           <p>
-            <span>买家姓名</span>
-            <span>买家姓名</span>
+            <span>{{message1.UID}}</span>
+            <span>{{message1.phone}}</span>
           </p>
-          <p>河南省郑州市金水区北三环瀚海北金</p>
+          <p>{{message1.address}}</p>
         </div>
       </div>
     </div>
     <div class="user good">
       <div class="topmes">
         <div class="left">
-          <img src="../../assets/image/shouhuo.png" alt>
+          <img :src="message3.imgurl" alt>
         </div>
         <div class="right">
           <p>
-            <span>买家姓名</span>
-            <span>买家姓名</span>
+            <span>{{message3.name}}</span>
           </p>
           <p>
-            <span>&yen;38</span>
-            <span>x1</span>
+            <span>&yen;{{message3.price}}</span>
+            <span>x{{message3.num}}</span>
           </p>
         </div>
       </div>
@@ -56,12 +55,12 @@
       </div>
     </div>
     <div class="footmes">
-      <p>订单编号：</p>
-      <p>下单时间：22</p>
-      <p>付款时间：</p>
+      <p>订单编号：{{message4.order_number}}</p>
+      <p>下单时间：{{message4.create_time}}</p>
+      <p>付款时间：{{message4.pay_time}}</p>
     </div>
     <div class="footmes">
-      <p>订单状态：</p>
+      <p>订单状态：{{message4.status|orderStaus}}</p>
     </div>
     <div class="comAlert" v-show="show">
          <div class="alertbox">
@@ -79,27 +78,61 @@ export default {
   name: "shopOrderDetail",
   data() {
     return {
+      id: this.$route.query.id,
       show: false,
+      message1: {},
+      message2: {},
+      message3: {},
+      message4: {},
       tel: '',
-      tel: '',
-
     };
   },
 
   computed: {},
 
-  created() {},
+  created() {
+    this.loading();
 
-  mounted() {},
+  },
 
+  mounted() {
+  },
+  filters: {
+    orderStaus(value){
+      const orderanv = ['待支付','待发货','待收货','已完成'];
+      return orderanv[value-1];
+    }
+  },
   methods: {
+    loading() {
+      this.axios
+        .post("/shop/order_info", {
+          token: this.token(),
+          id: this.id
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.message1 = data.data.buy;
+            this.message2 = data.data.sell;
+            this.message3 = data.data.good;
+            this.message4 = data.data.order;
+            this.pintai = data.data.pintai
+          } else if (data.code === "201") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
       telflat(){
           this.show = true;
-          this.tel = 1111;
+          this.tel = this.pintai;
       },
       telbuyer(){
           this.show = true;
-          this.tel = 2222;
+          this.tel = this.message1.phone;
       },
   }
 };
@@ -159,7 +192,7 @@ export default {
       .left {
         width: 130px;
         height: 130px;
-        background: rgba(216, 216, 216, 1);
+        // background: rgba(216, 216, 216, 1);
         border-radius: 6px;
       }
       .right {

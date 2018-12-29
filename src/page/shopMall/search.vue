@@ -6,7 +6,7 @@
         <i class="iconfont icon-sousuo"></i>
       </span>
       <input type="text" v-model="search" placeholder="请输入你想要搜索的物品或商家" autofocus="autofocus">
-      <i class="iconfont icon-shanchu" @click="delectValue"></i>      
+      <i class="iconfont icon-shanchu" @click="delectValue"></i>
     </div>
     <div class="keepdata" @click="sureSearch">确定</div>
     <div class="hot">
@@ -14,24 +14,19 @@
       <div class="hotnav">
         <div
           class="box"
-          @click="leftNav(index)"
+          @click="hotSearch(item.name)"
           v-for="(item,index) in hotnav"
           :key="index"
-        >{{item.nav}}</div>
+        >{{item.name}}</div>
       </div>
     </div>
     <div class="history">
       <p>
-        <span>热门搜索</span>
+        <span>搜索历史</span>
         <i @click="delectLog" class="iconfont icon-iconfont-shanchu"></i>
       </p>
       <div class="historynav">
-        <p
-          class="box"
-          @click="leftNav(index)"
-          v-for="(item,index) in hotnav"
-          :key="index"
-        >{{item.nav}}</p>
+        <p class="box" @click="logSearch(index)" v-for="(item,index) in log" :key="index">{{item.name}}</p>
       </div>
     </div>
   </div>
@@ -42,21 +37,22 @@ export default {
   name: "search",
   data() {
     return {
-      search: '',
+      search: "",
       hotnav: [
-        { nav: "热门" },
-        { nav: "热门" },
-        { nav: "热门" },
-        { nav: "热门" },
-        { nav: "热门" },
-        { nav: "热门" },
-        { nav: "热门" },
-        { nav: "热门" },
-        { nav: "热门" },
-        { nav: "热门" },
-        { nav: "热门" },
-        { nav: "热门" }
-      ]
+        // { nav: "热门" },
+        // { nav: "热门" },
+        // { nav: "热门" },
+        // { nav: "热门" },
+        // { nav: "热门" },
+        // { nav: "热门" },
+        // { nav: "热门" },
+        // { nav: "热门" },
+        // { nav: "热门" },
+        // { nav: "热门" },
+        // { nav: "热门" },
+        // { nav: "热门" }
+      ],
+      log: []
     };
   },
 
@@ -64,16 +60,55 @@ export default {
 
   created() {},
 
-  mounted() {},
+  mounted() {
+    this.loading();
+  },
 
   methods: {
-      delectLog(){
-          this.$bus.$emit("comAlert", {
+    loading() {
+      this.axios
+        .post("/shop/serch_view", {
+          token: this.token()
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code == "200") {
+            this.hotnav = data.data.hot_serch;
+            this.log = data.data.serch_history;
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    hotSearch(name){
+      this.$router.push({name: 'searchShop',query:{keyword: name}});
+    },
+    delectLog() {
+      this.$bus.$emit("comAlert", {
         info: "你确定删除全部历史记录？",
         button: [
           {
             text: "确认",
             callback: () => {
+              this.axios
+                .post("/shop/del_serch", {
+                  token: this.token()
+                })
+                .then(({ data }) => {
+                  console.log(data);
+                  if (data.code == "200") {
+                    this.log = [];
+                    this.$bus.$emit("toast", data.msg);
+                  } else if (data.code == "204") {
+                    this.$bus.$emit("toast", data.msg);
+                  }
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
             }
           },
           {
@@ -82,13 +117,17 @@ export default {
           }
         ]
       });
-      },
-      delectValue(){
-        this.search = '';
-      },
-      sureSearch(){
-
+    },
+    delectValue() {
+      this.search = "";
+    },
+    sureSearch() {
+      if(!this.search){
+        this.$bus.$emit("toast", '搜索词不能为空');
+      } else {
+        this.$router.push({name: 'searchShop',query:{keyword: this.search}});
       }
+    }
   }
 };
 </script>
@@ -96,7 +135,7 @@ export default {
 #search {
   background-color: #fff;
   padding-top: 82px;
-   .keepdata {
+  .keepdata {
     width: 140px;
     height: 80px;
     text-align: center;
@@ -121,7 +160,7 @@ export default {
       font-size: 34px;
       color: #999;
     }
-    .icon-shanchu{
+    .icon-shanchu {
       color: #999;
     }
     input {
@@ -155,7 +194,7 @@ export default {
     }
   }
   .hot {
-    padding: 0 20px;
+    padding: 0 30px;
     p {
       margin-top: 20px;
       font-size: 32px;
@@ -189,7 +228,7 @@ export default {
       font-weight: 500;
       color: rgba(0, 0, 0, 1);
       line-height: 80px;
-      border-bottom: 1Px solid #cbcbcb;
+      border-bottom: 1px solid #cbcbcb;
       display: flex;
       justify-content: space-between;
       .icon-iconfont-shanchu {

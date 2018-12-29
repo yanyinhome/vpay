@@ -1,33 +1,35 @@
 <template>
   <div id="myAddress">
     <com-head :opacity="1">我的地址</com-head>
-    <div class="address">
+    <div class="address" v-for="(item,index) in address" :key="index">
       <div class="box1">
         <p>
-          <span>{{name}}</span>&emsp;
-          <span>{{phone}}</span>
+          <span>{{item.name}}</span>&emsp;
+          <span>{{item.phone}}</span>
         </p>
-        <p>{{address}}</p>
+        <p>{{item.province+item.city+item.area+item.address}}</p>
       </div>
       <div class="box2">
-        <div class="left">
-          <i class="iconfont icon-fangkuang"/>
-          <!-- <i class="iconfont icon-fuxuankuang"/> -->
+        <div class="left" @click="defaultMes(index,item.id)">
+          <i v-if="item.checked" class="iconfont icon-fuxuankuang"/>
+          <i v-else class="iconfont icon-fangkuang"/>
           <span>设为默认</span>
         </div>
         <div class="right">
-          <div>
+          <router-link tag="div" :to="{name: 'addAddress',query: {status:'0',id:item.id}}">
             <i class="iconfont icon-icon_edit"/>
             <span>修改</span>
-          </div>
-          <div>
+          </router-link>
+          <div @click="delectItem(index,item.id)">
             <i class="iconfont icon-iconfont-shanchu"/>
             <span>删除</span>
           </div>
         </div>
       </div>
     </div>
-    <butFoot :click="addAddress"><i class="iconfont icon-add"/>添加新地址</butFoot>
+    <butFoot :click="addAddress">
+      <i class="iconfont icon-add"/>添加新地址
+    </butFoot>
   </div>
 </template>
 
@@ -36,9 +38,7 @@ export default {
   name: "myAddress",
   data() {
     return {
-      name: "陈女士",
-      phone: "17839888888",
-      address: "棉纺西路"
+      address: []
     };
   },
 
@@ -46,11 +46,98 @@ export default {
 
   created() {},
 
-  mounted() {},
+  mounted() {
+    this.loading();
+  },
 
   methods: {
-    addAddress(){
-      this.$router.push('addAddress');
+    loading() {
+      this.axios
+        .post("/user/my_address", {
+          token: this.token()
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code == "200") {
+            this.address = data.data;
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    // 设为默认地址
+    defaultMes(index, id) {
+      this.$bus.$emit("comAlert", {
+        info: "确定设为默认地址?",
+        button: [
+          {
+            text: "确认",
+            callback: () => {
+              this.axios
+                .post("/user/set_address", {
+                  token: this.token(),
+                  id: id
+                })
+                .then(({ data }) => {
+                  console.log(data);
+                  if (data.code == "200") {
+                    this.loading();
+                    this.$bus.$emit("toast", data.msg);
+                  } else if (data.code == "204") {
+                    this.$bus.$emit("toast", data.msg);
+                  }
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
+            }
+          },
+          {
+            text: "取消",
+            callback: () => {}
+          }
+        ]
+      });
+    },
+    // 删除地址
+    delectItem(index, id) {
+      this.$bus.$emit("comAlert", {
+        info: "确定删除该地址?",
+        button: [
+          {
+            text: "确认",
+            callback: () => {
+              this.axios
+                .post("/user/del_address", {
+                  token: this.token(),
+                  id: id
+                })
+                .then(({ data }) => {
+                  console.log(data);
+                  if (data.code == "200") {
+                    this.address.splice(index, 1);
+                    this.$bus.$emit("toast", data.msg);
+                  } else if (data.code == "204") {
+                    this.$bus.$emit("toast", data.msg);
+                  }
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
+            }
+          },
+          {
+            text: "取消",
+            callback: () => {}
+          }
+        ]
+      });
+    },
+    addAddress() {
+      this.$router.push("addAddress");
     }
   }
 };
@@ -64,7 +151,7 @@ export default {
     .box1 {
       margin: 10px 30px;
       padding: 10px 0;
-      border-bottom: 1Px solid rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       p:nth-of-type(1) {
         font-size: 28px;
         font-family: PingFangSC-Regular;
@@ -109,8 +196,8 @@ export default {
         // line-height: 80px;
       }
       .icon-fuxuankuang {
-          color: #D6AF7C;
-          font-size: 36px;
+        color: #d6af7c;
+        font-size: 36px;
       }
     }
   }

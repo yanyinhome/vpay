@@ -10,8 +10,8 @@
         <span>手机号码</span>
         <input type="text" v-model="phone" placeholder="请输入手机号码">
       </div>
-      <div class="box"  @click="cityalert=true">
-        <span>请选择地区{{name}}</span>
+      <div class="box" @click="cityalert=true">
+        <span>请选择地区</span>
         <i class="iconfont icon-next"/>
       </div>
       <div class="box">
@@ -23,7 +23,7 @@
         <span>{{City}}</span>
       </div>
       <div class="box">
-        <span>城市</span>
+        <span>区域</span>
         <span>{{county}}</span>
       </div>
       <div class="beizhu">
@@ -33,8 +33,11 @@
     <!-- 省市县三级联动 -->
     <div class="mask" v-if="cityalert">
       <div class="addressAlert">
-        <div class="box"><span>所在地区</span><button @click="cityalert=false">确定</button></div> 
-        <mt-picker :slots="myAddressSlots" @change="onMyAddressChange" :visibleItemCount=7></mt-picker>
+        <div class="box">
+          <span>所在地区</span>
+          <button @click="cityalert=false">确定</button>
+        </div>
+        <mt-picker :slots="myAddressSlots" @change="onMyAddressChange" :visibleItemCount="7"></mt-picker>
       </div>
     </div>
     <!-- <addressSelect></addressSelect> -->
@@ -44,11 +47,12 @@
 
 <script>
 import myaddress from "../../assets/js/province.js"; //引入省市区数据
-// import addressSelect from "../../components/addressSelect.vue"; 
+// import addressSelect from "../../components/addressSelect.vue";
 export default {
   name: "addAddress",
   data() {
     return {
+      status: this.$route.query.status,
       name: "",
       phone: "",
       content: "",
@@ -90,13 +94,17 @@ export default {
       cityalert: false,
       myAddressProvince: "省",
       myAddressCity: "市",
-      myAddresscounty: "区/县",
+      myAddresscounty: "区/县"
     };
   },
 
   computed: {},
 
-  created() {},
+  created() {
+    if (this.status == "0") {
+      this.loading();
+    }
+  },
 
   mounted() {
     console.log();
@@ -109,10 +117,99 @@ export default {
   },
 
   methods: {
-    keepData(){
-
+    loading() {
+      this.axios
+        .post("/user/edit_address", {
+          token: this.token(),
+          id: this.$route.query.id
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code == "200") {
+            this.name = data.data.name;
+            this.phone = data.data.phone;
+            this.Province = data.data.province;
+            this.City = data.data.city;
+            this.county = data.data.area;
+            this.content = data.data.address;
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
-     chooceAddress() {
+    keepData() {
+      let regTel = /^(1[3-9])\d{9}$/;
+      if (!this.name) {
+        this.$bus.$emit("toast", "收件人不能为空");
+      } else if (!this.phone) {
+        this.$bus.$emit("toast", "手机号不能为空");
+      } else if (!regTel.test(this.phone)) {
+        this.$bus.$emit("toast", "手机号码不合法");
+      } else if (!this.Province) {
+        this.$bus.$emit("toast", "请选择地址");
+      } else {
+        if (this.status == "0") {
+          //修改地址
+          this.xiugai();
+        } else {
+          //添加
+          this.tianjia();
+        }
+      }
+    },
+    xiugai() {
+      this.axios
+        .post("/user/doedit_address", {
+          token: this.token(),
+          id: this.$route.query.id,
+          name: this.name,
+          phone: this.phone,
+          province: this.Province,
+          city: this.City,
+          area: this.county,
+          address: this.content
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code == "200") {
+            this.$router.push("myAddress");
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    tianjia() {
+      this.axios
+        .post("/user/add_address", {
+          token: this.token(),
+          name: this.name,
+          phone: this.phone,
+          province: this.Province,
+          city: this.City,
+          area: this.county,
+          address: this.content
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code == "200") {
+            this.$router.push("myAddress");
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    chooceAddress() {
       this.cityalert = true;
     },
     onMyAddressChange(picker, values) {
@@ -123,9 +220,15 @@ export default {
         this.myAddressProvince = values[0];
         this.myAddressCity = values[1];
         this.myAddresscounty = values[2];
-        if(values[0]){this.Province=this.myAddressProvince};
-        if(values[1]){this.City=this.myAddressCity};
-        if(values[2]){this.county=this.myAddresscounty};   
+        if (values[0]) {
+          this.Province = this.myAddressProvince;
+        }
+        if (values[1]) {
+          this.City = this.myAddressCity;
+        }
+        if (values[2]) {
+          this.county = this.myAddresscounty;
+        }
       }
     }
   }
@@ -143,7 +246,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1Px solid rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
       line-height: 100px;
       input {
         width: 540px;

@@ -17,15 +17,15 @@
       <router-link class="iconfont icon-sousuo" tag="i" to="search"></router-link>
     </div>
     <div class="goods">
-      <div class="item">
+      <div class="item" v-for="item in goods" :key="item.id">
         <div class="img" @click="toGooddetail">
-          <img src>
+          <img :src="item.imgurl">
         </div>
         <div class="detail">
-          <p>少油烟锅具套装</p>
-          <p>七件套：欧式精铸炒锅+ Carat钻石汤锅+Carat钻石</p>
+          <p>{{item.name}}</p>
+          <p>{{item.content}}</p>
           <p>
-            <span>&yen;599</span>
+            <span>&yen;{{item.price}}</span>
             <span class="iconfont icon-gouwuche"></span>
           </p>
         </div>
@@ -44,7 +44,7 @@ export default {
         img: "",
         UID: "",
         grade: ""
-      }
+      },goods: []
     };
   },
 
@@ -53,13 +53,33 @@ export default {
   created() {},
 
   mounted() {
-    this.loading();
+    // this.loading();
+    this.goodlist();
   },
 
   methods: {
-    loading() {
+    // loading() {
+    //   this.axios
+    //     .post("/user/index", {
+    //       token: this.token()
+    //     })
+    //     .then(({ data }) => {
+    //       console.log(data);
+    //       if (data.code == "200") {
+    //         this.user.img = data.data.head_img;
+    //         this.user.UID = data.data.UID;
+    //         this.grade = data.data.credit;
+    //       } else if (data.code == "204") {
+    //         this.$bus.$emit("toast", data.msg);
+    //       }
+    //     })
+    //     .catch(function(error) {
+    //       console.log(error);
+    //     });
+    // },
+    goodlist() {
       this.axios
-        .post("/user/index", {
+        .post("/shop/shop_index", {
           token: this.token()
         })
         .then(({ data }) => {
@@ -67,7 +87,7 @@ export default {
           if (data.code == "200") {
             this.user.img = data.data.head_img;
             this.user.UID = data.data.UID;
-            this.grade = data.data.credit;
+            this.goods = data.data.goods;
           } else if (data.code == "204") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -90,10 +110,9 @@ export default {
     position: fixed;
     top: 0px;
     left: 30px;
-    background: #14171a;
-     
+    background: #14171a;    
     .boxmes {
-      padding-top: 20px;
+      padding: 20px 0;
       display: flex;
       justify-content: flex-start;
       align-items: center;

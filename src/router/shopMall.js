@@ -36,7 +36,8 @@ export default [
     },{
         path: '/shopOrder',
         component: shopOrder,
-        name: 'shopOrder'
+        name: 'shopOrder',
+        keepAlive: false
     },{
         path: '/shopOrderDetail',
         component: shopOrderDetail,
