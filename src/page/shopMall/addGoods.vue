@@ -31,24 +31,109 @@
       </div>
     </div>
     <div class="item2">
-      <span>为了更好的展示商品，请上传长宽比例为1:1的图片。</span>
+      <span>为了更好的展示商品，请上传长宽比例为1:1的图片。（点击图片，可删除替换）</span>
     </div>
     <div class="imglist">
-      <el-upload
-        action="https://jsonplaceholder.typicode.com"
-        list-type="picture-card"
-        :on-preview="handlePictureCardPreview"
-        :on-remove="handleRemove"
-        :multiple="true"
-        :limit="6"
-        :on-exceed="numWarn"
-        :on-success="uploadImg"
+      <div
+        class="upload uploadyulan"
+        @click="delectImg(index)"
+        v-for="(item,index) in imgurl"
+        :key="index"
       >
-        <i class="el-icon-plus"></i>
-      </el-upload>
-      <el-dialog :visible.sync="dialogVisible">
-        <img width="100%" :src="dialogImageUrl" alt>
-      </el-dialog>
+        <img :src="item">
+      </div>
+      <div class="upload" @click="portrait1" v-if="imgurl.length<6">
+        <!-- <div class="yulan" v-if="imgurl[0]">
+          <img :src="imgurl[0]">
+        </div>-->
+        <input
+          class="imginp"
+          ref="portrait1"
+          name="imgurl"
+          id="imgurl"
+          type="file"
+          accept="image/*"
+          @change="shangchuan1"
+        >
+        <div class="add">
+          <i class="iconfont icon-add"/>
+        </div>
+      </div>
+      <!-- <div class="upload" @click="portrait2">
+        <div class="yulan" v-if="imgurl[1]">
+          <img :src="imgurl[1]">
+        </div>
+        <input
+          class="imginp"
+          ref="portrait2"
+          name="imgurl"
+          id="imgurl"
+          type="file"
+          accept="image/*"
+          @change="shangchuan2"
+        >
+        <div class="add"><i v-if="!imgurl[1]" class="iconfont icon-add"/></div>
+      </div>-->
+      <!-- <div class="upload" @click="portrait3">
+        <div class="yulan" v-if="yulan">
+          <img :src="yulan">
+        </div>
+        <input
+          class="imginp"
+          ref="portrait3"
+          name="imgurl"
+          id="imgurl"
+          type="file"
+          accept="image/*"
+          @change="shangchuan3"
+        >
+        <div class="add"><i v-if="!yulan" class="iconfont icon-add"/></div>
+      </div>
+      <div class="upload" @click="portrait4">
+        <div class="yulan" v-if="yulan">
+          <img :src="yulan">
+        </div>
+        <input
+          class="imginp"
+          ref="portrait4"
+          name="imgurl"
+          id="imgurl"
+          type="file"
+          accept="image/*"
+          @change="shangchuan4"
+        >
+        <div class="add"><i v-if="!yulan" class="iconfont icon-add"/></div>
+      </div>
+      <div class="upload" @click="portrait5">
+        <div class="yulan" v-if="yulan">
+          <img :src="yulan">
+        </div>
+        <input
+          class="imginp"
+          ref="portrait5"
+          name="imgurl"
+          id="imgurl"
+          type="file"
+          accept="image/*"
+          @change="shangchuan5"
+        >
+        <div class="add"><i v-if="!yulan" class="iconfont icon-add"/></div>
+      </div>
+      <div class="upload" @click="portrait6">
+        <div class="yulan" v-if="yulan">
+          <img :src="yulan">
+        </div>
+        <input
+          class="imginp"
+          ref="portrait6"
+          name="imgurl"
+          id="imgurl"
+          type="file"
+          accept="image/*"
+          @change="shangchuan6"
+        >
+        <div class="add"><i v-if="!yulan" class="iconfont icon-add"/></div>
+      </div>-->
     </div>
     <com-button :click="submitTo">上传商品</com-button>
   </div>
@@ -59,11 +144,19 @@ export default {
   name: "addGoods",
   data() {
     return {
+      yulan: "",
+      picValue: "",
+      imgbase: [],
+
+      imgurl: [],
+      imgid: [],
+
       name: "",
       price: "",
       num: "",
       content: "",
       number: "0",
+      imglist: [],
 
       dialogImageUrl: "",
       dialogVisible: false
@@ -85,20 +178,21 @@ export default {
   mounted() {},
 
   methods: {
-    submitTo(){
+    submitTo() {
       this.axios
-        .post("/shop/my_shop", {
+        .post("/shop/add_goods", {
           token: this.token(),
           name: this.name,
           price: this.price,
           stock: this.num,
           content: this.content,
-          img: this.img,
+          img: this.imgid.join()
         })
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
-            
+            this.$router.push("shoplist");
+            this.$bus.$emit("toast", data.msg);
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -107,18 +201,45 @@ export default {
           console.log(error);
         });
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    // 头像单击事件
+    portrait1() {
+      this.$refs.portrait1.click(); // 获取ref为portrait的元素相当于获取id为portrait的元素
     },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+    shangchuan1(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.picValue = files[0];
+      this.imgPreview(this.picValue, "0");
+      setTimeout(() => {
+        this.uploadImg();
+      }, 100);
     },
-    uploadImg(response, file, fileList) {
-      console.log(fileList);
+    delectImg(index) {
+      // console.log(index);
+      // console.log(this.imgid);
+      // console.log(this.imgurl);
+      this.imgid.splice(index, 1);
+      this.imgurl.splice(index, 1);
     },
-    numWarn(files, fileList) {
-      this.$bus.$emit("toast", "最多只能上传6张图片");
+    // 上传图片请求
+    uploadImg(num) {
+      this.axios
+        .post("/home/base_img", {
+          imgurl: this.imgbase[0]
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.imgid.push(data.data.id);
+            this.imgurl.push(data.data.url);
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   }
 };
@@ -178,7 +299,7 @@ export default {
         width: 690px;
         margin: auto;
         padding: 10px;
-        border: 1Px solid rgba(238, 238, 238, 1);
+        border: 1px solid rgba(238, 238, 238, 1);
         box-sizing: border-box;
       }
       .number {
@@ -190,27 +311,60 @@ export default {
     }
   }
   .item2 {
-    margin: 0 30px;
-    line-height: 94px;
+    padding: 10px 30px;
+    // line-height: 94px;
     font-size: 28px;
     color: #d6ae7b;
   }
   .imglist {
     background-color: #fff;
-    padding: 30px;
-    .el-icon-plus {
-      font-size: 50px;
-      line-height: 220px;
+    padding: 20px;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    .uploadyulan {
+      border: none;
+      display: flex;
+      align-items: center;
+      img {
+        width: 100%;
+      }
     }
-    .el-upload-list--picture-card .el-upload-list__item {
+    .upload {
       width: 220px;
       height: 220px;
-    }
-    .el-upload--picture-card {
-      width: 220px;
-      height: 220px;
-      background-color: rgba(221, 221, 221, 1);
+      margin-left: 10px;
+      margin-top: 10px;
       border-radius: 6px;
+      background-color: #ddd;
+      overflow: hidden;
+      // border: 1Px dashed rgba(153, 153, 153, 1);
+      .yulan {
+        width: 220px;
+        height: 220px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          width: 100%;
+        }
+      }
+      .add {
+        width: 80px;
+        height: 80px;
+        margin: 30px auto;
+        text-align: center;
+        .iconfont {
+          font-size: 60px;
+          color: #666;
+        }
+      }
+      input {
+        width: 10px;
+        opacity: 0;
+        filter: alpha(opacity=0);
+      }
     }
   }
 }

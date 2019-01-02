@@ -2,10 +2,10 @@
   <div id="searchShop">
     <com-head :opacity="0"></com-head>
     <div class="iteminp">
-      <span>
+      <input type="text" v-model="search" placeholder="请输入你想要搜索的物品或商家" autofocus="autofocus">
+      <span @click="sureSearch">
         <i class="iconfont icon-sousuo"></i>
       </span>
-      <input type="text" v-model="search" placeholder="请输入你想要搜索的物品或商家" autofocus="autofocus">
     </div>
     <div class="user">
       <router-link class="boxmes" v-for="item in shop" :key="item.id" :to="{name:'shopDetail',query:{shopid: item.id}}">
@@ -65,7 +65,7 @@ export default {
       this.axios
         .post("/shop/serch_goods", {
           token: this.token(),
-          keyword: this.$route.query.keyword
+          keyword: this.search
         })
         .then(({ data }) => {
           console.log(data);
@@ -86,6 +86,13 @@ export default {
     toGoodpay(id){
       this.$router.push({name:'payment',query: {id: id}});
     },
+    sureSearch() {
+      if(!this.search){
+        this.$bus.$emit("toast", '搜索词不能为空');
+      } else {
+        this.$router.replace({name: 'searchShop',query:{keyword: this.search}});
+      }
+    }
   }
 };
 </script>
@@ -102,23 +109,30 @@ export default {
     position: fixed;
     top: 11px;
     left: 84px;
-    padding: 0 30px;
+    padding: 0 0 0 30px;
     box-sizing: border-box;
     background: #ddd;
     line-height: 60px;
     border-radius: 30px;
     z-index: 100;
-    span {
-      font-size: 34px;
-      color: #999;
-    }
+    
     input {
       padding-left: 10px;
       line-height: 60px;
-      width: 500px;
+      width: 470px;
       background: none;
       font-size: 26px;
       color: #000;
+    }
+    span {
+      display: inline-block;
+      width: 110px;
+      text-align: center;
+      .iconfont {
+      font-size: 36px;
+      line-height: 60px;
+      color: #666;
+      }
     }
     input::-webkit-input-placeholder {
       /* WebKit browsers */

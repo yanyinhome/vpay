@@ -138,8 +138,13 @@ export default {
     },
     addAddress() {
       this.$router.push("addAddress");
-    }
-  }
+    },
+  },
+  // beforeRouteLeave(to, from, next) {
+  //   if (to.from == "payment") {
+  //     next
+  //   }
+  // }
 };
 </script>
 <style lang='scss' scoped>
@@ -151,7 +156,7 @@ export default {
     .box1 {
       margin: 10px 30px;
       padding: 10px 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom: 1Px solid rgba(0, 0, 0, 0.1);
       p:nth-of-type(1) {
         font-size: 28px;
         font-family: PingFangSC-Regular;

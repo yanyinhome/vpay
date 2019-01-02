@@ -389,7 +389,7 @@ export default {
       font-size: 24px;
       color: #666;
       line-height: 66px;
-      border-bottom: 1px solid #f0f0f0;
+      border-bottom: 1Px solid #f0f0f0;
       .box2 {
         color: #f10f0f;
       }
@@ -446,7 +446,7 @@ export default {
       padding-bottom: 20px;
       box-sizing: border-box;
       font-size: 26px;
-      border-bottom: 1px solid #cbcbcb;
+      border-bottom: 1Px solid #cbcbcb;
       .sumprice {
         line-height: 70px;
         margin: 10px auto;
@@ -485,7 +485,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        border-bottom: 1px solid rgba(203, 203, 203, 1);
+        border-bottom: 1Px solid rgba(203, 203, 203, 1);
         .left {
           width: 50px;
           height: 58px;
@@ -521,7 +521,7 @@ export default {
         // height: 250px;
         overflow: auto;
         margin: 0 30px;
-        border-bottom: 1px solid rgba(203, 203, 203, 1);
+        border-bottom: 1Px solid rgba(203, 203, 203, 1);
         padding: 10px 0;
         p:nth-of-type(1) {
           font-size: 26px;
@@ -555,7 +555,7 @@ export default {
           line-height: 60px;
           input {
             line-height: 50px;
-            border: 1px solid rgba(102, 102, 102, 0.5);
+            border: 1Px solid rgba(102, 102, 102, 0.5);
           }
         }
       }

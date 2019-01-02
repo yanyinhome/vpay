@@ -72,7 +72,7 @@ export default {
       active: "-1",
       yulan: "",
       picValue: "",
-      newimg: "",
+      imgbase: [],
 
       name: "",
       ia: '',
@@ -134,7 +134,7 @@ export default {
           .post("/shop/shop_application", {
             token: this.token(),
             shop_name: this.name,
-            img: this.newimg,
+            img: this.imgbase[0],
             flag: this.id,
             address: this.address,
             phone: this.phone
@@ -161,7 +161,7 @@ export default {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.picValue = files[0];
-      this.imgPreview(this.picValue);
+      this.imgPreview(this.picValue,'0');
     },
     navAcitive(item, index) {
       this.active = index;

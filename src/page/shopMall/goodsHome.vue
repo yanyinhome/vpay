@@ -18,13 +18,13 @@
     </div>
     <div class="goods">
       <div class="item" v-for="item in goods" :key="item.id">
-        <div class="img" @click="toGooddetail">
+        <div class="img" @click="toGooddetail(item.id)">
           <img :src="item.imgurl">
         </div>
         <div class="detail">
           <p>{{item.name}}</p>
           <p>{{item.content}}</p>
-          <p>
+          <p @click="toGoodpay(item.id)">
             <span>&yen;{{item.price}}</span>
             <span class="iconfont icon-gouwuche"></span>
           </p>
@@ -97,8 +97,11 @@ export default {
         });
     },
     toGooddetail(id) {
-      this.$router.push({ name: "goodDetail" });
-    }
+      this.$router.push({name:'goodDetail',query: {id: id}});
+    },
+    toGoodpay(id){
+      this.$router.push({name:'payment',query: {id: id}});
+    },
   }
 };
 </script>

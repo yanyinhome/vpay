@@ -47,7 +47,7 @@
   
     <div class="goodslist" v-if="!listshow">
       <div class="item" v-for="(item,index) in message" :key="item.id">
-        <div class="img"><img :src="item.img" alt=""></div>
+        <div class="img"><img :src="item.imgurl" alt=""></div>
         <div class="goodsmes">
           <p>{{item.shop_name}}</p>
           <p>
@@ -388,6 +388,12 @@ export default {
         height: 130px;
         background: rgba(216, 216, 216, 1);
         border-radius: 6px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        img {
+          width: 100%;
+        }
       }
       .goodsmes {
         width: 540px;

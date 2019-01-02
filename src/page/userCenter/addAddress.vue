@@ -246,7 +246,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      border-bottom: 1Px solid rgba(0, 0, 0, 0.2);
       line-height: 100px;
       input {
         width: 540px;

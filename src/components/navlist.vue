@@ -164,13 +164,13 @@ export default {
     },
     toOrder() {
       this.navout();
-      this.$bus.$emit("toast", "功能开发中");
-      // this.$router.push("notice");
+      // this.$bus.$emit("toast", "功能开发中");
+      this.$router.push("myorder");
     },
     toAddress() {
       this.navout();
-      this.$bus.$emit("toast", "功能开发中");
-      // this.$router.push("myAddress");
+      // this.$bus.$emit("toast", "功能开发中");
+      this.$router.push("myAddress");
     },
     toCardlist() {
       this.navout();

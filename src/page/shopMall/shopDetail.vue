@@ -1,12 +1,6 @@
 <template>
   <div id="shopDetail">
-    <com-head :opacity="0"></com-head>
-    <div class="iteminp">
-      <span>
-        <i class="iconfont icon-sousuo"></i>
-      </span>
-      <input type="text" v-model="search" placeholder="请输入你想要搜索的物品或商家" autofocus="autofocus">
-    </div>
+    <com-head :opacity="0">{{shop.shop_name}}</com-head>
     <div class="user">
       <div class="boxmes">
         <div class="left">
@@ -24,13 +18,13 @@
     </div>
     <div class="goods">
       <div class="item" v-for="item in goods" :key="item.id">
-        <div class="img">
+        <div class="img"  @click="toGooddetail(item.id)">
           <img :src="item.imgurl">
         </div>
         <div class="detail">
           <p>{{item.name}}</p>
           <p>{{item.content}}</p>
-          <p>
+          <p @click="toGoodpay(item.id)">
             <span>&yen;{{item.price}}</span>
             <span class="iconfont icon-gouwuche"></span>
           </p>
@@ -99,51 +93,6 @@ export default {
   background-image: url("../../assets/image/shopbg1.png");
   background-repeat: no-repeat;
   background-size: 750px 450px;
-  .iteminp {
-    position: fixed;
-    top: 11px;
-    left: 84px;
-    padding: 0 30px;
-    box-sizing: border-box;
-    background: #ddd;
-    line-height: 60px;
-    border-radius: 30px;
-    z-index: 100;
-    span {
-      font-size: 34px;
-      color: #999;
-    }
-    input {
-      padding-left: 10px;
-      line-height: 60px;
-      width: 500px;
-      background: none;
-      font-size: 26px;
-      color: #000;
-    }
-    input::-webkit-input-placeholder {
-      /* WebKit browsers */
-      color: #888;
-      font-size: 28px;
-    }
-    input:-moz-placeholder {
-      /* Mozilla Firefox 4 to 18 */
-      color: #888;
-      font-size: 28px;
-    }
-
-    input::-moz-placeholder {
-      /* Mozilla Firefox 19+ */
-      color: #888;
-      font-size: 28px;
-    }
-
-    input:-ms-input-placeholder {
-      /* Internet Explorer 10+ */
-      color: #888;
-      font-size: 28px;
-    }
-  }
   .user {
     padding: 10px 30px;
     display: flex;

@@ -22,6 +22,25 @@
         </div>
       </div>
 
+      <!-- <div class="box1" @click="portrait2">
+        <span>头像</span>
+        <input
+          class="imginp"
+          ref="portrait2"
+          name="imgLocal"
+          id="imgLocal"
+          type="file"
+          accept="image/*"
+          @change="shangchuan2"
+        >
+        <div class="tou">
+          <div class="touxiang">
+            <img :src="yulan">
+          </div>
+          <i class="iconfont icon-next"></i>
+        </div>
+      </div> -->
+
       
       
       <div class="item">
@@ -40,7 +59,6 @@ export default {
       phone: "",
       yulan: '',
       picValue: "",
-      newimg: "",
       imgbase: [],
     };
   },
@@ -98,17 +116,8 @@ export default {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.picValue = files[0];
-      this.imgPreview(this.picValue,'0');
-    },
-    // portrait2() {
-    //   this.$refs.portrait2.click(); // 获取ref为portrait的元素相当于获取id为portrait的元素
-    // },
-    // shangchuan2(e) {
-    //   let files = e.target.files || e.dataTransfer.files;
-    //   if (!files.length) return;
-    //   this.picValue = files[0];
-    //   this.imgPreview(this.picValue,'1');
-    // },   
+      this.imgPreview(this.picValue,'0'); 
+    },  
   }
 };
 </script>

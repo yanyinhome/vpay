@@ -50,6 +50,7 @@ export default {
   name: "goodDetail",
   data() {
     return {
+      id: this.$route.query.id,
       goods: {},
       shop: {},
       images: [
@@ -97,6 +98,7 @@ export default {
             this.images = data.data.imgurl;
             this.shop = data.data.shop;
             this.goods = data.data.goods;
+            this.id = data.data.goods.id;
           } else if (data.code == "204") {
             this.$bus.$emit("toast", data.msg);
           }

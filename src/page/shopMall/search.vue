@@ -26,7 +26,7 @@
         <i @click="delectLog" class="iconfont icon-iconfont-shanchu"></i>
       </p>
       <div class="historynav">
-        <p class="box" @click="logSearch(index)" v-for="(item,index) in log" :key="index">{{item.name}}</p>
+        <p class="box" @click="hotSearch(item.name)" v-for="(item,index) in log" :key="index">{{item.name}}</p>
       </div>
     </div>
   </div>
@@ -228,7 +228,7 @@ export default {
       font-weight: 500;
       color: rgba(0, 0, 0, 1);
       line-height: 80px;
-      border-bottom: 1px solid #cbcbcb;
+      border-bottom: 1Px solid #cbcbcb;
       display: flex;
       justify-content: space-between;
       .icon-iconfont-shanchu {

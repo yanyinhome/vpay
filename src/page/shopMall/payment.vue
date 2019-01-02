@@ -1,32 +1,36 @@
 <template>
   <div id="payment">
     <com-head :opacity="1"></com-head>
-    <div class="myaddress" @click>
+    <router-link to="myaddress" tag="div" class="myaddress">
       <div class="left">
         <img src="../../assets/image/address.png" alt>
       </div>
       <div class="center">
         <p>
-          <span>买家姓名</span>
+          <span>收货人：{{message.name}}&emsp;{{message.phone}}</span>
         </p>
-        <p>河南省郑州市金水区北三环瀚海北金</p>
+        <p>{{message.province+message.city+message.area+message.address}}</p>
       </div>
       <div class="right">
         <i class="iconfont icon-next"></i>
       </div>
-    </div>
-    <div class="order" v-for="(item,index) in message" :key="index">
+    </router-link>
+    <div class="order">
       <div class="orderCenter">
         <div class="box1">
-          <img :src="item.image1">
+          <img :src="goods.imgurl">
         </div>
         <div class="box2">
-          <p>{{item.book}}</p>
-          <p>{{item.book}}</p>
-          <p>
-            <span>{{item.book_sign}}</span>
-            <span>x{{item.number}}</span>
-          </p>
+          <p>{{goods.name}}</p>
+          <p>{{goods.content}}</p>
+          <div class="numsell">
+            <span>&yen;{{goods.price}}</span>
+            <div class="rightbox">
+              <div class="minus" @click="minus()">-</div>
+              <div class="blank">{{count}}</div>
+              <div class="add" @click="add()">+</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -42,17 +46,36 @@
           placeholder="请输入备注，最多40个字哦"
           v-model="content"
           cols="80"
-          rows="3"
+          rows="4"
         ></textarea>
         <span class="number">{{number}}/40</span>
       </div>
     </div>
+    <div class="show" v-show="show">
+      <div class="box">
+        <div class="title">请输入支付密码<span @click="show=false" class="iconfont icon-chahao"></span></div>
+        <div class="money">&yen;{{goods.price * count}}</div>
+        <!-- <div class="item">
+          支付密码：
+          <input type="password" v-model="sale_code" placeholder="请输入支付密码">
+        </div> -->
+        <div class="container">
+          <div class="item" v-for="i in 6" :key="i">{{numbers[i-1]|hideNum}}</div>
+          <input type="password" v-model="numbers" maxlength="6">
+        </div>
+        <!-- <div class="item item1 item2">
+          <button :disabled="disabled" @click="buySome()">确定</button>
+          <button @click="show=false">取消</button>
+        </div> -->
+      </div>
+    </div>
     <div class="footBuy">
-      <div class="box1">实付：
-        <span>&yen;999999</span>
+      <div class="box1">
+        实付：
+        <span>&yen;{{goods.price * count}}</span>
       </div>
       <div class="box2">
-        <button :disabled='disabled' @click="payTo">立即支付</button>
+        <button @click="show=true">立即支付</button>
       </div>
     </div>
   </div>
@@ -63,22 +86,16 @@ export default {
   name: "payment",
   data() {
     return {
+      numbers: "",
+
+      show: false,
+      sale_code: "",
+      count: "1",
       content: "",
       number: "0",
       disabled: false,
-      message: [
-        {
-          order_create_time: "120212",
-          order_create_time: "120212",
-          order_create_time: "120212",
-          status: "2",
-          book: "120212",
-          book_sign: "120212",
-          order_pay_price: "120212",
-          number: "120212",
-          image1: require("../../assets/image/zanshi/touxiang.jpg")
-        }
-      ]
+      message: {},
+      goods: {}
     };
   },
   watch: {
@@ -86,7 +103,12 @@ export default {
       this.number = a.length;
       console.log(this.number);
       if (this.number > 39) {
-        this.$bus.$emit("toast", "字数不能超过50");
+        this.$bus.$emit("toast", "字数不能超过40");
+      }
+    },
+    numbers(newValue, oldValue) {
+      if (newValue.length == 6) {
+        this.buySome(newValue);
       }
     }
   },
@@ -94,15 +116,66 @@ export default {
 
   created() {},
 
-  mounted() {},
+  mounted() {
+    this.loading();
+  },
 
   methods: {
-      payTo(){
+    loading() {
+      this.axios
+        .post("/shop/buy_goods", {
+          token: this.token(),
+          id: this.$route.query.id
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code == "200") {
+            this.message = data.data.address;
+            this.goods = data.data.goods;
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    buySome(newValue) {
         this.disabled = true;
         setTimeout(() => {
-            this.disabled = false;
-        }, 2000)
+          this.disabled = false;
+        }, 2000);
+        this.axios
+          .post("/shop/buy_sub", {
+            token: this.token(),
+            id: this.$route.query.id,
+            address_id: this.message.id,
+            content: this.content,
+            num: this.count,
+            sale_code: newValue
+          })
+          .then(({ data }) => {
+            this.show= false;
+            console.log(data);
+            if (data.code == "200") {
+              this.$router.push('buySuccess');
+            } else if (data.code == "204") {
+              this.$bus.$emit("toast", data.msg);
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+    },
+    minus() {
+      if (this.count > 1) {
+        this.count--;
       }
+    },
+    // 加商品的数量
+    add() {
+      this.count++;
+    }
   }
 };
 </script>
@@ -134,6 +207,7 @@ export default {
         font-weight: 400;
         color: rgba(3, 3, 3, 1);
         line-height: 40px;
+        word-break: break-all;
       }
       p:nth-of-type(2) {
         font-size: 24px;
@@ -160,7 +234,6 @@ export default {
     padding: 10px 30px;
     background: rgba(255, 255, 255, 1);
     box-sizing: border-box;
-
     .orderCenter {
       margin: 20px 0px;
       padding: 20px 0;
@@ -172,6 +245,8 @@ export default {
         max-height: 186px;
         border-radius: 6px;
         overflow: hidden;
+        display: flex;
+      align-items: center;
         img {
           width: 100%;
         }
@@ -194,15 +269,46 @@ export default {
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
-        p:nth-of-type(3) {
+        .numsell {
           font-size: 28px;
           color: #000;
           line-height: 60px;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          span:nth-of-type(1) {
+          span {
             color: #f10f0f;
+          }
+          .rightbox {
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            line-height: 100px;
+            font-size: 28px;
+            color: #999;
+            border-radius: 6px;
+
+            border: 1Px solid #999999;
+            .add,
+            .minus {
+              width: 46px;
+              line-height: 46px;
+              height: 46px;
+              text-align: center;
+              color: #9290ae;
+              &:hover {
+                // background: #e5e5e5;
+              }
+            }
+            .blank {
+              width: 60px;
+              line-height: 45px;
+              height: 45px;
+              text-align: center;
+              color: #282828;
+              border-left: 1Px solid #999999;
+              border-right: 1Px solid #999999;
+            }
           }
         }
       }
@@ -232,6 +338,124 @@ export default {
         position: absolute;
         bottom: 32px;
         right: 36px;
+      }
+    }
+  }
+  .show {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.6);
+    .box {
+      width: 590px;
+      box-sizing: border-box;
+      padding: 30px 40px 50px;
+      background: #fff;
+      border-radius: 10px;
+      position: absolute;
+      top: 22%;
+      left: 80px;
+      text-align: center;
+      .title {
+        font-weight: 600;
+        font-size: 30px;
+        line-height: 80px;
+        position: relative;
+        // border-bottom: 1Px solid #ddd;
+        span {
+          position: absolute;
+          right: -10px;
+          top: -10px;
+          color: #666;
+          font-size: 40px;
+        }
+      }
+      .money {
+        line-height: 120px;
+        font-size: 50px;
+          // border-bottom: 1Px solid #ddd;
+      }
+      // .item {
+      //   margin-top: 20px;
+      //   input {
+      //     padding-left: 20px;
+      //     box-sizing: border-box;
+      //     color: #000;
+      //     width: 300px;
+      //     background: transparent;
+      //     line-height: 80px;
+      //     border-bottom: 1Px solid #aaa;
+      //   }
+      //   input::-webkit-input-placeholder {
+      //     /* WebKit browsers */
+      //     color: #888;
+      //   }
+      //   input:-moz-placeholder {
+      //     /* Mozilla Firefox 4 to 18 */
+      //     color: #888;
+      //   }
+      //   input::-moz-placeholder {
+      //     /* Mozilla Firefox 19+ */
+      //     color: #888;
+      //   }
+
+      //   input:-ms-input-placeholder {
+      //     /* Internet Explorer 10+ */
+      //     color: #888;
+      //   }
+      // }
+      .container {
+    margin: 30px auto;
+    position: relative;
+    //   margin: auto;
+    height: 88px;
+    width: 528px;
+    display: flex;
+    border: 1Px solid #ddd;
+    .item {
+    flex-basis: 25%;
+    font-size: 40px;
+    text-align: center;
+    line-height: 88px;
+  }
+  .item:not(:last-of-type) {
+    border-right: 1Px solid #ddd;
+  }
+  input {
+    position: absolute;
+    height: 88px;
+    opacity: 0;
+    left: 0;
+    width: 528px;
+    color: red;
+  }
+  }
+  
+      .item1 {
+        border-bottom: none;
+      }
+      .item2 {
+        margin-top: 50px;
+        display: flex;
+        justify-content: space-around;
+        line-height: 70px;
+        button {
+          width: 180px;
+          line-height: 70px;
+          background: linear-gradient(
+            90deg,
+            rgba(214, 174, 123, 1) 0%,
+            rgba(238, 204, 153, 1) 100%
+          );
+          border-radius: 10px;
+        }
+        button:nth-of-type(2) {
+          background: #aaa;
+          color: #fff;
+        }
       }
     }
   }
