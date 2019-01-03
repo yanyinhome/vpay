@@ -195,6 +195,7 @@ export default {
         overflow: hidden;
       }
       p:nth-of-type(2) {
+        word-break: break-all;
         font-size: 24px;
         font-family: PingFangSC-Regular;
         font-weight: 400;

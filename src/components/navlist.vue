@@ -135,6 +135,9 @@ export default {
           } else if (data.code === "202") {
             this.$router.push({name:"applyShop",query: {applyStatus: false}}); 
             this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "204") {
+            this.navout();
+            // this.$bus.$emit("toast", data.msg);
           } else if (data.code === "205") {
             this.applyShop();
             this.$bus.$emit("toast", data.msg);

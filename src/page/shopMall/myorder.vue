@@ -9,7 +9,7 @@
         @click="listSelect(index)"
       >{{item}}</div>
     </div>
-    <div class="order" v-for="(item,index) in message" :key="item.order_id">
+    <div class="order" v-for="(item,index) in message" :key="index">
       <div class="orderCenter">
         <div class="box1">
           <img :src="item.imgurl">
@@ -31,6 +31,7 @@
         <button class="noborder" v-if="status=='2'" @click="sureReceive(item.id)">确定收货</button>
       </div>
     </div>
+    <div v-if="!message.length" style="margin-top: 15vh; text-align: center;">暂无订单信息</div>
   </div>
 </template>
 
@@ -200,7 +201,7 @@ export default {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    z-index: 100;
+    z-index: 49;
     div {
       width: 22%;
       margin: 0 3%;

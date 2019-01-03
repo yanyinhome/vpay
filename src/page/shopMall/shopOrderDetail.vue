@@ -65,7 +65,7 @@
     <div class="comAlert" v-show="show">
          <div class="alertbox">
              <div class="alerttop">
-                 <div class="box1"><a href="`tel://${tel}`">{{tel}}</a></div>
+                 <div class="box1"><a :href="`tel://${tel}`">{{tel}}</a></div>
              </div>
              <div class="alertfoot" @click="show=false">取消</div>
          </div>

@@ -1,6 +1,6 @@
 <template>
   <div id="addGoods">
-    <com-head :opacity="1">新增商品</com-head>
+    <com-head :opacity="1">{{title}}</com-head>
     <div class="addmes">
       <div class="item">
         <span>商品名称：</span>
@@ -59,81 +59,7 @@
           <i class="iconfont icon-add"/>
         </div>
       </div>
-      <!-- <div class="upload" @click="portrait2">
-        <div class="yulan" v-if="imgurl[1]">
-          <img :src="imgurl[1]">
-        </div>
-        <input
-          class="imginp"
-          ref="portrait2"
-          name="imgurl"
-          id="imgurl"
-          type="file"
-          accept="image/*"
-          @change="shangchuan2"
-        >
-        <div class="add"><i v-if="!imgurl[1]" class="iconfont icon-add"/></div>
-      </div>-->
-      <!-- <div class="upload" @click="portrait3">
-        <div class="yulan" v-if="yulan">
-          <img :src="yulan">
-        </div>
-        <input
-          class="imginp"
-          ref="portrait3"
-          name="imgurl"
-          id="imgurl"
-          type="file"
-          accept="image/*"
-          @change="shangchuan3"
-        >
-        <div class="add"><i v-if="!yulan" class="iconfont icon-add"/></div>
-      </div>
-      <div class="upload" @click="portrait4">
-        <div class="yulan" v-if="yulan">
-          <img :src="yulan">
-        </div>
-        <input
-          class="imginp"
-          ref="portrait4"
-          name="imgurl"
-          id="imgurl"
-          type="file"
-          accept="image/*"
-          @change="shangchuan4"
-        >
-        <div class="add"><i v-if="!yulan" class="iconfont icon-add"/></div>
-      </div>
-      <div class="upload" @click="portrait5">
-        <div class="yulan" v-if="yulan">
-          <img :src="yulan">
-        </div>
-        <input
-          class="imginp"
-          ref="portrait5"
-          name="imgurl"
-          id="imgurl"
-          type="file"
-          accept="image/*"
-          @change="shangchuan5"
-        >
-        <div class="add"><i v-if="!yulan" class="iconfont icon-add"/></div>
-      </div>
-      <div class="upload" @click="portrait6">
-        <div class="yulan" v-if="yulan">
-          <img :src="yulan">
-        </div>
-        <input
-          class="imginp"
-          ref="portrait6"
-          name="imgurl"
-          id="imgurl"
-          type="file"
-          accept="image/*"
-          @change="shangchuan6"
-        >
-        <div class="add"><i v-if="!yulan" class="iconfont icon-add"/></div>
-      </div>-->
+    
     </div>
     <com-button :click="submitTo">上传商品</com-button>
   </div>
@@ -144,6 +70,7 @@ export default {
   name: "addGoods",
   data() {
     return {
+      title: '',
       yulan: "",
       picValue: "",
       imgbase: [],
@@ -156,7 +83,6 @@ export default {
       num: "",
       content: "",
       number: "0",
-      imglist: [],
 
       dialogImageUrl: "",
       dialogVisible: false
@@ -165,7 +91,6 @@ export default {
   watch: {
     content: function(a, b) {
       this.number = a.length;
-      console.log(this.number);
       if (this.number > 29) {
         this.$bus.$emit("toast", "字数不能超过50");
       }
@@ -173,12 +98,68 @@ export default {
   },
   computed: {},
 
-  created() {},
+  created() {
+    if (this.$route.query.id) {
+      //编辑商品
+      this.title = '编辑商品';
+      this.loading();
+    } else{
+      //添加商品
+      this.title = '添加商品';
+    }
+  },
 
   mounted() {},
 
   methods: {
+    loading() {
+      this.axios
+        .post("/shop/edit_goodsview", {
+          token: this.token(),
+          id: this.$route.query.id,
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+           this.name = data.data.goods.name;
+           this.price = data.data.goods.price;
+           this.num = data.data.goods.stock;
+           this.content = data.data.goods.content;
+           data.data.imgurl.forEach(element => {
+             this.imgurl.push(element.imgurl);
+             this.imgid.push(element.id);
+           });
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     submitTo() {
+      // console.log(!this.imgid.join());
+      if (!this.name) {
+        this.$bus.$emit("toast", "商品名不能为空");
+      } else if (!this.price) {
+        this.$bus.$emit("toast", "请设置商品价格");
+      } else if (!this.num) {
+        this.$bus.$emit("toast", "请设置商品库存");
+      } else if (!this.content) {
+        this.$bus.$emit("toast", "请输入商品描述");
+      } else if (!this.imgid.join()) {
+        this.$bus.$emit("toast", "请上传商品图片");
+      } else {
+        if (this.$route.query.id) {
+          //编辑商品
+          this.rewriteGoods();
+        } else {
+          //添加商品
+          this.addGoods();
+        }
+      }
+    },
+    addGoods(){
       this.axios
         .post("/shop/add_goods", {
           token: this.token(),
@@ -186,7 +167,31 @@ export default {
           price: this.price,
           stock: this.num,
           content: this.content,
-          img: this.imgid.join()
+          img: this.imgid.join(),
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.$router.push("shoplist");
+            this.$bus.$emit("toast", data.msg);
+          } else if (data.code === "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    rewriteGoods(){
+      this.axios
+        .post("/shop/edit_goods", {
+          token: this.token(),
+          name: this.name,
+          price: this.price,
+          stock: this.num,
+          content: this.content,
+          img: this.imgid.join(),
+          id: this.$route.query.id
         })
         .then(({ data }) => {
           console.log(data);
@@ -299,7 +304,7 @@ export default {
         width: 690px;
         margin: auto;
         padding: 10px;
-        border: 1px solid rgba(238, 238, 238, 1);
+        border: 1Px solid rgba(238, 238, 238, 1);
         box-sizing: border-box;
       }
       .number {

@@ -2,7 +2,7 @@
   <div id="myAddress">
     <com-head :opacity="1">我的地址</com-head>
     <div class="address" v-for="(item,index) in address" :key="index">
-      <div class="box1">
+      <div class="box1" :class="{active: active==index}" @click="selectAddress(index,item.id)">
         <p>
           <span>{{item.name}}</span>&emsp;
           <span>{{item.phone}}</span>
@@ -38,6 +38,7 @@ export default {
   name: "myAddress",
   data() {
     return {
+      active: "-1",
       address: []
     };
   },
@@ -51,6 +52,25 @@ export default {
   },
 
   methods: {
+    selectAddress(index, id) {
+      console.log(11);
+      this.active = index;
+      const message = {
+        name: this.address[index].name,
+        phone: this.address[index].phone,
+        province: this.address[index].province,
+        city: this.address[index].city,
+        area: this.address[index].area,
+        address: this.address[index].address,
+        id: this.address[index].id
+      };
+      if (!localStorage.address) {
+        localStorage.message = JSON.stringify(message);
+      } else {
+        localStorage.removeItem("message");
+        localStorage.message = JSON.stringify(message);
+      }
+    },
     loading() {
       this.axios
         .post("/user/my_address", {
@@ -138,13 +158,8 @@ export default {
     },
     addAddress() {
       this.$router.push("addAddress");
-    },
-  },
-  // beforeRouteLeave(to, from, next) {
-  //   if (to.from == "payment") {
-  //     next
-  //   }
-  // }
+    }
+  }
 };
 </script>
 <style lang='scss' scoped>
@@ -152,10 +167,10 @@ export default {
   padding-top: 72px;
   background-color: #f6f6f6;
   .address {
-    background-color: #fff;
+    background: #fff;
     .box1 {
-      margin: 10px 30px;
-      padding: 10px 0;
+      margin: 10px 20px;
+      padding: 10px 10px;
       border-bottom: 1Px solid rgba(0, 0, 0, 0.1);
       p:nth-of-type(1) {
         font-size: 28px;
@@ -165,11 +180,17 @@ export default {
         line-height: 60px;
       }
       p:nth-of-type(2) {
+        word-break: break-all;
         font-size: 26px;
         font-family: PingFangSC-Regular;
         font-weight: 400;
         color: rgba(136, 136, 136, 1);
         line-height: 60px;
+      }
+    }
+    .active {
+      p {
+        color: #daaf77 !important;
       }
     }
     .box2 {

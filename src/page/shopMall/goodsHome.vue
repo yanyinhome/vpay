@@ -125,6 +125,8 @@ export default {
         height: 70px;
         border-radius: 35px;
         overflow: hidden;
+        display: flex;
+        align-items: center;
         img {
           width: 100%;
         }

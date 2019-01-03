@@ -53,12 +53,14 @@
     </div>
     <div class="show" v-show="show">
       <div class="box">
-        <div class="title">请输入支付密码<span @click="show=false" class="iconfont icon-chahao"></span></div>
+        <div class="title">请输入支付密码
+          <span @click="show=false" class="iconfont icon-chahao"></span>
+        </div>
         <div class="money">&yen;{{goods.price * count}}</div>
         <!-- <div class="item">
           支付密码：
           <input type="password" v-model="sale_code" placeholder="请输入支付密码">
-        </div> -->
+        </div>-->
         <div class="container">
           <div class="item" v-for="i in 6" :key="i">{{numbers[i-1]|hideNum}}</div>
           <input type="password" v-model="numbers" maxlength="6">
@@ -66,7 +68,7 @@
         <!-- <div class="item item1 item2">
           <button :disabled="disabled" @click="buySome()">确定</button>
           <button @click="show=false">取消</button>
-        </div> -->
+        </div>-->
       </div>
     </div>
     <div class="footBuy">
@@ -75,7 +77,7 @@
         <span>&yen;{{goods.price * count}}</span>
       </div>
       <div class="box2">
-        <button @click="show=true">立即支付</button>
+        <button @click="payAlert">立即支付</button>
       </div>
     </div>
   </div>
@@ -113,7 +115,18 @@ export default {
     }
   },
   computed: {},
-
+  // beforeRouteEnter(to, from, next) {
+  //     next(vm => {
+  //       if (from.name == 'myAddress') {
+  //         if (localStorage.message) {
+  //           vm.message = JSON.parse(localStorage.getItem('message'));
+  //           // console.log(JSON.parse(vm.message));
+  //         }
+  //       } else {
+  //         vm.loading();
+  //       }
+  //     });
+  //   },
   created() {},
 
   mounted() {
@@ -130,8 +143,12 @@ export default {
         .then(({ data }) => {
           console.log(data);
           if (data.code == "200") {
-            this.message = data.data.address;
             this.goods = data.data.goods;
+            if (localStorage.message) {
+              this.message = JSON.parse(localStorage.getItem("message"));
+            } else {
+              this.message = data.data.address;
+            }
           } else if (data.code == "204") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -141,31 +158,39 @@ export default {
         });
     },
     buySome(newValue) {
-        this.disabled = true;
-        setTimeout(() => {
-          this.disabled = false;
-        }, 2000);
-        this.axios
-          .post("/shop/buy_sub", {
-            token: this.token(),
-            id: this.$route.query.id,
-            address_id: this.message.id,
-            content: this.content,
-            num: this.count,
-            sale_code: newValue
-          })
-          .then(({ data }) => {
-            this.show= false;
-            console.log(data);
-            if (data.code == "200") {
-              this.$router.push('buySuccess');
-            } else if (data.code == "204") {
-              this.$bus.$emit("toast", data.msg);
-            }
-          })
-          .catch(function(error) {
-            console.log(error);
-          });
+      this.disabled = true;
+      setTimeout(() => {
+        this.disabled = false;
+      }, 2000);
+      this.axios
+        .post("/shop/buy_sub", {
+          token: this.token(),
+          id: this.$route.query.id,
+          address_id: this.message.id,
+          content: this.content,
+          num: this.count,
+          sale_code: newValue
+        })
+        .then(({ data }) => {
+          this.show = false;
+          console.log(data);
+          if (data.code == "200") {
+            localStorage.removeItem("message");
+            this.$router.push("buySuccess");
+          } else if (data.code == "204") {
+            this.$bus.$emit("toast", data.msg);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    payAlert() {
+      if (!this.message.name) {
+        this.$bus.$emit("toast", "请设置你的收货地址");
+      } else {
+        this.show = true;
+      }
     },
     minus() {
       if (this.count > 1) {
@@ -246,7 +271,7 @@ export default {
         border-radius: 6px;
         overflow: hidden;
         display: flex;
-      align-items: center;
+        align-items: center;
         img {
           width: 100%;
         }
@@ -261,6 +286,7 @@ export default {
           line-height: 60px;
         }
         p:nth-of-type(2) {
+          word-break: break-all;
           font-size: 26px;
           color: #999;
           line-height: 40px;
@@ -302,8 +328,8 @@ export default {
             }
             .blank {
               width: 60px;
-              line-height: 45px;
-              height: 45px;
+              line-height: 46px;
+              // height: 45px;
               text-align: center;
               color: #282828;
               border-left: 1Px solid #999999;
@@ -376,64 +402,34 @@ export default {
       .money {
         line-height: 120px;
         font-size: 50px;
-          // border-bottom: 1Px solid #ddd;
       }
-      // .item {
-      //   margin-top: 20px;
-      //   input {
-      //     padding-left: 20px;
-      //     box-sizing: border-box;
-      //     color: #000;
-      //     width: 300px;
-      //     background: transparent;
-      //     line-height: 80px;
-      //     border-bottom: 1Px solid #aaa;
-      //   }
-      //   input::-webkit-input-placeholder {
-      //     /* WebKit browsers */
-      //     color: #888;
-      //   }
-      //   input:-moz-placeholder {
-      //     /* Mozilla Firefox 4 to 18 */
-      //     color: #888;
-      //   }
-      //   input::-moz-placeholder {
-      //     /* Mozilla Firefox 19+ */
-      //     color: #888;
-      //   }
-
-      //   input:-ms-input-placeholder {
-      //     /* Internet Explorer 10+ */
-      //     color: #888;
-      //   }
-      // }
       .container {
-    margin: 30px auto;
-    position: relative;
-    //   margin: auto;
-    height: 88px;
-    width: 528px;
-    display: flex;
-    border: 1Px solid #ddd;
-    .item {
-    flex-basis: 25%;
-    font-size: 40px;
-    text-align: center;
-    line-height: 88px;
-  }
-  .item:not(:last-of-type) {
-    border-right: 1Px solid #ddd;
-  }
-  input {
-    position: absolute;
-    height: 88px;
-    opacity: 0;
-    left: 0;
-    width: 528px;
-    color: red;
-  }
-  }
-  
+        margin: 30px auto;
+        position: relative;
+        //   margin: auto;
+        height: 88px;
+        // width: 528px;
+        display: flex;
+        border: 1Px solid #ddd;
+        .item {
+          flex-basis: 25%;
+          font-size: 40px;
+          text-align: center;
+          line-height: 88px;
+        }
+        .item:not(:last-of-type) {
+          border-right: 1Px solid #ddd;
+        }
+        input {
+          position: absolute;
+          height: 88px;
+          opacity: 0;
+          left: 0;
+          width: 528px;
+          color: red;
+        }
+      }
+
       .item1 {
         border-bottom: none;
       }

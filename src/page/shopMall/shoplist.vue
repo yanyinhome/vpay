@@ -172,10 +172,11 @@ export default {
     },
     // 编辑
     rewriteGood(){
-
+      this.$router.push({name: 'addGoods',query:{id: this.goodid}});
     },
     // 置顶,取消
     topGood(){
+      console.log(this.istop);
       if (this.istop == '1') {
         // 取消
         this.axios
@@ -261,11 +262,11 @@ export default {
   color: #fff;
   .keepdata {
     width: 160px;
-    height: 80px;
+    height: 82px;
     text-align: center;
     color: #fff;
-    line-height: 80px;
-    position: absolute;
+    line-height: 82px;
+    position: fixed;
     right: 0;
     top: 0;
     z-index: 100;
@@ -278,14 +279,15 @@ export default {
     text-align: center;
     padding-top: 82px;
     box-sizing: border-box;
-    position: relative;
+    position: fixed;
+    top: 0;
     .upload {
       width: 100px;
       height: 100px;
       margin: auto;
       border-radius: 50px;
       overflow: hidden;
-      border: 1Px dashed rgba(153, 153, 153, 1);
+      // border: 1Px dashed rgba(153, 153, 153, 1);
       .yulan {
         width: 100px;
         height: 100px;
@@ -340,7 +342,7 @@ export default {
       width: 690px;
       background: rgba(255, 255, 255, 1);
       box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.2);
-      border-radius: 51px;
+      border-radius: 51Px;
       position: absolute;
       bottom: 0;
       left: 50%;
@@ -358,7 +360,7 @@ export default {
           margin-left: 10px;
           width: 42px;
           height: 42px;
-          border-radius: 21px;
+          border-radius: 21Px;
           background: rgba(214, 174, 123, 1);
           color: #fff;
           line-height: 42px;
@@ -374,6 +376,7 @@ export default {
     }
   }
   .goodslist {
+    padding-top: 560px;
     margin-top: 60px;
     color: #000;
     .item {

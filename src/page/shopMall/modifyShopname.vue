@@ -16,7 +16,7 @@ export default {
   name: "modifyShopname",
   data() {
     return {
-      name: ''
+      name: ""
     };
   },
 
@@ -24,29 +24,32 @@ export default {
 
   created() {},
 
-  mounted() {
-  },
+  mounted() {},
   methods: {
     keepdata() {
-      this.axios
-        .post("shop/upshop_name", {
-          token: this.token(),
-          id: this.$route.query.id,
-          name: this.name
-        })
-        .then(({ data }) => {
-          console.log(data);
-          if (data.code === "200") {
-            this.$bus.$emit("toast", data.msg);
-            this.$router.push('shoplist');
-          } else if (data.code === "204") {
-            this.$bus.$emit("toast", data.msg);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }, 
+      if (!this.name) {
+        this.$bus.$emit("toast", "店铺名不能为空");
+      } else {
+        this.axios
+          .post("shop/upshop_name", {
+            token: this.token(),
+            id: this.$route.query.id,
+            name: this.name
+          })
+          .then(({ data }) => {
+            console.log(data);
+            if (data.code === "200") {
+              this.$bus.$emit("toast", data.msg);
+              this.$router.push("shoplist");
+            } else if (data.code === "204") {
+              this.$bus.$emit("toast", data.msg);
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    }
   }
 };
 </script>

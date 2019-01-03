@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="orderFoot">
-        <div class="sumprice">共{{item.number}}件商品，合计：¥{{ item.num * item.price}}</div>
+        <div class="sumprice">共{{item.num}}件商品，合计：¥{{ item.num * item.price}}</div>
         <button class="noborder" @click="fahuoMes(item.id)" v-if="status=='1'">发货</button>
         <button v-if="status=='2'||status=='3'" @click="lookwuliu(item.id)">查看物流</button>
         <button class="evaluate" v-if="status=='3'" @click="surereceive(item.id)">订单详情</button>
@@ -76,7 +76,8 @@
           <p>订单编号：{{fahuolist.order_number}}</p>
           <p>下单时间：{{fahuolist.create_time}}</p>
           <p>付款时间：{{fahuolist.pay_time}}</p>
-          <div class="item">快递单号：
+          <div class="item">
+            快递单号：
             <input type="text" v-model="number" placeholder="请输入快递单号">
           </div>
         </div>
@@ -105,19 +106,7 @@ export default {
       fahuomes: {},
       fahuolist: [],
       orderlist: ["待付款", "待发货", "待收货", "已完成"],
-      message: [
-        // {
-        //   order_create_time: "120212",
-        //   order_create_time: "120212",
-        //   order_create_time: "120212",
-        //   status: "2",
-        //   book: "120212",
-        //   book_sign: "120212",
-        //   order_pay_price: "120212",
-        //   number: "120212",
-        //   image1: require("../../assets/image/zanshi/touxiang.jpg")
-        // },
-      ]
+      message: []
     };
   },
 
@@ -228,34 +217,38 @@ export default {
         });
     },
     // 搜索商品
-    searchOrder(){
-      this.axios
-        .post("/shop/order_list", {
-          token: this.token(),
-          keyword: this.search,
-          status: parseInt(this.status)+1,
-        })
-        .then(({ data }) => {
-          console.log(data);
-          if (data.code === "200") {
-            this.message = data.data.order;
-            this.fa = data.data.fa;
-            this.shou = data.data.shou;
-          } else if (data.code === "201") {
-            this.$bus.$emit("toast", data.msg);
-          } else if (data.code === "205") {
-            this.fa = data.data.fa;
-            this.shou = data.data.shou;
-            this.$bus.$emit("toast", data.msg);
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+    searchOrder() {
+      if (!this.search) {
+        this.$bus.$emit("toast", "请输入搜索内容");
+      } else {
+        this.axios
+          .post("/shop/order_list", {
+            token: this.token(),
+            keyword: this.search,
+            status: parseInt(this.status) + 1
+          })
+          .then(({ data }) => {
+            console.log(data);
+            if (data.code === "200") {
+              this.message = data.data.order;
+              this.fa = data.data.fa;
+              this.shou = data.data.shou;
+            } else if (data.code === "201") {
+              this.$bus.$emit("toast", data.msg);
+            } else if (data.code === "205") {
+              this.fa = data.data.fa;
+              this.shou = data.data.shou;
+              this.$bus.$emit("toast", data.msg);
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
     },
     // 订单详情
-    surereceive(id){
-      this.$router.push({name: 'shopOrderDetail',query:{id,id}})
+    surereceive(id) {
+      this.$router.push({ name: "shopOrderDetail", query: { id, id } });
     },
     listSelect1() {
       this.message = [];
@@ -303,8 +296,8 @@ export default {
         color: #999;
         text-align: center;
 
-        .iconfont{
-        font-size: 40px;
+        .iconfont {
+          font-size: 40px;
         }
       }
       input {
@@ -389,7 +382,7 @@ export default {
       font-size: 24px;
       color: #666;
       line-height: 66px;
-      border-bottom: 1Px solid #f0f0f0;
+      border-bottom: 1px solid #f0f0f0;
       .box2 {
         color: #f10f0f;
       }
@@ -431,13 +424,15 @@ export default {
           line-height: 40px;
         }
         p:nth-of-type(3) {
+          margin-top: 10px;
+          word-break: break-all;
           font-size: 24px;
           color: #999;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
-          line-height: 60px;
+          line-height: 40px;
         }
       }
     }
@@ -446,7 +441,7 @@ export default {
       padding-bottom: 20px;
       box-sizing: border-box;
       font-size: 26px;
-      border-bottom: 1Px solid #cbcbcb;
+      border-bottom: 1px solid #cbcbcb;
       .sumprice {
         line-height: 70px;
         margin: 10px auto;
@@ -485,7 +480,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        border-bottom: 1Px solid rgba(203, 203, 203, 1);
+        border-bottom: 1px solid rgba(203, 203, 203, 1);
         .left {
           width: 50px;
           height: 58px;
@@ -521,7 +516,7 @@ export default {
         // height: 250px;
         overflow: auto;
         margin: 0 30px;
-        border-bottom: 1Px solid rgba(203, 203, 203, 1);
+        border-bottom: 1px solid rgba(203, 203, 203, 1);
         padding: 10px 0;
         p:nth-of-type(1) {
           font-size: 26px;
@@ -554,8 +549,9 @@ export default {
           color: rgba(102, 102, 102, 1);
           line-height: 60px;
           input {
+            padding-left: 10px;
             line-height: 50px;
-            border: 1Px solid rgba(102, 102, 102, 0.5);
+            border: 1px solid rgba(102, 102, 102, 0.5);
           }
         }
       }

@@ -14,7 +14,7 @@
         </div>
         <div class="right">
           <p>{{item.shop_name}}</p>
-          <p>商品：{{shop.name}}</p>
+          <p>位置：{{item.address}}</p>
           <p>申请时间：{{item.create_time}}</p>
           <p>进入店铺</p>
         </div>
@@ -91,6 +91,7 @@ export default {
         this.$bus.$emit("toast", '搜索词不能为空');
       } else {
         this.$router.replace({name: 'searchShop',query:{keyword: this.search}});
+        this.loading();
       }
     }
   }
@@ -194,11 +195,19 @@ export default {
         line-height: 60px;
       }
       .right p:nth-of-type(2),.right p:nth-of-type(3), {
+        word-break: break-all;
         font-size: 26px;
         font-family: PingFangSC-Regular;
         font-weight: 400;
         color: rgba(153, 153, 153, 1);
         line-height: 50px;
+      }
+      .right p:nth-of-type(2), {
+        line-height: 40px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
       }
       .right p:nth-of-type(4) {
         margin-top: 20px;
