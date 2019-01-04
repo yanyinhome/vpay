@@ -28,19 +28,19 @@ export default {
           iconfont: require("../assets/image/nav11.png"),
           iconfont1: require("../assets/image/nav12.png"),
           name: "首页",
-          route: '/index'
+          route: "/index"
         },
         {
           iconfont: require("../assets/image/nav21.png"),
           iconfont1: require("../assets/image/nav22.png"),
-          name: "e家公链",
+          name: "e家公链"
           // route: '/assets'
         },
         {
           iconfont: require("../assets/image/nav31.png"),
           iconfont1: require("../assets/image/nav32.png"),
           name: "藏宝阁",
-          route: '/goodsHome'
+          route: "/goodsHome"
         }
       ]
     };

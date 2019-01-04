@@ -116,7 +116,7 @@ export default {
           .then(({ data }) => {
             console.log(data);
             if (data.code === "200") {
-              this.$router.push({ name: "sellList", query: { status: '1' } });
+              this.$router.push({ name: "sellList", query: { status: "1" } });
               this.$bus.$emit("toast", data.msg);
             } else if (data.code === "204") {
               this.$bus.$emit("toast", data.msg);
@@ -137,7 +137,7 @@ export default {
           .then(({ data }) => {
             console.log(data);
             if (data.code === "200") {
-              this.$router.push({ name: "sellList", query: { status: '2' } });
+              this.$router.push({ name: "sellList", query: { status: "2" } });
               this.$bus.$emit("toast", data.msg);
             } else if (data.code === "204") {
               this.$bus.$emit("toast", data.msg);

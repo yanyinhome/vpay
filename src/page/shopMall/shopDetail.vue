@@ -18,7 +18,7 @@
     </div>
     <div class="goods">
       <div class="item" v-for="item in goods" :key="item.id">
-        <div class="img"  @click="toGooddetail(item.id)">
+        <div class="img" @click="toGooddetail(item.id)">
           <img :src="item.imgurl">
         </div>
         <div class="detail">
@@ -40,9 +40,9 @@ export default {
   data() {
     return {
       count: "",
-      search: '',
+      search: "",
       shop: {},
-      goods: [],
+      goods: []
     };
   },
 
@@ -75,12 +75,12 @@ export default {
           console.log(error);
         });
     },
-    toGooddetail(id){
-      this.$router.push({name:'goodDetail',query: {id: id}});
+    toGooddetail(id) {
+      this.$router.push({ name: "goodDetail", query: { id: id } });
     },
-    toGoodpay(id){
-      this.$router.push({name:'payment',query: {id: id}});
-    },
+    toGoodpay(id) {
+      this.$router.push({ name: "payment", query: { id: id } });
+    }
   }
 };
 </script>

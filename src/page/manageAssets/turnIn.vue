@@ -1,7 +1,6 @@
 <template>
   <div id="turnOut">
-    <com-head :opacity="0">
-      转入
+    <com-head :opacity="0">转入
       <router-link class="keepdata" tag="div" :to="{name:'turnOutlog',query:{status: '2'}}">
         <span>转入记录</span>
       </router-link>
@@ -21,18 +20,16 @@ import QRCode from "qrcode";
 export default {
   name: "turnOut",
   data() {
-    return {
-    };
+    return {};
   },
 
   computed: {},
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      vm.loading();      
+      vm.loading();
     });
   },
-  created() {
-  },
+  created() {},
 
   mounted() {},
 
@@ -48,7 +45,7 @@ export default {
             const url = data.data.url;
             this.qrcode(url);
           } else if (data.code == "204") {
-            this.$router.push('index');
+            this.$router.push("index");
             this.$bus.$emit("toast", data.msg);
           }
         })

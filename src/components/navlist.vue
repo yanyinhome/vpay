@@ -2,7 +2,7 @@
   <div id="navlist" v-show="show">
     <div class="usernav">
       <div class="nav">
-        <div class="logo"  @click="toUsercenter">
+        <div class="logo" @click="toUsercenter">
           <img :src="user.img">
         </div>
         <div class="phone">{{user.UID}}</div>
@@ -128,12 +128,18 @@ export default {
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
-            this.$router.push("shoplist"); 
+            this.$router.push("shoplist");
           } else if (data.code === "201") {
-            this.$router.push({name:"applyShop",query: {applyStatus: true}}); 
+            this.$router.push({
+              name: "applyShop",
+              query: { applyStatus: true }
+            });
             this.$bus.$emit("toast", data.msg);
           } else if (data.code === "202") {
-            this.$router.push({name:"applyShop",query: {applyStatus: false}}); 
+            this.$router.push({
+              name: "applyShop",
+              query: { applyStatus: false }
+            });
             this.$bus.$emit("toast", data.msg);
           } else if (data.code === "204") {
             this.navout();
@@ -155,7 +161,10 @@ export default {
           {
             text: "确认",
             callback: () => {
-            this.$router.push({name:"applyShop",query: {applyStatus: false}});               
+              this.$router.push({
+                name: "applyShop",
+                query: { applyStatus: false }
+              });
             }
           },
           {
@@ -185,7 +194,7 @@ export default {
     },
     toShare() {
       this.loading();
-      this.navout();     
+      this.navout();
     },
     signout() {
       this.navout();
@@ -203,7 +212,7 @@ export default {
           if (data.code === "200") {
             this.$router.push("shareMes");
           } else if (data.code === "204") {
-            this.$router.push('index');
+            this.$router.push("index");
             this.$bus.$emit("toast", data.msg);
           }
         })

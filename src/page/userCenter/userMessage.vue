@@ -22,27 +22,6 @@
         </div>
       </div>
 
-      <!-- <div class="box1" @click="portrait2">
-        <span>头像</span>
-        <input
-          class="imginp"
-          ref="portrait2"
-          name="imgLocal"
-          id="imgLocal"
-          type="file"
-          accept="image/*"
-          @change="shangchuan2"
-        >
-        <div class="tou">
-          <div class="touxiang">
-            <img :src="yulan">
-          </div>
-          <i class="iconfont icon-next"></i>
-        </div>
-      </div> -->
-
-      
-      
       <div class="item">
         <span>手机号</span>
         <input type="text" v-model="phone" readonly="readonly">
@@ -57,9 +36,9 @@ export default {
   data() {
     return {
       phone: "",
-      yulan: '',
+      yulan: "",
       picValue: "",
-      imgbase: [],
+      imgbase: []
     };
   },
 
@@ -116,8 +95,8 @@ export default {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.picValue = files[0];
-      this.imgPreview(this.picValue,'0'); 
-    },  
+      this.imgPreview(this.picValue, "0");
+    }
   }
 };
 </script>

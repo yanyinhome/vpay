@@ -8,25 +8,22 @@
 </template>
 
 <script>
-import toast from './components/toast';
-import alert from './components/alert';
+import toast from "./components/toast";
+import alert from "./components/alert";
 export default {
-  name: 'App',
-  data () {
+  name: "App",
+  data() {
     return {
       // 保存屏幕宽高
       userClient: {
         width: document.children[0].clientWidth,
         height: document.children[0].clientHeight
       },
-      scrollRouteArr: [
-        'cooker',
-        
-      ]
+      scrollRouteArr: ["cooker"]
     };
   },
-  mounted () {
-    this.resetRem();;
+  mounted() {
+    this.resetRem();
     document.onscroll = this.toggleHead;
     // window.onresize = function () {
     //   document.addEventListener('touchstart', function (event) {
@@ -46,28 +43,34 @@ export default {
   },
   methods: {
     // 实例化根rem大小
-    resetRem () {
+    resetRem() {
       // 如果屏幕高大于屏幕宽
       if (this.userClient.height > this.userClient.width) {
         // 对html进行赋值rem大小
-        document.children[0].style.fontSize = this.userClient.width / 750 * 100 + 'px';
+        document.children[0].style.fontSize =
+          (this.userClient.width / 750) * 100 + "px";
         // 将body的宽度设置为auto
-        document.body.style.width = 'auto';
-      } else { // 如果屏幕高不大于屏幕宽
+        document.body.style.width = "auto";
+      } else {
+        // 如果屏幕高不大于屏幕宽
         // 对可视区域重新定义
-        document.body.style.width = this.userClient.height / 1.77 + 'px';
+        document.body.style.width = this.userClient.height / 1.77 + "px";
         // 将body设置为居中
-        document.body.style.margin = '0 auto';
+        document.body.style.margin = "0 auto";
         // 将body的宽度设置为高度的1.77分之一
-        document.children[0].style.fontSize = this.userClient.height / 1.77 / 750 * 100 + 'px';
+        document.children[0].style.fontSize =
+          (this.userClient.height / 1.77 / 750) * 100 + "px";
       }
     },
-    toggleHead: function (e) {
+    toggleHead: function(e) {
       if (this.scrollRouteArr.indexOf(this.$route.name) === -1) return false;
       // 获取活动距底部距离
-      let scrollBottom = document.body.clientHeight - e.target.scrollingElement.scrollTop - window.innerHeight;
+      let scrollBottom =
+        document.body.clientHeight -
+        e.target.scrollingElement.scrollTop -
+        window.innerHeight;
       // 小于50触发
-      if (scrollBottom <= 50) this.$bus.$emit('contentScroll', scrollBottom);
+      if (scrollBottom <= 50) this.$bus.$emit("contentScroll", scrollBottom);
     }
   },
   components: {
@@ -78,23 +81,23 @@ export default {
 </script>
 
 <style lang="scss">
-  @import './assets/scss/reset.scss';
-  @import './assets/scss/common_style.scss';
-  #app {
+@import "./assets/scss/reset.scss";
+@import "./assets/scss/common_style.scss";
+#app {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  background: #14171a;
+  font-size: 28px;
+  .children_view {
     width: 100%;
     min-height: 100vh;
-    position: relative;
-    background: #14171A;
-    font-size: 28px;
-    .children_view {
-      width: 100%;
-      min-height: 100vh;
-      font-family:PingFangSC-Regular;
-      box-sizing: border-box;
-      padding-bottom: 150px;
-      .iconfont {
-        // font-size: 30px;
-      }
+    font-family: PingFangSC-Regular;
+    box-sizing: border-box;
+    padding-bottom: 150px;
+    .iconfont {
+      // font-size: 30px;
     }
   }
+}
 </style>

@@ -20,7 +20,7 @@
           <i class="iconfont icon-sort" @click="shownav"></i>
         </div>
         <div class="saoma">
-          <div class="img" @click="warn">
+          <div class="img" @click="saoma">
             <img src="../assets/image/saoma.png">
           </div>
           <p>扫码支付</p>
@@ -86,10 +86,10 @@
             <img src="../assets/image/zichan.png">
             <div>e家公链</div>
           </div>
-          <div class="item" @click="warn">
+          <router-link class="item" tag="div" to="goodsHome">
             <img src="../assets/image/shoping.png">
             <div>藏宝阁</div>
-          </div>
+          </router-link>
         </div>
       </div>
     </div>
@@ -248,8 +248,8 @@ export default {
             height: 70px;
             border-radius: 35px;
             display: flex;
-        justify-content: center;
-        align-items: center;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
             img {
               width: 100%;

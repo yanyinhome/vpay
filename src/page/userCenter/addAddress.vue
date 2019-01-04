@@ -47,7 +47,6 @@
 
 <script>
 import myaddress from "../../assets/js/province.js"; //引入省市区数据
-// import addressSelect from "../../components/addressSelect.vue";
 export default {
   name: "addAddress",
   data() {

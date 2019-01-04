@@ -1,13 +1,15 @@
 <template>
-  <div id='noticeDetail'>
-    <com-head :opacity='0'>详情</com-head>
+  <div id="noticeDetail">
+    <com-head :opacity="0">详情</com-head>
     <div class="notice">
-        <div class="left">
-            <p>{{news_title}}</p>
-            <p>{{create_time}}</p>
-        </div>
+      <div class="left">
+        <p>{{news_title}}</p>
+        <p>{{create_time}}</p>
+      </div>
     </div>
-    <div class="detail"><div v-html="detail"></div></div>   
+    <div class="detail">
+      <div v-html="detail"></div>
+    </div>
   </div>
 </template>
 
@@ -18,8 +20,8 @@ export default {
     return {
       id: this.$route.query.id,
       detail: "",
-      news_title: '',
-      create_time: ''
+      news_title: "",
+      create_time: ""
     };
   },
 
@@ -68,19 +70,19 @@ export default {
         width: 686px;
         font-size: 32px;
         font-family: PingFangSC-Medium;
-        font-weight:500;
-        color:rgba(255,255,255,1);
+        font-weight: 500;
+        color: rgba(255, 255, 255, 1);
         // line-height: 96px;
         box-sizing: border-box;
       }
       p:nth-of-type(2) {
         font-size: 24px;
-        color:rgba(153,153,153,1);
+        color: rgba(153, 153, 153, 1);
         line-height: 70px;
       }
     }
   }
-  .detail img{
+  .detail img {
     width: 100%;
   }
 }

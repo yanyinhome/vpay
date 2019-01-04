@@ -5,7 +5,7 @@
       <span>
         <i class="iconfont icon-sousuo"></i>
       </span>
-      <input type="text" v-model="search" placeholder="请输入你想要搜索的物品或商家" autofocus="autofocus">
+      <input type="text" v-model="search" placeholder="请输入你想要搜索的物品或商家" v-focus>
       <i class="iconfont icon-shanchu" @click="delectValue"></i>
     </div>
     <div class="keepdata" @click="sureSearch">确定</div>
@@ -26,7 +26,12 @@
         <i @click="delectLog" class="iconfont icon-iconfont-shanchu"></i>
       </p>
       <div class="historynav">
-        <p class="box" @click="hotSearch(item.name)" v-for="(item,index) in log" :key="index">{{item.name}}</p>
+        <p
+          class="box"
+          @click="hotSearch(item.name)"
+          v-for="(item,index) in log"
+          :key="index"
+        >{{item.name}}</p>
       </div>
     </div>
   </div>
@@ -38,24 +43,18 @@ export default {
   data() {
     return {
       search: "",
-      hotnav: [
-        // { nav: "热门" },
-        // { nav: "热门" },
-        // { nav: "热门" },
-        // { nav: "热门" },
-        // { nav: "热门" },
-        // { nav: "热门" },
-        // { nav: "热门" },
-        // { nav: "热门" },
-        // { nav: "热门" },
-        // { nav: "热门" },
-        // { nav: "热门" },
-        // { nav: "热门" }
-      ],
+      hotnav: [],
       log: []
     };
   },
-
+  directives: {
+    focus: {
+      // 获取焦点
+      inserted: function(el) {
+        el.focus();
+      }
+    }
+  },
   computed: {},
 
   created() {},
@@ -83,8 +82,8 @@ export default {
           console.log(error);
         });
     },
-    hotSearch(name){
-      this.$router.push({name: 'searchShop',query:{keyword: name}});
+    hotSearch(name) {
+      this.$router.push({ name: "searchShop", query: { keyword: name } });
     },
     delectLog() {
       this.$bus.$emit("comAlert", {
@@ -122,10 +121,13 @@ export default {
       this.search = "";
     },
     sureSearch() {
-      if(!this.search){
-        this.$bus.$emit("toast", '搜索词不能为空');
+      if (!this.search) {
+        this.$bus.$emit("toast", "搜索词不能为空");
       } else {
-        this.$router.push({name: 'searchShop',query:{keyword: this.search}});
+        this.$router.push({
+          name: "searchShop",
+          query: { keyword: this.search }
+        });
       }
     }
   }
@@ -148,7 +150,7 @@ export default {
   }
   .item {
     position: fixed;
-    top: 11px;
+    top: 12px;
     left: 84px;
     padding: 0 30px;
     box-sizing: border-box;

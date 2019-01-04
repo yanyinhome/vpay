@@ -42,33 +42,26 @@
         <textarea
           style="resize:none"
           border
-          maxlength="40"
-          placeholder="请输入备注，最多40个字哦"
+          maxlength="50"
+          placeholder="请输入备注，最多50个字哦"
           v-model="content"
           cols="80"
           rows="4"
         ></textarea>
-        <span class="number">{{number}}/40</span>
+        <span class="number">{{number}}/50</span>
       </div>
     </div>
     <div class="show" v-show="show">
       <div class="box">
-        <div class="title">请输入支付密码
+        <div class="title">
+          请输入支付密码
           <span @click="show=false" class="iconfont icon-chahao"></span>
         </div>
         <div class="money">&yen;{{goods.price * count}}</div>
-        <!-- <div class="item">
-          支付密码：
-          <input type="password" v-model="sale_code" placeholder="请输入支付密码">
-        </div>-->
         <div class="container">
           <div class="item" v-for="i in 6" :key="i">{{numbers[i-1]|hideNum}}</div>
           <input type="password" v-model="numbers" maxlength="6">
         </div>
-        <!-- <div class="item item1 item2">
-          <button :disabled="disabled" @click="buySome()">确定</button>
-          <button @click="show=false">取消</button>
-        </div>-->
       </div>
     </div>
     <div class="footBuy">
@@ -104,8 +97,8 @@ export default {
     content: function(a, b) {
       this.number = a.length;
       console.log(this.number);
-      if (this.number > 39) {
-        this.$bus.$emit("toast", "字数不能超过40");
+      if (this.number > 49) {
+        this.$bus.$emit("toast", "字数不能超过50");
       }
     },
     numbers(newValue, oldValue) {
@@ -115,18 +108,7 @@ export default {
     }
   },
   computed: {},
-  // beforeRouteEnter(to, from, next) {
-  //     next(vm => {
-  //       if (from.name == 'myAddress') {
-  //         if (localStorage.message) {
-  //           vm.message = JSON.parse(localStorage.getItem('message'));
-  //           // console.log(JSON.parse(vm.message));
-  //         }
-  //       } else {
-  //         vm.loading();
-  //       }
-  //     });
-  //   },
+
   created() {},
 
   mounted() {
@@ -386,7 +368,7 @@ export default {
       left: 80px;
       text-align: center;
       .title {
-        font-weight: 600;
+        font-weight: 400;
         font-size: 30px;
         line-height: 80px;
         position: relative;
@@ -400,7 +382,7 @@ export default {
         }
       }
       .money {
-        line-height: 120px;
+        line-height: 100px;
         font-size: 50px;
       }
       .container {

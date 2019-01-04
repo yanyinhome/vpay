@@ -35,29 +35,30 @@ export default {
   mounted() {},
 
   methods: {
-    verification () {
-      if (!this.verify){
-        this.$bus.$emit('toast', '验证码不能为空');       
+    verification() {
+      if (!this.verify) {
+        this.$bus.$emit("toast", "验证码不能为空");
       } else {
-				this.axios.post('register/getcode',{
-          type: '1',
-          account: this.tel
-				})
-				.then((response)=>{
-					if (response.data=='1'){
-						this.sendSMSTime = 60;
-						this.isSend = true;
-						this.disabled = true;
-						this.btntxt = '已发送(' + this.sendSMSTime + ')s';
-						this.timer();
-					}else if(response.data=='2'){
-						this.$bus.$emit('toast', '手机号已注册');	
-						this.disabled = false;
-					}
-				})
-			}			
+        this.axios
+          .post("register/getcode", {
+            type: "1",
+            account: this.tel
+          })
+          .then(response => {
+            if (response.data == "1") {
+              this.sendSMSTime = 60;
+              this.isSend = true;
+              this.disabled = true;
+              this.btntxt = "已发送(" + this.sendSMSTime + ")s";
+              this.timer();
+            } else if (response.data == "2") {
+              this.$bus.$emit("toast", "手机号已注册");
+              this.disabled = false;
+            }
+          });
+      }
     },
-    timer () {
+    timer() {
       if (this.sendSMSTime > 0) {
         this.sendSMSTime--;
         this.btntxt = `已发送(${this.sendSMSTime})s`;
@@ -66,10 +67,10 @@ export default {
         }, 1000);
       } else {
         this.sendSMSTime = 0;
-        this.btntxt = '重新获取';
+        this.btntxt = "重新获取";
         this.isSend = false;
       }
-    },
+    }
   }
 };
 </script>

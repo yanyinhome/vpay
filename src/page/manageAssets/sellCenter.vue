@@ -7,14 +7,6 @@
       </div>
       <div class="box2">
         <p>{{item.UID}}</p>
-        <!-- <p>
-          信用：
-          <img
-            src="../../assets/image/grade.png"
-            v-for="(item,index) in  item.credit*1"
-            :key="index"
-          >
-        </p> -->
         <p>{{item.create_time}}</p>
       </div>
       <div class="box3">
@@ -156,7 +148,6 @@ export default {
     background: rgba(42, 42, 42, 1);
     display: flex;
     justify-content: flex-start;
-    // align-items: center;
     padding: 30px;
     box-sizing: border-box;
     .box1 {
@@ -169,10 +160,8 @@ export default {
       }
     }
     .box2 {
-      //   width: 220px;
       margin-left: 30px;
       font-size: 28px;
-
       p:nth-of-type(1) {
         font-size: 28px;
         font-family: PingFangSC-Regular;
@@ -180,20 +169,6 @@ export default {
         color: rgba(255, 255, 255, 1);
         line-height: 40px;
       }
-      // p:nth-of-type(2) {
-      //   font-size: 24px;
-      //   font-family: PingFangSC-Regular;
-      //   font-weight: 400;
-      //   color: rgba(177, 177, 177, 1);
-      //   line-height: 40px;
-      //   display: flex;
-      //   align-items: center;
-      //   img {
-      //     display: inline-block;
-      //     width: 26px;
-      //     height: 26px;
-      //   }
-      // }
       p:nth-of-type(2) {
         font-size: 22px;
         font-family: PingFangSC-Regular;

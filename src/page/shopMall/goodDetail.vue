@@ -32,7 +32,7 @@
     </div>
     <div class="detail">——&nbsp;商品详情&nbsp;——</div>
     <div class="footBuy">
-      <router-link  class="box1" tag="div" :to="{name:'shopDetail',query:{shopid: shop.id}}">
+      <router-link class="box1" tag="div" :to="{name:'shopDetail',query:{shopid: shop.id}}">
         <i class="iconfont icon-dianpu1"/>
         <p>店铺</p>
       </router-link>
@@ -53,12 +53,7 @@ export default {
       id: this.$route.query.id,
       goods: {},
       shop: {},
-      images: [
-        // require("../../assets/image/zanshi/111.jpg"),
-        // require("../../assets/image/zanshi/222.jpg"),
-        // require("../../assets/image/zanshi/111.jpg"),
-        // require("../../assets/image/zanshi/222.jpg")
-      ],
+      images: [],
       // swiper配置
       swiperOption: {
         direction: "horizontal",
@@ -82,7 +77,7 @@ export default {
   created() {},
 
   mounted() {
-   this.loading();
+    this.loading();
   },
   methods: {
     //商品详情
@@ -107,8 +102,8 @@ export default {
           console.log(error);
         });
     },
-    buyTopay(){
-      this.$router.push({name:'payment',query: {id: this.id}});
+    buyTopay() {
+      this.$router.push({ name: "payment", query: { id: this.id } });
     },
     gone() {
       this.$router.go(-1);
@@ -168,7 +163,7 @@ export default {
       }
     }
     p:nth-of-type(2) {
-      width: 550px;
+      // width: 550px;
       padding: 10px 30px;
       font-size: 26px;
       font-family: PingFangSC-Regular;

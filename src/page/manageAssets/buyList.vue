@@ -9,22 +9,6 @@
       <div class="box2">
         <p v-if="status=='1'">{{UID}}</p>
         <p v-else>{{item.UID}}</p>
-        <!-- <p v-if="status=='1'">
-          信用：
-          <img
-            src="../../assets/image/grade.png"
-            v-for="(item1,index) in grade"
-            :key="index"
-          >
-        </p>
-        <p v-if="status!='1'">
-          信用：
-          <img
-            src="../../assets/image/grade.png"
-            v-for="(item1,index) in (item.credit*1)"
-            :key="index"
-          >
-        </p> -->
         <p>{{item.create_time}}</p>
       </div>
       <div class="box3">

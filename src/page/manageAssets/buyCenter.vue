@@ -7,14 +7,6 @@
       </div>
       <div class="box2">
         <p>{{item.UID}}</p>
-        <!-- <p>
-          信用：
-          <img
-            src="../../assets/image/grade.png"
-            v-for="(item1,index) in item.credit*1"
-            :key="index"
-          >
-        </p> -->
         <p>{{item.create_time}}</p>
       </div>
       <div class="box3">
@@ -109,7 +101,7 @@ export default {
         if (this.isDisable) {
           this.$bus.$emit("toast", "不能重复操作");
         }
-        this.isDisable = true;       
+        this.isDisable = true;
         setTimeout(() => {
           this.isDisable = false;
         }, 1000);

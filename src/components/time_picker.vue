@@ -2,7 +2,10 @@
   <div id="timePicker" v-show="defaultData.show">
     <div class="time_picker_bg" @click="closePicker"></div>
     <div class="time_picker_inner">
-      <h3 class="time_picker_title">{{ defaultData.title }}<button class="time_picker_submit" @click="submit">确认</button></h3>
+      <h3 class="time_picker_title">
+        {{ defaultData.title }}
+        <button class="time_picker_submit" @click="submit">确认</button>
+      </h3>
       <div class="time_picker_list_box" v-for="(item, index) in data" :key="index" v-if="item">
         <dl class="time_picker_list">
           <dt class="time_picker_select_title">{{ item.name }}</dt>
@@ -20,31 +23,31 @@
 
 <script>
 export default {
-  name: 'timePicker',
-  data () {
+  name: "timePicker",
+  data() {
     return {
       // 数据
       data: {
         year: {
-          name: '年',
+          name: "年",
           data: []
         },
         month: {
-          name: '月',
+          name: "月",
           data: []
         },
         day: {
-          name: '日',
+          name: "日",
           data: []
         }
       },
       // 默认数据
       defaultData: {
         show: false,
-        title: '时间选择器',
-        mode: 'day',
-        startYear: (new Date()).getFullYear() - 10,
-        endYear: (new Date()).getFullYear() + 10
+        title: "时间选择器",
+        mode: "day",
+        startYear: new Date().getFullYear() - 10,
+        endYear: new Date().getFullYear() + 10
       },
       // 设置全局倒计时，方便清除
       setTime: {
@@ -66,22 +69,22 @@ export default {
       },
       // 全局默认时间,只读
       readonlyData: {
-        year: (new Date()).getFullYear(),
-        month: (new Date()).getMonth(),
-        day: (new Date()).getDate()
+        year: new Date().getFullYear(),
+        month: new Date().getMonth(),
+        day: new Date().getDate()
       }
     };
   },
-  mounted () {
+  mounted() {
     // 监听事件
-    this.$bus.$on('timePicker', flag => {
+    this.$bus.$on("timePicker", flag => {
       this.defaultData.show = flag;
       this.agumentsInit();
     });
   },
   methods: {
     // 更改默认参数
-    agumentsInit () {
+    agumentsInit() {
       // 更改标题
       if (this.title) this.defaultData.title = this.title;
       // 更改显示模式
@@ -92,15 +95,21 @@ export default {
       if (this.endYear) this.defaultData.endYear = this.endYear;
       // 默认时间
       if (this.defaultTime) {
-        this.getData.year = this.readonlyData.year = (new Date(this.defaultTime)).getFullYear();
-        this.getData.month = this.readonlyData.month = (new Date(this.defaultTime)).getMonth();
-        this.getData.day = this.readonlyData.day = (new Date(this.defaultTime)).getDate();
+        this.getData.year = this.readonlyData.year = new Date(
+          this.defaultTime
+        ).getFullYear();
+        this.getData.month = this.readonlyData.month = new Date(
+          this.defaultTime
+        ).getMonth();
+        this.getData.day = this.readonlyData.day = new Date(
+          this.defaultTime
+        ).getDate();
       }
       // 初始化
       this.init();
     },
     // 初始化页面
-    init () {
+    init() {
       // 更改页面模式显示
       this.changeDataShow();
       // 更改当前时间
@@ -109,7 +118,7 @@ export default {
       this.changeYear();
     },
     // 确认事件
-    submit () {
+    submit() {
       this.closePicker();
       if (this.timeClick) {
         this.timeClick({
@@ -120,19 +129,19 @@ export default {
       }
     },
     // 关闭picker事件
-    closePicker () {
+    closePicker() {
       this.defaultData.show = false;
     },
     // 更改页面模式
-    changeDataShow () {
-      if (this.defaultData.mode === 'month') this.data.day = null;
-      if (this.defaultData.mode === 'year') {
+    changeDataShow() {
+      if (this.defaultData.mode === "month") this.data.day = null;
+      if (this.defaultData.mode === "year") {
         this.data.month = null;
         this.data.day = null;
       }
     },
     // 初始化更改时间
-    getDateInit () {
+    getDateInit() {
       // 如果没有选择时间
       if (this.getData.day === null) {
         this.getData.year = this.readonlyData.year;
@@ -141,36 +150,49 @@ export default {
       }
     },
     // 时间滚动事件
-    listScroll (e) {
+    listScroll(e) {
       // 获取第几个
-      let doNode = e.target.getAttribute('data-index');
+      let doNode = e.target.getAttribute("data-index");
       this.getSelectData(doNode);
     },
     // 返回当前选择的时间
-    getSelectData (doNode) {
+    getSelectData(doNode) {
       this.setTime[doNode] = setTimeout(() => {
         // 获取滚动条高度
         let boxScrTop = this.$refs[doNode][0].scrollTop;
         // 获取顶部高度
-        let padTop = parseInt(getComputedStyle(this.$refs[doNode][0], null)['padding-top']);
+        let padTop = parseInt(
+          getComputedStyle(this.$refs[doNode][0], null)["padding-top"]
+        );
         // 获取行高
-        let lineHeight = parseInt(getComputedStyle(this.$refs[doNode][0].childNodes[0], null)['line-height']);
+        let lineHeight = parseInt(
+          getComputedStyle(this.$refs[doNode][0].childNodes[0], null)[
+            "line-height"
+          ]
+        );
         // 返回值
         if ((boxScrTop - padTop) % lineHeight === 0) {
-          if (doNode === 'month') {
+          if (doNode === "month") {
             return (this.getData[doNode] = (boxScrTop - padTop) / lineHeight);
           } else {
-            return (this.getData[doNode] = this.data[doNode].data[(boxScrTop - padTop) / lineHeight]);
+            return (this.getData[doNode] = this.data[doNode].data[
+              (boxScrTop - padTop) / lineHeight
+            ]);
           }
         }
         // 创建滚动到第几条，从而确定位置
         let toTopNum = null;
-        if (Math.ceil((boxScrTop - padTop) / lineHeight) > (this.data[doNode].data.length - 1)) {
+        if (
+          Math.ceil((boxScrTop - padTop) / lineHeight) >
+          this.data[doNode].data.length - 1
+        ) {
           toTopNum = this.data[doNode].data.length - 1;
         } else if (Math.floor((boxScrTop - padTop) / lineHeight) < 0) {
           toTopNum = 0;
         } else {
-          toTopNum = Math.floor((boxScrTop - padTop + lineHeight / 2) / lineHeight);
+          toTopNum = Math.floor(
+            (boxScrTop - padTop + lineHeight / 2) / lineHeight
+          );
         }
         // 将要前往的位置
         let toTop = toTopNum * lineHeight + padTop;
@@ -189,10 +211,14 @@ export default {
             this.$refs[doNode][0].scrollTop = toTop;
             clearInterval(this.setInter[doNode]);
             // 滚动后赋值
-            if (doNode === 'month') {
-              this.getData[doNode] = parseInt((boxScrTop - padTop) / lineHeight + 1);
+            if (doNode === "month") {
+              this.getData[doNode] = parseInt(
+                (boxScrTop - padTop) / lineHeight + 1
+              );
             } else {
-              this.getData[doNode] = this.data[doNode].data[parseInt((boxScrTop - padTop) / lineHeight)];
+              this.getData[doNode] = this.data[doNode].data[
+                parseInt((boxScrTop - padTop) / lineHeight)
+              ];
             }
             this.dataRefresh(doNode);
           }
@@ -200,15 +226,15 @@ export default {
       }, 300);
     },
     // 触发数据更新事件
-    dataRefresh (doNode) {
-      if (doNode === 'year' && this.defaultData.mode !== 'year') {
+    dataRefresh(doNode) {
+      if (doNode === "year" && this.defaultData.mode !== "year") {
         this.changeMonths(this.getData.year);
-      } else if (doNode === 'month' && this.defaultData.mode === 'day') {
+      } else if (doNode === "month" && this.defaultData.mode === "day") {
         this.changeDays(this.getData.year, this.getData.month);
       }
     },
     // 产生年份
-    changeYear () {
+    changeYear() {
       // 获取年份差值
       const yearDiff = this.defaultData.endYear - this.defaultData.startYear;
       // 清空年份数组
@@ -222,13 +248,26 @@ export default {
         // 如果没有年份返回
         if (!this.$refs.year[0]) return false;
         // 让页面滚动到默认位置
-        this.$refs.year[0].scrollTop = (parseInt(getComputedStyle(this.$refs.year[0].childNodes[0], null)['line-height']) * yearDiff / 2 + parseInt(getComputedStyle(this.$refs.year[0].childNodes[0], null)['padding-top']));
+        this.$refs.year[0].scrollTop =
+          (parseInt(
+            getComputedStyle(this.$refs.year[0].childNodes[0], null)[
+              "line-height"
+            ]
+          ) *
+            yearDiff) /
+            2 +
+          parseInt(
+            getComputedStyle(this.$refs.year[0].childNodes[0], null)[
+              "padding-top"
+            ]
+          );
         // 如果模式不仅仅是年，继续走月份
-        if (this.defaultData.mode !== 'year') this.changeMonths(this.getData.year);
+        if (this.defaultData.mode !== "year")
+          this.changeMonths(this.getData.year);
       });
     },
     // 产生月份
-    changeMonths (year) {
+    changeMonths(year) {
       // 清空后赋值
       this.data.month.data = [];
       // 给月份复制
@@ -239,15 +278,27 @@ export default {
       this.$nextTick(() => {
         // 判断是否需要更改滚动条
         if (year === this.readonlyData.year) {
-          this.$refs.month[0].scrollTop = parseInt(getComputedStyle(this.$refs.month[0].childNodes[0], null)['line-height']) * this.readonlyData.month + parseInt(getComputedStyle(this.$refs.month[0].childNodes[0], null)['padding-top']);
+          this.$refs.month[0].scrollTop =
+            parseInt(
+              getComputedStyle(this.$refs.month[0].childNodes[0], null)[
+                "line-height"
+              ]
+            ) *
+              this.readonlyData.month +
+            parseInt(
+              getComputedStyle(this.$refs.month[0].childNodes[0], null)[
+                "padding-top"
+              ]
+            );
           this.getData.month = this.readonlyData.month;
         } else {
           this.$refs.month[0].scrollTop = 0;
         }
-        if (this.defaultData.mode === 'day') this.changeDays(year, this.getData.month);
+        if (this.defaultData.mode === "day")
+          this.changeDays(year, this.getData.month);
       });
     },
-    changeDays (year, month) {
+    changeDays(year, month) {
       let theYear = year;
       let theMonth = month;
       // 判断是否是最后一月
@@ -256,9 +307,9 @@ export default {
         theMonth = 0;
       }
       // 获取当前月最后一秒时间
-      let nextMonthTime = (new Date(theYear, theMonth + 1, 1)).getTime() - 1;
+      let nextMonthTime = new Date(theYear, theMonth + 1, 1).getTime() - 1;
       // 获取当前月最后一天
-      let theMonthLast = (new Date(nextMonthTime)).getDate();
+      let theMonthLast = new Date(nextMonthTime).getDate();
       // 清空后赋值
       this.data.day.data = [];
       for (let i = 0; i < theMonthLast; i++) {
@@ -266,139 +317,146 @@ export default {
       }
       this.$nextTick(() => {
         // 判断是否需要更改滚动条
-        if (year === this.readonlyData.year && month === this.readonlyData.month) {
-          this.$refs.day[0].scrollTop = parseInt(getComputedStyle(this.$refs.day[0].childNodes[0], null)['line-height']) * (this.readonlyData.day - 1) + parseInt(getComputedStyle(this.$refs.month[0].childNodes[0], null)['padding-top']);
+        if (
+          year === this.readonlyData.year &&
+          month === this.readonlyData.month
+        ) {
+          this.$refs.day[0].scrollTop =
+            parseInt(
+              getComputedStyle(this.$refs.day[0].childNodes[0], null)[
+                "line-height"
+              ]
+            ) *
+              (this.readonlyData.day - 1) +
+            parseInt(
+              getComputedStyle(this.$refs.month[0].childNodes[0], null)[
+                "padding-top"
+              ]
+            );
         } else {
           this.$refs.day[0].scrollTop = 0;
         }
       });
     }
   },
-  props: [
-    'title',
-    'mode',
-    'startYear',
-    'endYear',
-    'defaultTime',
-    'timeClick'
-  ]
+  props: ["title", "mode", "startYear", "endYear", "defaultTime", "timeClick"]
 };
 </script>
 
 <style lang="scss">
-  // 背景色
-  $bgColor: rgba(0, 0, 0, 0.6);
-  $mainColor: #000;
-  $pickerBgColor: #fff;
-  #timePicker {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 30;
-    .time_picker_bg {
-      width: 100%;
-      height: 100%;
-      background: $bgColor;
-    }
-    .time_picker_inner {
-      background: #fff;
-      width: 80%;
-      height: 400px;
+// 背景色
+$bgColor: rgba(0, 0, 0, 0.6);
+$mainColor: #000;
+$pickerBgColor: #fff;
+#timePicker {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 30;
+  .time_picker_bg {
+    width: 100%;
+    height: 100%;
+    background: $bgColor;
+  }
+  .time_picker_inner {
+    background: #fff;
+    width: 80%;
+    height: 400px;
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    margin-top: -300px;
+    border-radius: 20px;
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    padding-top: 75px;
+    .time_picker_title {
+      font-size: 34px;
+      color: $mainColor;
+      height: 70px;
+      line-height: 70px;
+      border-bottom: 1Px solid $mainColor;
       position: absolute;
-      top: 50%;
-      left: 10%;
-      margin-top: -300px;
-      border-radius: 20px;
-      overflow: hidden;
-      text-align: center;
-      display: flex;
-      justify-content: space-around;
-      padding-top: 75px;
-      .time_picker_title {
-        font-size: 34px;
-        color: $mainColor;
-        height: 70px;
-        line-height: 70px;
-        border-bottom: 1Px solid $mainColor;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: $pickerBgColor;
+      .time_picker_submit {
         position: absolute;
         top: 0;
-        left: 0;
-        width: 100%;
-        background: $pickerBgColor;
-        .time_picker_submit {
-          position: absolute;
-          top: 0;
-          right: 10px;
-          height: 70px;
-          color: #807cb3;
+        right: 10px;
+        height: 70px;
+        color: #807cb3;
+        font-size: 28px;
+        width: 80px;
+        background: none;
+      }
+    }
+    .time_picker_list_box {
+      flex-grow: 2;
+      position: relative;
+      .time_picker_list {
+        .time_picker_select_title {
+          padding-top: 10px;
+          line-height: 50px;
+          font-size: 34px;
+          font-weight: 900;
+          background: $pickerBgColor;
+          z-index: 2;
+          position: relative;
+        }
+        .time_picker_data {
+          height: 260px;
+          overflow: scroll;
+          line-height: 60px;
           font-size: 28px;
-          width: 80px;
-          background: none;
+          color: #666;
+          padding: 100px 0;
+          position: relative;
+          &:-webkit-scrollbar {
+            display: none;
+          }
+          .time_picker_scroll {
+            padding: 100px 0 250px;
+          }
         }
       }
-      .time_picker_list_box{
-        flex-grow: 2;
-        position: relative;
-        .time_picker_list {
-          .time_picker_select_title {
-            padding-top: 10px;
-            line-height: 50px;
-            font-size: 34px;
-            font-weight: 900;
-            background: $pickerBgColor;
-            z-index: 2;
-            position: relative;
-          }
-          .time_picker_data {
-            height: 260px;
-            overflow: scroll;
-            line-height: 60px;
-            font-size: 28px;
-            color: #666;
-            padding: 100px 0;
-            position: relative;
-            &:-webkit-scrollbar {
-              display: none;
-            }
-            .time_picker_scroll {
-              padding: 100px 0 250px;
-            }
-          }
-        }
-        .time_picker_change {
-          position: absolute;
-          width: 120px;
-          height: 1Px;
-          background: $mainColor;
-          top: 215px;
-          left: 50%;
-          margin-left: -60px;
-        }
-        &:before {
-          content: '';
-          position: absolute;
-          top: 50px;
-          left: 0;
-          width: 100%;
-          height: 1Px;
-          background: $pickerBgColor;
-          box-shadow: 0 25px 60px 40px $pickerBgColor;
-          z-index: 2;
-        }
-        &:after {
-          content: '';
-          position: absolute;
-          bottom: 50px;
-          left: 0;
-          width: 100%;
-          height: 1Px;
-          background: $pickerBgColor;
-          box-shadow: 0 25px 60px 40px $pickerBgColor;
-          z-index: 2;
-        }
+      .time_picker_change {
+        position: absolute;
+        width: 120px;
+        height: 1Px;
+        background: $mainColor;
+        top: 215px;
+        left: 50%;
+        margin-left: -60px;
+      }
+      &:before {
+        content: "";
+        position: absolute;
+        top: 50px;
+        left: 0;
+        width: 100%;
+        height: 1Px;
+        background: $pickerBgColor;
+        box-shadow: 0 25px 60px 40px $pickerBgColor;
+        z-index: 2;
+      }
+      &:after {
+        content: "";
+        position: absolute;
+        bottom: 50px;
+        left: 0;
+        width: 100%;
+        height: 1Px;
+        background: $pickerBgColor;
+        box-shadow: 0 25px 60px 40px $pickerBgColor;
+        z-index: 2;
       }
     }
   }
+}
 </style>

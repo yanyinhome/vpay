@@ -63,13 +63,15 @@
       <p>订单状态：{{message4.status|orderStaus}}</p>
     </div>
     <div class="comAlert" v-show="show">
-         <div class="alertbox">
-             <div class="alerttop">
-                 <div class="box1"><a :href="`tel://${tel}`">{{tel}}</a></div>
-             </div>
-             <div class="alertfoot" @click="show=false">取消</div>
-         </div>
-     </div>
+      <div class="alertbox">
+        <div class="alerttop">
+          <div class="box1">
+            <a :href="`tel://${tel}`">{{tel}}</a>
+          </div>
+        </div>
+        <div class="alertfoot" @click="show=false">取消</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -84,7 +86,7 @@ export default {
       message2: {},
       message3: {},
       message4: {},
-      tel: '',
+      tel: ""
     };
   },
 
@@ -92,15 +94,12 @@ export default {
 
   created() {
     this.loading();
-
   },
-
-  mounted() {
-  },
+  mounted() {},
   filters: {
-    orderStaus(value){
-      const orderanv = ['待支付','待发货','待收货','已完成'];
-      return orderanv[value-1];
+    orderStaus(value) {
+      const orderanv = ["待支付", "待发货", "待收货", "已完成"];
+      return orderanv[value - 1];
     }
   },
   methods: {
@@ -117,7 +116,7 @@ export default {
             this.message2 = data.data.sell;
             this.message3 = data.data.good;
             this.message4 = data.data.order;
-            this.pintai = data.data.pintai
+            this.pintai = data.data.pintai;
           } else if (data.code === "201") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -126,14 +125,14 @@ export default {
           console.log(error);
         });
     },
-      telflat(){
-          this.show = true;
-          this.tel = this.pintai;
-      },
-      telbuyer(){
-          this.show = true;
-          this.tel = this.message1.phone;
-      },
+    telflat() {
+      this.show = true;
+      this.tel = this.pintai;
+    },
+    telbuyer() {
+      this.show = true;
+      this.tel = this.message1.phone;
+    }
   }
 };
 </script>
@@ -253,12 +252,12 @@ export default {
     background: rgba(4, 4, 15, 0.4);
     .alertbox {
       width: 686px;
-      height: 211px;
+      height: 212px;
       position: absolute;
       bottom: 20px;
       left: 32px;
       .alerttop {
-        height: 101px;
+        height: 100px;
         background-color: rgba(255, 255, 255, 1);
         border-radius: 10px;
         text-align: center;
@@ -275,9 +274,9 @@ export default {
             width: 30px;
             height: 30px;
           }
-           a {
-            text-decoration:none; 
-            color:#d6ae7b; 
+          a {
+            text-decoration: none;
+            color: #d6ae7b;
           }
         }
         .box2 {

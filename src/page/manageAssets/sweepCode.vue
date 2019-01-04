@@ -8,10 +8,10 @@
       </div>
       <p class="code">将二维码放入框内</p>
       <footer>
-        <mt-button type="primary" @click="startRecognize">1.创建控件</mt-button>
+        <!-- <mt-button type="primary" @click="startRecognize">1.创建控件</mt-button>
         <mt-button type="primary" @click="startScan">2.开始扫描</mt-button>
         <mt-button type="primary" @click="cancelScan">3.结束扫描</mt-button>
-        <mt-button type="primary" @click="closeScan">4.关闭控件</mt-button>
+        <mt-button type="primary" @click="closeScan">4.关闭控件</mt-button>-->
       </footer>
     </div>
   </div>
@@ -19,6 +19,19 @@
 
 <script>
 let scan = null;
+//点手机虚拟返回键
+// document.addEventListener("plusready", function() {
+//   // 注册返回按键事件
+//   plus.key.addEventListener(
+//     "backbutton",
+//     function() {
+//       // 事件处理
+//       scan.close(); //关闭条码识别控件
+//       window.history.back();
+//     },
+//     false
+//   );
+// });
 export default {
   name: "sweepCode",
   data() {
@@ -33,17 +46,9 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (from.name != 'index') {
-        alert(vm.token())
         vm.$router.push('index');
-      }else {
-         alert(vm.token());  
       }
     });
-  },
-
-  created() {
-    this.startRecognize();
-    this.startScan();
   },
 
   mounted() {
@@ -75,7 +80,6 @@ export default {
         }
         var result = result.replace(/\n/g, "");
         that.codeUrl = result;
-        // alert(result);
         window.location.href = result;
         that.closeScan();
       }
@@ -99,18 +103,8 @@ export default {
   beforeDestroy() {
     // this.cancelScan();
     this.closeScan();
-    this.show = false;
-  },
-  // beforeRouteLeave(to, from, next) {
-  //   if (to.name == "index") {
-  //     this.closeScan();
-  //     this.$router.go(0);
-  //   }
-  // }
-  // 销毁解绑
-  // beforeDestroy () {
-  //   this.$bus.$emit('comAlert');
-  // },
+  }
+ 
 };
 </script>
 <style lang='scss' scoped>
@@ -121,10 +115,10 @@ export default {
     height: 100%;
     #bcid {
       width: 100%;
-      // position: absolute;
-      // left: 0;
-      // right: 0;
-      // top: 0;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
       // bottom: 3rem;
       height: 60vh;
       text-align: center;
@@ -140,6 +134,7 @@ export default {
     }
   }
   .code {
+    margin-top: 60vh;
     text-align: center;
     color: #d6ae7b;
     line-height: 120px;

@@ -24,9 +24,7 @@
         </div>
       </div>
       <div class="orderFoot">
-        <!-- <div class="sumprice">共{{item.number}}件商品(包含运费) 合计：¥{{ item.number * item.order_pay_price}}</div> -->
         <button class="noborder" v-if="status=='0'">去付款</button>
-        <!-- <button class="noborder" v-if="status=='1'" @click="warning(item.id)">提醒发货</button> -->
         <button v-if="status=='2'||status=='3'" @click="lookwuliu(item.id)">查看物流</button>
         <button class="noborder" v-if="status=='2'" @click="sureReceive(item.id)">确定收货</button>
       </div>
@@ -43,9 +41,7 @@ export default {
       mask: false,
       status: 0,
       search: "",
-      message: [
-     
-      ],
+      message: [],
       server: [
         "",
         "待发货",
@@ -87,35 +83,6 @@ export default {
           console.log(error);
         });
     },
-    // 提醒发货
-    // warning(id) {
-    //   this.$bus.$emit("comAlert", {
-    //     info: "已提醒买家发货",
-    //     button: [
-    //       {
-    //         text: "确认",
-    //         callback: () => {
-    //           this.axios
-    //             .post("user/orderout", {
-    //               order_id: id
-    //             })
-    //             .then(({ data }) => {
-    //               console.log(data);
-    //               if (data.code === "200") {
-    //                 this.$bus.$emit("toast", data.msg);
-    //                 this.message.splice(index, 1);
-    //               } else if (data.code === "201") {
-    //                 this.$bus.$emit("toast", data.msg);
-    //               }
-    //             })
-    //             .catch(function(error) {
-    //               console.log(error);
-    //             });
-    //         }
-    //       }
-    //     ]
-    //   });
-    // },
     // 确定收货
     sureReceive(id, index) {
       this.$bus.$emit("comAlert", {
@@ -181,7 +148,7 @@ export default {
     listSelect(index) {
       console.log(index);
       this.status = index;
-      this.loading(index+1);
+      this.loading(index + 1);
     }
   }
 };

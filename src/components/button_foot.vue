@@ -1,10 +1,9 @@
 <template>
-<div id="but_foot">
-  <button class="but_foot" :class="{'but_foot_click': isClick}" @click="buttonClick">
-    <slot>确认</slot>
-  </button>
-</div>
-  
+  <div id="but_foot">
+    <button class="but_foot" :class="{'but_foot_click': isClick}" @click="buttonClick">
+      <slot>确认</slot>
+    </button>
+  </div>
 </template>
 
 <script>

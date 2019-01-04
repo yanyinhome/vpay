@@ -21,7 +21,6 @@
       </div>
     </div>
     <div v-if="!log.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
-
   </div>
 </template>
 
@@ -31,8 +30,8 @@ export default {
   data() {
     return {
       status: this.$route.query.status,
-      name: '',
-      log: [],
+      name: "",
+      log: []
     };
   },
 
@@ -42,19 +41,19 @@ export default {
     if (this.status == "1") {
       //转出记录
       this.name = "转出记录";
-      this.loading('1');
+      this.loading("1");
     } else if (this.status == "2") {
       //转入记录
       this.name = "转入记录";
-      this.loading('2');
+      this.loading("2");
     } else if (this.status == "3") {
       //积分记录
       this.name = "积分记录";
-      this.loadGrade('2');
+      this.loadGrade("2");
     } else if (this.status == "4") {
       //余额记录
       this.name = "余额记录";
-      this.loadGrade('1');
+      this.loadGrade("1");
     } else if (this.status == "5") {
       //分享记录
       this.name = "分享记录";
@@ -123,7 +122,7 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
-    },
+    }
   }
 };
 </script>
@@ -134,7 +133,7 @@ export default {
   .chargeLog {
     margin: 0 32px;
     height: 144px;
-    border-bottom: 1Px solid rgba(68,68,68,1);
+    border-bottom: 1Px solid rgba(68, 68, 68, 1);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -143,7 +142,7 @@ export default {
       p:nth-of-type(1) {
         // padding-top: 20px;
         font-size: 28px;
-        color: #C1C1C1;
+        color: #c1c1c1;
         line-height: 60px;
         box-sizing: border-box;
         overflow: hidden;
@@ -152,7 +151,7 @@ export default {
       }
       p:nth-of-type(2) {
         font-size: 24px;
-        color: #C1C1C1;
+        color: #c1c1c1;
         line-height: 40px;
       }
     }

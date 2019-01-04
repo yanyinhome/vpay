@@ -8,10 +8,6 @@
         <div class="right">
           <p>UID：{{user.UID}}</p>
           <p>注册币：{{user.grade}}</p>
-          <!-- <p>
-            信用：
-            <img src="../../assets/image/grade.png" v-for="(item,index) in grade" :key="index">
-          </p>-->
         </div>
       </router-link>
       <router-link class="iconfont icon-sousuo" tag="i" to="search"></router-link>
@@ -44,7 +40,8 @@ export default {
         img: "",
         UID: "",
         grade: ""
-      },goods: []
+      },
+      goods: []
     };
   },
 
@@ -53,30 +50,10 @@ export default {
   created() {},
 
   mounted() {
-    // this.loading();
     this.goodlist();
   },
 
   methods: {
-    // loading() {
-    //   this.axios
-    //     .post("/user/index", {
-    //       token: this.token()
-    //     })
-    //     .then(({ data }) => {
-    //       console.log(data);
-    //       if (data.code == "200") {
-    //         this.user.img = data.data.head_img;
-    //         this.user.UID = data.data.UID;
-    //         this.grade = data.data.credit;
-    //       } else if (data.code == "204") {
-    //         this.$bus.$emit("toast", data.msg);
-    //       }
-    //     })
-    //     .catch(function(error) {
-    //       console.log(error);
-    //     });
-    // },
     goodlist() {
       this.axios
         .post("/shop/shop_index", {
@@ -97,11 +74,11 @@ export default {
         });
     },
     toGooddetail(id) {
-      this.$router.push({name:'goodDetail',query: {id: id}});
+      this.$router.push({ name: "goodDetail", query: { id: id } });
     },
-    toGoodpay(id){
-      this.$router.push({name:'payment',query: {id: id}});
-    },
+    toGoodpay(id) {
+      this.$router.push({ name: "payment", query: { id: id } });
+    }
   }
 };
 </script>
@@ -113,7 +90,7 @@ export default {
     position: fixed;
     top: 0px;
     left: 30px;
-    background: #14171a;    
+    background: #14171a;
     .boxmes {
       padding: 20px 0;
       display: flex;

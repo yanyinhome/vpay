@@ -25,24 +25,6 @@ export default {
       //     name: "首页",
       //     route: "/index"
       //   },
-      //   {
-      //     icon: require("../assets/image/nav4.png"),
-      //     icon1: require("../assets/image/nav3.png"),
-      //     name: "厨师",
-      //     route: "/cooker"
-      //   },
-      //   {
-      //     icon: require("../assets/image/nav6.png"),
-      //     icon1: require("../assets/image/nav5.png"),
-      //     name: "订单",
-      //     route: "/order"
-      //   },
-      //   {
-      //     icon: require("../assets/image/nav8.png"),
-      //     icon1: require("../assets/image/nav7.png"),
-      //     name: "我的",
-      //     route: "/userCenter"
-      //   }
       // ]
     };
   },

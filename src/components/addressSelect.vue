@@ -3,8 +3,11 @@
     <!-- 省市县三级联动 -->
     <div class="mask" @click="cityalert=false" v-if="cityalert">
       <div class="addressAlert">
-        <div class="box"><span>所在地区</span><button  v-on:click="sendMsg">确定</button></div> 
-        <mt-picker :slots="myAddressSlots" @change="onMyAddressChange" :visibleItemCount=3></mt-picker>
+        <div class="box">
+          <span>所在地区</span>
+          <button v-on:click="sendMsg">确定</button>
+        </div>
+        <mt-picker :slots="myAddressSlots" @change="onMyAddressChange" :visibleItemCount="3"></mt-picker>
       </div>
     </div>
   </div>
@@ -16,7 +19,6 @@ export default {
   name: "addressSelect",
   data() {
     return {
-
       myAddressSlots: [
         {
           flex: 1,
@@ -51,7 +53,7 @@ export default {
       cityalert: true,
       myAddressProvince: "省",
       myAddressCity: "市",
-      myAddresscounty: "区/县",
+      myAddresscounty: "区/县"
     };
   },
 
@@ -69,7 +71,7 @@ export default {
   },
 
   methods: {
-     chooceAddress() {
+    chooceAddress() {
       this.cityalert = true;
     },
     onMyAddressChange(picker, values) {
@@ -83,8 +85,8 @@ export default {
         console.log(this.myAddressProvince);
       }
     },
-    sendMsg(){
-      this.$emit("aaa",'666666666')
+    sendMsg() {
+      this.$emit("aaa", "666666666");
       console.log(11333333);
     }
   }

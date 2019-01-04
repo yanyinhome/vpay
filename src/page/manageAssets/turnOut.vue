@@ -1,7 +1,6 @@
 <template>
   <div id="turnOut">
-    <com-head :opacity="0">
-      转出
+    <com-head :opacity="0">转出
       <router-link class="keepdata" tag="div" :to="{name:'turnOutlog',query:{status: '1'}}">
         <span>转出记录</span>
       </router-link>
@@ -25,8 +24,7 @@ export default {
 
   computed: {},
 
-  created() {
-  },
+  created() {},
 
   mounted() {},
 
@@ -45,7 +43,7 @@ export default {
             if (data.code == "200") {
               this.$router.push({
                 name: "turnOutmes",
-                query: { UID: data.data}
+                query: { UID: data.data }
               });
             } else if (data.code == "204") {
               this.$bus.$emit("toast", data.msg);
@@ -55,7 +53,7 @@ export default {
             console.log(error);
           });
       }
-    },
+    }
   }
 };
 </script>

@@ -88,8 +88,8 @@ export default {
         .post("user/editpwd", {
           token: this.token(),
           type: passwordtype,
-          oldpwd: this.oldpass.replace(/\s/g,''),
-          newpwd: this.newpass1.replace(/\s/g,'')
+          oldpwd: this.oldpass.replace(/\s/g, ""),
+          newpwd: this.newpass1.replace(/\s/g, "")
         })
         .then(({ data }) => {
           console.log(data);

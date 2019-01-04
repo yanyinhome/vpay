@@ -21,13 +21,13 @@
         <textarea
           style="resize:none"
           border
-          maxlength="30"
+          maxlength="50"
           placeholder="请输入商品描述"
           v-model="content"
           cols="80"
           rows="5"
         ></textarea>
-        <span class="number">{{number}}/30</span>
+        <span class="number">{{number}}/50</span>
       </div>
     </div>
     <div class="item2">
@@ -43,9 +43,6 @@
         <img :src="item">
       </div>
       <div class="upload" @click="portrait1" v-if="imgurl.length<6">
-        <!-- <div class="yulan" v-if="imgurl[0]">
-          <img :src="imgurl[0]">
-        </div>-->
         <input
           class="imginp"
           ref="portrait1"
@@ -59,7 +56,6 @@
           <i class="iconfont icon-add"/>
         </div>
       </div>
-    
     </div>
     <com-button :click="submitTo">上传商品</com-button>
   </div>
@@ -70,7 +66,7 @@ export default {
   name: "addGoods",
   data() {
     return {
-      title: '',
+      title: "",
       yulan: "",
       picValue: "",
       imgbase: [],
@@ -91,7 +87,7 @@ export default {
   watch: {
     content: function(a, b) {
       this.number = a.length;
-      if (this.number > 29) {
+      if (this.number > 49) {
         this.$bus.$emit("toast", "字数不能超过50");
       }
     }
@@ -101,11 +97,11 @@ export default {
   created() {
     if (this.$route.query.id) {
       //编辑商品
-      this.title = '编辑商品';
+      this.title = "编辑商品";
       this.loading();
-    } else{
+    } else {
       //添加商品
-      this.title = '添加商品';
+      this.title = "添加商品";
     }
   },
 
@@ -116,19 +112,19 @@ export default {
       this.axios
         .post("/shop/edit_goodsview", {
           token: this.token(),
-          id: this.$route.query.id,
+          id: this.$route.query.id
         })
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
-           this.name = data.data.goods.name;
-           this.price = data.data.goods.price;
-           this.num = data.data.goods.stock;
-           this.content = data.data.goods.content;
-           data.data.imgurl.forEach(element => {
-             this.imgurl.push(element.imgurl);
-             this.imgid.push(element.id);
-           });
+            this.name = data.data.goods.name;
+            this.price = data.data.goods.price;
+            this.num = data.data.goods.stock;
+            this.content = data.data.goods.content;
+            data.data.imgurl.forEach(element => {
+              this.imgurl.push(element.imgurl);
+              this.imgid.push(element.id);
+            });
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -159,7 +155,7 @@ export default {
         }
       }
     },
-    addGoods(){
+    addGoods() {
       this.axios
         .post("/shop/add_goods", {
           token: this.token(),
@@ -167,7 +163,7 @@ export default {
           price: this.price,
           stock: this.num,
           content: this.content,
-          img: this.imgid.join(),
+          img: this.imgid.join()
         })
         .then(({ data }) => {
           console.log(data);
@@ -182,7 +178,7 @@ export default {
           console.log(error);
         });
     },
-    rewriteGoods(){
+    rewriteGoods() {
       this.axios
         .post("/shop/edit_goods", {
           token: this.token(),

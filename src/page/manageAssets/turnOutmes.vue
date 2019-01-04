@@ -12,10 +12,13 @@
     <p>{{phone}}</p>
     <div class="account">
       <input type="text" v-model="money" placeholder="请输入转出金额">
-      <div class="jihuo" v-if="status=='1'">* 激活用户需要<span>{{currency}}</span>注册币，<span>{{balance}}</span>余额。</div>
+      <div class="jihuo" v-if="status=='1'">* 激活用户需要
+        <span>{{currency}}</span>注册币，
+        <span>{{balance}}</span>余额。
+      </div>
       <input type="password" v-model="password" placeholder="请输入支付密码">
       <p>* 确定转出前请核对转出用户信息。</p>
-      <com-button :disabled='disabled' :click="submit">确定转出</com-button>
+      <com-button :disabled="disabled" :click="submit">确定转出</com-button>
     </div>
   </div>
 </template>
@@ -27,22 +30,22 @@ export default {
     return {
       disabled: false,
       UID: this.$route.query.UID,
-      status: '',
-      rate: '',
-      img: '',
+      status: "",
+      rate: "",
+      img: "",
       phone: "",
       money: "",
-      password: "",
+      password: ""
     };
   },
 
   computed: {
     currency: function() {
-      return (this.money * this.rate)/100;
+      return (this.money * this.rate) / 100;
     },
     balance: function() {
-      return (this.money * (1-this.rate/100));
-    },
+      return this.money * (1 - this.rate / 100);
+    }
   },
 
   created() {},
@@ -74,18 +77,18 @@ export default {
           console.log(error);
         });
     },
-    submit() {     
+    submit() {
       if (!this.money) {
         this.$bus.$emit("toast", "请输入转出金额");
-      } else if (this.money<=0) {
+      } else if (this.money <= 0) {
         this.$bus.$emit("toast", "转出金额需大于零");
       } else if (!this.password) {
         this.$bus.$emit("toast", "请输入安全密码");
       } else {
         this.disabled = true;
         setTimeout(() => {
-            this.disabled = false;
-        }, 2000)
+          this.disabled = false;
+        }, 2000);
         this.axios
           .post("exchange/doexchange", {
             token: this.token(),
@@ -165,7 +168,7 @@ export default {
       font-size: 24px;
       span {
         padding: 0 10px;
-        color: #D6AE7B;
+        color: #d6ae7b;
       }
     }
     input {
@@ -177,28 +180,28 @@ export default {
       background: rgba(42, 42, 42, 1);
       border-radius: 10px;
       color: #fff;
-    }  
+    }
     // input:nth-of-type(1) {
     //   margin-bottom: 30px;
     // }
-      input::-webkit-input-placeholder {
-        /* WebKit browsers */
-        color: #999;
-      }
-      input:-moz-placeholder {
-        /* Mozilla Firefox 4 to 18 */
-        color: #999;
-      }
+    input::-webkit-input-placeholder {
+      /* WebKit browsers */
+      color: #999;
+    }
+    input:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      color: #999;
+    }
 
-      input::-moz-placeholder {
-        /* Mozilla Firefox 19+ */
-        color: #999;
-      }
+    input::-moz-placeholder {
+      /* Mozilla Firefox 19+ */
+      color: #999;
+    }
 
-      input:-ms-input-placeholder {
-        /* Internet Explorer 10+ */
-        color: #999;
-      }
+    input:-ms-input-placeholder {
+      /* Internet Explorer 10+ */
+      color: #999;
+    }
     p {
       text-align: left;
       font-size: 26px;

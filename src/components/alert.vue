@@ -117,56 +117,10 @@ export default {
         color: #888;
         font-size: 36px;
         border-radius: 39px;
-        color:rgba(214,175,124,1);
+        color: rgba(214, 175, 124, 1);
         background: none;
-        // background: linear-gradient(
-        //   90deg,
-        //   rgba(234, 205, 163, 1) 0%,
-        //   rgba(214, 174, 123, 1) 100%
-        // );
-        // @include bgChangeStyle();
       }
     }
-    // .alert_btn {
-    //   padding-top: 40px;
-    //   display: flex;
-    //   justify-content: space-between;
-    //   .alert_buttons {
-    //     width: 226px;
-    //     height: 76px;
-    //     line-height: 76px;
-    //     color: #fff;
-    //     font-size: 30px;
-    //     border-radius: 38px;
-    //     &:nth-child(1) {
-    //       // background: #D6AE7B;
-    //       background: linear-gradient(
-    //         90deg,
-    //         rgba(234, 205, 163, 1) 0%,
-    //         rgba(214, 174, 123, 1) 100%
-    //       );
-    //     }
-    //     &:nth-child(2) {
-    //       background: #999;
-    //     }
-    //   }
-    //   .alert_button {
-    //     width: 400px;
-    //     margin: 0 auto;
-    //     height: 78px;
-    //     line-height: 78px;
-    //     color: #000;
-    //     font-size: 28px;
-    //     border-radius: 39px;
-    //     // background: #d6ae7b;
-    //     background: linear-gradient(
-    //       90deg,
-    //       rgba(234, 205, 163, 1) 0%,
-    //       rgba(214, 174, 123, 1) 100%
-    //     );
-    //     // @include bgChangeStyle();
-    //   }
-    // }
   }
 }
 </style>

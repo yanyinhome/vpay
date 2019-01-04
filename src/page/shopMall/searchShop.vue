@@ -8,7 +8,12 @@
       </span>
     </div>
     <div class="user">
-      <router-link class="boxmes" v-for="item in shop" :key="item.id" :to="{name:'shopDetail',query:{shopid: item.id}}">
+      <router-link
+        class="boxmes"
+        v-for="item in shop"
+        :key="item.id"
+        :to="{name:'shopDetail',query:{shopid: item.id}}"
+      >
         <div class="left">
           <img :src="item.img">
         </div>
@@ -22,7 +27,7 @@
     </div>
     <div class="goods">
       <div class="item" v-for="item in goods" :key="item.id">
-        <div class="img"  @click="toGooddetail(item.id)">
+        <div class="img" @click="toGooddetail(item.id)">
           <img :src="item.imgurl">
         </div>
         <div class="detail">
@@ -35,7 +40,10 @@
         </div>
       </div>
     </div>
-    <div v-if="!shop.length&&!goods.length" style="margin-top: 30vh; text-align: center; color: #888;">暂无搜索信息</div>
+    <div
+      v-if="!shop.length&&!goods.length"
+      style="margin-top: 30vh; text-align: center; color: #888;"
+    >暂无搜索信息</div>
   </div>
 </template>
 
@@ -55,7 +63,7 @@ export default {
 
   created() {},
 
-  mounted() {  
+  mounted() {
     this.loading();
   },
 
@@ -80,17 +88,20 @@ export default {
           console.log(error);
         });
     },
-    toGooddetail(id){
-      this.$router.push({name:'goodDetail',query: {id: id}});
+    toGooddetail(id) {
+      this.$router.push({ name: "goodDetail", query: { id: id } });
     },
-    toGoodpay(id){
-      this.$router.push({name:'payment',query: {id: id}});
+    toGoodpay(id) {
+      this.$router.push({ name: "payment", query: { id: id } });
     },
     sureSearch() {
-      if(!this.search){
-        this.$bus.$emit("toast", '搜索词不能为空');
+      if (!this.search) {
+        this.$bus.$emit("toast", "搜索词不能为空");
       } else {
-        this.$router.replace({name: 'searchShop',query:{keyword: this.search}});
+        this.$router.replace({
+          name: "searchShop",
+          query: { keyword: this.search }
+        });
         this.loading();
       }
     }
@@ -103,12 +114,11 @@ export default {
   background-color: #f6f6f6;
   padding-top: 82px;
   color: #fff;
-  // background-image: url("../../assets/image/shopbg1.png");
   background-repeat: no-repeat;
   background-size: 750px 450px;
   .iteminp {
     position: fixed;
-    top: 11px;
+    top: 12px;
     left: 84px;
     padding: 0 0 0 30px;
     box-sizing: border-box;
@@ -116,7 +126,7 @@ export default {
     line-height: 60px;
     border-radius: 30px;
     z-index: 100;
-    
+
     input {
       padding-left: 10px;
       line-height: 60px;
@@ -130,9 +140,9 @@ export default {
       width: 110px;
       text-align: center;
       .iconfont {
-      font-size: 36px;
-      line-height: 60px;
-      color: #666;
+        font-size: 36px;
+        line-height: 60px;
+        color: #666;
       }
     }
     input::-webkit-input-placeholder {
@@ -194,7 +204,8 @@ export default {
         color: #000;
         line-height: 60px;
       }
-      .right p:nth-of-type(2),.right p:nth-of-type(3), {
+      .right p:nth-of-type(2),
+      .right p:nth-of-type(3) {
         word-break: break-all;
         font-size: 26px;
         font-family: PingFangSC-Regular;
@@ -202,7 +213,7 @@ export default {
         color: rgba(153, 153, 153, 1);
         line-height: 50px;
       }
-      .right p:nth-of-type(2), {
+      .right p:nth-of-type(2) {
         line-height: 40px;
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -215,7 +226,7 @@ export default {
         width: 200px;
         text-align: center;
         font-size: 26px;
-        background-color: #D6AE7B;
+        background-color: #d6ae7b;
         font-family: PingFangSC-Regular;
         font-weight: 400;
         color: #fff;

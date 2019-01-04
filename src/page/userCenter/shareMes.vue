@@ -38,11 +38,6 @@ export default {
   },
 
   computed: {},
-  // beforeRouteEnter(to, from, next) {
-  //   next(vm => {
-  //     vm.loading();      
-  //   });
-  // },
   created() {
     this.loading();
   },
@@ -50,21 +45,17 @@ export default {
   mounted() {},
 
   methods: {
-    shareLog(){
-      this.$router.push({name:'turnOutlog',query:{status: '5'}});
+    shareLog() {
+      this.$router.push({ name: "turnOutlog", query: { status: "5" } });
     },
     // 生成二维码
     qrcode() {
       var canvas = document.getElementById("canvas");
       // const ctx = canvas.getContext('2d');
       // ctx.lineTo(100,100);
-      QRCode.toCanvas(
-        canvas,
-        this.url,
-        function(error) {
-          if (error) console.error(error);
-        }
-      );
+      QRCode.toCanvas(canvas, this.url, function(error) {
+        if (error) console.error(error);
+      });
     },
     loading() {
       this.axios
@@ -78,7 +69,7 @@ export default {
             this.code = data.data.UID;
             this.qrcode();
           } else if (data.code === "204") {
-            this.$router.push('index');
+            this.$router.push("index");
             this.$bus.$emit("toast", data.msg);
           }
         })

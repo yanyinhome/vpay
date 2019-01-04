@@ -7,10 +7,7 @@
         </div>
         <div class="item verify">
           <input type="text" placeholder="请输入验证码：" v-model="verify">
-          <button
-            @click="verification"
-            :disabled="isSend"
-          >{{btntxt}}</button>
+          <button @click="verification" :disabled="isSend">{{btntxt}}</button>
         </div>
         <div class="item">
           <input type="password" v-model="loginpass1" placeholder="请设置登录密码">
@@ -38,7 +35,7 @@ export default {
       tel: "",
       verify: "",
       loginpass1: "",
-      loginpass2: "",
+      loginpass2: ""
     };
   },
 
@@ -49,60 +46,62 @@ export default {
   mounted() {},
 
   methods: {
-    submitTo(){
-      if (!this.loginpass1||!this.loginpass2){
-        this.$bus.$emit('toast', '密码不能为空');       
+    submitTo() {
+      if (!this.loginpass1 || !this.loginpass2) {
+        this.$bus.$emit("toast", "密码不能为空");
       } else if (this.loginpass1 !== this.loginpass2) {
         this.$bus.$emit("toast", "俩次输入的密码不一致");
       } else {
-        this.axios.post('register/forgetpwd',{
-          param: this.verify,
-          account: this.tel,
-          newpassword: this.loginpass1.replace(/\s/g,'')
-				})
-				.then(({data})=>{
-					if (data.code=='200'){
-            this.$router.push("login");
-            this.$bus.$emit('toast', data.msg);	           						
-					} else if(data.code=='204'){
-						this.$bus.$emit('toast', data.msg);	
-					}
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+        this.axios
+          .post("register/forgetpwd", {
+            param: this.verify,
+            account: this.tel,
+            newpassword: this.loginpass1.replace(/\s/g, "")
+          })
+          .then(({ data }) => {
+            if (data.code == "200") {
+              this.$router.push("login");
+              this.$bus.$emit("toast", data.msg);
+            } else if (data.code == "204") {
+              this.$bus.$emit("toast", data.msg);
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
       }
     },
-    verification () {
+    verification() {
       let regTel = /^(1[3-9])\d{9}$/;
-			if (!this.tel){
-        this.$bus.$emit('toast', '手机号不能为空');       
+      if (!this.tel) {
+        this.$bus.$emit("toast", "手机号不能为空");
       } else if (!regTel.test(this.tel)) {
         this.$bus.$emit("toast", "手机号码不合法");
       } else {
-			  this.isSend = true;
-				this.axios.post('register/getcode',{
-          type: '2',
-          account: this.tel
-				})
-				.then(({data})=>{
-					if (data.code=='200'){
-            this.sendSMSTime = 60;
-            this.isSend = true;
-            this.btntxt = '已发送(' + this.sendSMSTime + ')s';
-					  this.timer();
-            this.$bus.$emit('toast', data.msg);	           						
-					} else if(data.code=='204'){
-            this.$bus.$emit('toast', data.msg);	
-            this.isSend = false;            
-					}
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-			}			
+        this.isSend = true;
+        this.axios
+          .post("register/getcode", {
+            type: "2",
+            account: this.tel
+          })
+          .then(({ data }) => {
+            if (data.code == "200") {
+              this.sendSMSTime = 60;
+              this.isSend = true;
+              this.btntxt = "已发送(" + this.sendSMSTime + ")s";
+              this.timer();
+              this.$bus.$emit("toast", data.msg);
+            } else if (data.code == "204") {
+              this.$bus.$emit("toast", data.msg);
+              this.isSend = false;
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
     },
-    timer () {
+    timer() {
       if (this.sendSMSTime > 0) {
         this.sendSMSTime--;
         this.btntxt = `已发送(${this.sendSMSTime})s`;
@@ -111,10 +110,10 @@ export default {
         }, 1000);
       } else {
         this.sendSMSTime = 0;
-        this.btntxt = '重新获取';
+        this.btntxt = "重新获取";
         this.isSend = false;
       }
-    },
+    }
   }
 };
 </script>
@@ -174,7 +173,7 @@ export default {
         background: rgba(0, 0, 0, 0);
         width: 400px;
         line-height: 100px;
-      }  
+      }
       input::-webkit-input-placeholder {
         /* WebKit browsers */
         color: #888;
@@ -207,7 +206,7 @@ export default {
         width: 160px;
         background: rgba(237, 70, 70, 0);
         border-radius: 10px;
-        color: #D6AE7B;
+        color: #d6ae7b;
       }
     }
   }

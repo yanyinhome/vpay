@@ -21,7 +21,7 @@
         <!-- <div class="item">
           <i class="iconfont icon-yonghuming"/>
           <input type="text" v-model="name" placeholder="请设置用户名">
-        </div> -->
+        </div>-->
         <div class="item">
           <i class="iconfont icon-zhucedenglushoujihao"/>
           <input type="text" v-model="tel" placeholder="请输入手机号">
@@ -29,10 +29,7 @@
         <div class="item verify">
           <i class="iconfont icon-yanzhengyanzhengma"/>
           <input type="text" placeholder="请输入验证码" v-model="verify">
-          <button
-            @click="verification"
-            :disabled="isSend"
-          >{{btntxt}}</button>
+          <button @click="verification" :disabled="isSend">{{btntxt}}</button>
         </div>
         <div class="item">
           <i class="iconfont icon-3denglumima"/>
@@ -49,7 +46,7 @@
         <div class="jiantou" @click="resSubmit">
           <img src="../assets/image/jiantou.png">
         </div>
-      </div>     
+      </div>
     </div>
   </div>
 </template>
@@ -71,7 +68,7 @@ export default {
       safepass: "",
       tel: "",
       verify: "",
-      code: "",
+      code: ""
     };
   },
 
@@ -82,95 +79,98 @@ export default {
   mounted() {},
 
   methods: {
-    loginSubmit(){
-      if (!this.phone){
-        this.$bus.$emit('toast', '请输入手机号');       
-      } else if (!this.password){
-        this.$bus.$emit('toast', '请输入登录密码');       
+    loginSubmit() {
+      if (!this.phone) {
+        this.$bus.$emit("toast", "请输入手机号");
+      } else if (!this.password) {
+        this.$bus.$emit("toast", "请输入登录密码");
       } else {
-        this.axios.post('register/login',{
-          password: this.password,
-          user_num: this.phone,
-				})
-				.then(({data})=>{
-					if (data.code=='200'){
-            if (!localStorage.token) {
-              localStorage.setItem("token", data.data);
-            } else {
-              localStorage.removeItem("token");
-              localStorage.setItem("token", data.data);
+        this.axios
+          .post("register/login", {
+            password: this.password,
+            user_num: this.phone
+          })
+          .then(({ data }) => {
+            if (data.code == "200") {
+              if (!localStorage.token) {
+                localStorage.setItem("token", data.data);
+              } else {
+                localStorage.removeItem("token");
+                localStorage.setItem("token", data.data);
+              }
+              this.$router.push("index");
+              this.$bus.$emit("toast", "登录成功");
+            } else if (data.code == "204") {
+              this.$bus.$emit("toast", data.msg);
             }
-            this.$router.push("index");
-            this.$bus.$emit("toast", "登录成功");	
-					} else if(data.code=='204'){
-						this.$bus.$emit('toast', data.msg);	
-					}
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
       }
     },
-    resSubmit(){
-      if (!this.verify){
-        this.$bus.$emit('toast', '验证码不能为空');       
-      } else if (!this.loginpass){
-        this.$bus.$emit('toast', '登录密码不能为空');       
+    resSubmit() {
+      if (!this.verify) {
+        this.$bus.$emit("toast", "验证码不能为空");
+      } else if (!this.loginpass) {
+        this.$bus.$emit("toast", "登录密码不能为空");
       } else if (!this.safepass) {
-        this.$bus.$emit('toast', '支付密码不能为空');
+        this.$bus.$emit("toast", "支付密码不能为空");
       } else if (!this.code) {
-        this.$bus.$emit('toast', '邀请码不能为空');
+        this.$bus.$emit("toast", "邀请码不能为空");
       } else {
-        this.axios.post('register/reg',{
-          password: this.loginpass.replace(/\s/g,''),
-          sale_code: this.safepass.replace(/\s/g,''),
-          phone: this.tel,
-          pid: this.code.replace(/\s/g,''),
-          param: this.verify,
-				})
-				.then(({data})=>{
-					if (data.code=='200'){
-            this.$bus.$emit('toast', data.msg);	
-            this.$router.go(0);                      						
-					} else if(data.code=='204'){
-						this.$bus.$emit('toast', data.msg);	
-					}
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+        this.axios
+          .post("register/reg", {
+            password: this.loginpass.replace(/\s/g, ""),
+            sale_code: this.safepass.replace(/\s/g, ""),
+            phone: this.tel,
+            pid: this.code.replace(/\s/g, ""),
+            param: this.verify
+          })
+          .then(({ data }) => {
+            if (data.code == "200") {
+              this.$bus.$emit("toast", data.msg);
+              this.$router.go(0);
+            } else if (data.code == "204") {
+              this.$bus.$emit("toast", data.msg);
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
       }
     },
-    verification () {
+    verification() {
       let regTel = /^(1[3-9])\d{9}$/;
-			if (!this.tel){
-        this.$bus.$emit('toast', '手机号不能为空');       
+      if (!this.tel) {
+        this.$bus.$emit("toast", "手机号不能为空");
       } else if (!regTel.test(this.tel)) {
         this.$bus.$emit("toast", "手机号码不合法");
       } else {
-			  this.isSend = true;
-				this.axios.post('register/getcode',{
-          type: '1',
-          account: this.tel
-				})
-				.then(({data})=>{
-					if (data.code=='200'){
-            this.sendSMSTime = 60;
-            this.isSend = true;
-            this.btntxt = '已发送(' + this.sendSMSTime + ')s';
-					  this.timer();
-            this.$bus.$emit('toast', data.msg);	           						
-					} else if(data.code=='204'){
-            this.isSend = false;
-						this.$bus.$emit('toast', data.msg);	
-					}
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-			}			
+        this.isSend = true;
+        this.axios
+          .post("register/getcode", {
+            type: "1",
+            account: this.tel
+          })
+          .then(({ data }) => {
+            if (data.code == "200") {
+              this.sendSMSTime = 60;
+              this.isSend = true;
+              this.btntxt = "已发送(" + this.sendSMSTime + ")s";
+              this.timer();
+              this.$bus.$emit("toast", data.msg);
+            } else if (data.code == "204") {
+              this.isSend = false;
+              this.$bus.$emit("toast", data.msg);
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
     },
-    timer () {
+    timer() {
       if (this.sendSMSTime > 0) {
         this.sendSMSTime--;
         this.btntxt = `已发送(${this.sendSMSTime})s`;
@@ -179,7 +179,7 @@ export default {
         }, 1000);
       } else {
         this.sendSMSTime = 0;
-        this.btntxt = '重新获取';
+        this.btntxt = "重新获取";
         this.isSend = false;
       }
     },
@@ -253,7 +253,7 @@ export default {
         height: 80px;
         background: rgba(255, 255, 255, 1);
         border-radius: 40px;
-      }  
+      }
       input::-webkit-input-placeholder {
         /* WebKit browsers */
         color: #888;
@@ -301,7 +301,7 @@ export default {
         background: rgba(0, 0, 0, 0);
         width: 400px;
         line-height: 100px;
-      }  
+      }
       input::-webkit-input-placeholder {
         /* WebKit browsers */
         color: #888;
@@ -334,7 +334,7 @@ export default {
         width: 160px;
         background: rgba(237, 70, 70, 0);
         border-radius: 10px;
-        color: #D6AE7B;
+        color: #d6ae7b;
       }
     }
   }

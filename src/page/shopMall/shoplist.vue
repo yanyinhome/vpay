@@ -1,7 +1,7 @@
 <template>
   <div id="shoplist">
     <com-head :opacity="2"></com-head>
-    <router-link tag="div" :to="{name: 'shopOrder',query: {status: '0'}}" class="keepdata">订单管理</router-link>
+    <router-link tag="div" to="shopOrder" class="keepdata">订单管理</router-link>
     <div class="shopMes">
       <div class="upload" @click="portrait">
         <div class="yulan" v-if="yulan">
@@ -19,13 +19,17 @@
       </div>
       <p>
         {{shop.shop_name}}
-        <router-link  class="iconfont icon-bianji" tag="span" :to="{name:'modifyShopname',query:{id: shop.id}}"></router-link>
+        <router-link
+          class="iconfont icon-bianji"
+          tag="span"
+          :to="{name:'modifyShopname',query:{id: shop.id}}"
+        ></router-link>
       </p>
       <p>开铺时间：{{shop.create_time}}</p>
       <div class="number">
         <div class="box">
-          <p>浏览人数</p>
-          <p>{{shop.view}}</p>
+          <p>商品总数</p>
+          <p>{{good_num}}</p>
         </div>|
         <div class="box">
           <p>今日收益</p>
@@ -37,51 +41,66 @@
         </div>
       </div>
       <div class="nav">
-        <div class="box">
+        <router-link class="box" tag="div" :to="{name: 'shopOrder',query:{status: '0'}}">
           <span class="navzi">待发货</span>
           <span class="navshu">{{fahuo}}</span>
-        </div>
-        <div class="box"><span class="navzi">已完成</span><span class="navshu">{{wancheng}}</span></div>
+        </router-link>
+        <router-link class="box" tag="div" :to="{name: 'shopOrder',query:{status: '1'}}">
+          <span class="navzi">已完成</span>
+          <span class="navshu">{{wancheng}}</span>
+        </router-link>
       </div>
     </div>
-  
+
     <div class="goodslist" v-if="!listshow">
       <div class="item" v-for="(item,index) in message" :key="item.id">
-        <div class="img"><img :src="item.imgurl" alt=""></div>
-        <div class="goodsmes">
-          <p>{{item.shop_name}}</p>
-          <p>
-            售价：
-            <span>&yen;{{item.price}}</span>
-          </p>
-          <p>
-            <span>库存：{{item.stock}}</span>
-            <span>销量：{{item.sale_num}}</span>
-            <i @click="goodHandel(item.id,index,item.is_top)" class="iconfont icon-gengduo"/>
-          </p>
+        <div class="itembox">
+          <div class="img">
+            <img :src="item.imgurl" alt>
+          </div>
+          <div class="goodsmes">
+            <p>{{item.shop_name}}</p>
+            <p>
+              售价：
+              <span>&yen;{{item.price}}</span>
+            </p>
+            <p>
+              <span>库存：{{item.stock}}</span>
+              <span>销量：{{item.sale_num}}</span>
+              <i @click="goodHandel(item.id,index,item.is_top)" class="iconfont icon-gengduo"/>
+            </p>
+          </div>
+        </div>
+        <div class="page_foot_inner" v-if="goodindex===index">
+          <div class="page_foot_nav" @click="delectGood">
+            <div>
+              <i class="iconfont icon-iconfont-shanchu"/>
+            </div>
+            <p class="page_foot_name">删除</p>
+          </div>
+          <div class="page_foot_nav" @click="rewriteGood">
+            <div>
+              <i class="iconfont icon-bianji"/>
+            </div>
+            <p class="page_foot_name">编辑</p>
+          </div>
+          <div class="page_foot_nav" @click="topGood">
+            <div>
+              <i class="iconfont icon-zhiding"/>
+            </div>
+            <p class="page_foot_name">{{istopzi}}</p>
+          </div>
         </div>
       </div>
+
       <div v-if="!message.length" style="margin-top: 15vh; text-align: center;">暂无商品信息</div>
     </div>
-     
-    <router-link tag="div" to="addGoods" class="addgoods"><img src="../../assets/image/addgoods.png"></router-link>
+
+    <router-link tag="div" to="addGoods" class="addgoods">
+      <img src="../../assets/image/addgoods.png">
+    </router-link>
     <!-- 更多 -->
-    <div class="morenav" v-if="navhandel" @click="navhandel=false">
-      <div class="page_foot_inner">
-        <div class="page_foot_nav" @click="delectGood">
-          <div> <i class="iconfont icon-iconfont-shanchu"/></div>
-          <p class="page_foot_name">删除</p>
-        </div>
-        <div  class="page_foot_nav" @click="rewriteGood">
-          <div> <i class="iconfont icon-bianji"/></div>
-          <p class="page_foot_name">编辑</p>
-        </div>
-        <div class="page_foot_nav"  @click="topGood">
-          <div> <i class="iconfont icon-zhiding"/></div>
-          <p class="page_foot_name">{{istopzi}}</p>
-        </div>
-      </div>
-    </div>
+    <div class="morenav" v-if="goodindex>=0" @click="goodindex='-1'"></div>
   </div>
 </template>
 
@@ -91,22 +110,22 @@ export default {
   data() {
     return {
       listshow: false,
-      navhandel: false,
       yulan: "",
       picValue: "",
       imgbase: [],
       name: "",
       time: "",
       message: [],
-      shop:{},
-      today: '',
-      total: '',
-      wancheng: '',
-      fahuo: '',
-      goodid: '',
-      goodindex: '',
-      istop: '',
-      istopzi: '',
+      shop: {},
+      good_num: "",
+      today: "",
+      total: "",
+      wancheng: "",
+      fahuo: "",
+      goodid: "",
+      goodindex: "-1",
+      istop: "",
+      istopzi: ""
     };
   },
 
@@ -119,7 +138,7 @@ export default {
   },
 
   methods: {
-    loading(){
+    loading() {
       this.axios
         .post("/shop/my_shop", {
           token: this.token()
@@ -129,6 +148,7 @@ export default {
           if (data.code === "200") {
             this.shop = data.data.shop;
             this.yulan = data.data.shop.img;
+            this.good_num = data.data.good_num;
             this.today = data.data.today;
             this.total = data.data.total;
             this.fahuo = data.data.fahuo;
@@ -142,15 +162,14 @@ export default {
           console.log(error);
         });
     },
-    goodHandel(id,index,istop){
-      istop =='1'? this.istopzi='取消置顶':this.istopzi='置顶';
+    goodHandel(id, index, istop) {
+      istop == "1" ? (this.istopzi = "取消置顶") : (this.istopzi = "置顶");
       this.goodid = id;
       this.goodindex = index;
       this.istop = istop;
-      this.navhandel = true;
     },
     // 删除
-    delectGood(){
+    delectGood() {
       this.axios
         .post("/shop/del_goods", {
           token: this.token(),
@@ -158,9 +177,9 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
-          this.navhandel = false;
+          this.goodindex = -1;
           if (data.code === "200") {
-            this.message.splice(this.goodindex,1);
+            this.message.splice(this.goodindex, 1);
             this.$bus.$emit("toast", data.msg);
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
@@ -171,54 +190,53 @@ export default {
         });
     },
     // 编辑
-    rewriteGood(){
-      this.$router.push({name: 'addGoods',query:{id: this.goodid}});
+    rewriteGood() {
+      this.$router.push({ name: "addGoods", query: { id: this.goodid } });
     },
     // 置顶,取消
-    topGood(){
+    topGood() {
       console.log(this.istop);
-      if (this.istop == '1') {
+      if (this.istop == "1") {
         // 取消
         this.axios
-        .post("/shop/cancel_top", {
-          token: this.token(),
-          id: this.goodid
-        })
-        .then(({ data }) => {
-          console.log(data);
-          this.navhandel = false;
-          if (data.code === "200") {
-            this.$router.go(0);
-            this.$bus.$emit("toast", data.msg);
-          } else if (data.code === "204") {
-            this.$bus.$emit("toast", data.msg);
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-      } else if (this.istop == '2') {
+          .post("/shop/cancel_top", {
+            token: this.token(),
+            id: this.goodid
+          })
+          .then(({ data }) => {
+            console.log(data);
+            this.goodindex = -1;
+            if (data.code === "200") {
+              this.loading();
+              this.$bus.$emit("toast", data.msg);
+            } else if (data.code === "204") {
+              this.$bus.$emit("toast", data.msg);
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      } else if (this.istop == "2") {
         // 置顶
         this.axios
-        .post("/shop/is_top", {
-          token: this.token(),
-          id: this.goodid
-        })
-        .then(({ data }) => {
-          console.log(data);
-          this.navhandel = false;
-          if (data.code === "200") {
-            this.$router.go(0);
-            this.$bus.$emit("toast", data.msg);
-          } else if (data.code === "204") {
-            this.$bus.$emit("toast", data.msg);
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+          .post("/shop/is_top", {
+            token: this.token(),
+            id: this.goodid
+          })
+          .then(({ data }) => {
+            console.log(data);
+            this.goodindex = -1;
+            if (data.code === "200") {
+              this.loading();
+              this.$bus.$emit("toast", data.msg);
+            } else if (data.code === "204") {
+              this.$bus.$emit("toast", data.msg);
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
       }
-      
     },
     // 头像单击事件
     portrait() {
@@ -228,13 +246,13 @@ export default {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.picValue = files[0];
-      this.imgPreview(this.picValue,'0');
+      this.imgPreview(this.picValue, "0");
       setTimeout(() => {
         this.uploadImg();
-      }, 100); 
+      }, 100);
     },
     // 上传图片请求
-    uploadImg(){
+    uploadImg() {
       this.axios
         .post("/shop/upshop_img", {
           token: this.token(),
@@ -244,7 +262,7 @@ export default {
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
-            this.$bus.$emit("toast", data.msg);            
+            this.$bus.$emit("toast", data.msg);
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -252,7 +270,7 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
-    },
+    }
   }
 };
 </script>
@@ -342,7 +360,7 @@ export default {
       width: 690px;
       background: rgba(255, 255, 255, 1);
       box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.2);
-      border-radius: 51Px;
+      border-radius: 52px;
       position: absolute;
       bottom: 0;
       left: 50%;
@@ -360,7 +378,7 @@ export default {
           margin-left: 10px;
           width: 42px;
           height: 42px;
-          border-radius: 21Px;
+          border-radius: 50%;
           background: rgba(214, 174, 123, 1);
           color: #fff;
           line-height: 42px;
@@ -370,7 +388,7 @@ export default {
           padding: 5px;
         }
         .active {
-          border-bottom: 2Px solid rgba(214, 174, 123, 1);
+          border-bottom: 2px solid rgba(214, 174, 123, 1);
         }
       }
     }
@@ -379,64 +397,94 @@ export default {
     padding-top: 560px;
     margin-top: 60px;
     color: #000;
+
     .item {
       margin: 0 30px;
-      padding: 30px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 30px 0 0;
       border-bottom: 1Px solid #cbcbcb;
-      .img {
-        width: 130px;
-        height: 130px;
-        background: rgba(216, 216, 216, 1);
-        border-radius: 6px;
-        overflow: hidden;
+      .itembox {
+        margin-bottom: 30px;
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        img {
-          width: 100%;
+        .img {
+          width: 130px;
+          height: 130px;
+          background: rgba(216, 216, 216, 1);
+          border-radius: 6px;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          img {
+            width: 100%;
+          }
+        }
+        .goodsmes {
+          width: 540px;
+          color: rgba(102, 102, 102, 1);
+          p:nth-of-type(1) {
+            font-size: 30px;
+            font-family: PingFangSC-Medium;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 1);
+            line-height: 50px;
+          }
+          p:nth-of-type(2) {
+            font-size: 26px;
+            font-family: PingFangSC-Medium;
+            font-weight: 500;
+            line-height: 40px;
+            span {
+              color: #f10f0f;
+            }
+          }
+          p:nth-of-type(3) {
+            font-size: 26px;
+            font-family: PingFangSC-Medium;
+            font-weight: 500;
+            line-height: 40px;
+            span {
+              display: inline-block;
+              width: 44%;
+            }
+            .icon-gengduo {
+              font-size: 42px;
+              color: #d6ae7b;
+            }
+          }
         }
       }
-      .goodsmes {
-        width: 540px;
-        color: rgba(102, 102, 102, 1);
-        p:nth-of-type(1) {
-          font-size: 30px;
-          font-family: PingFangSC-Medium;
-          font-weight: 500;
-          color: rgba(0, 0, 0, 1);
-          line-height: 50px;
-        }
-        p:nth-of-type(2) {
-          font-size: 26px;
-          font-family: PingFangSC-Medium;
-          font-weight: 500;
+      .page_foot_inner {
+        position: relative;
+        // bottom: 196px;
+        // left: 0;
+        width: 100%;
+        height: 110px;
+        background: #888;
+        // z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;
+
+        .page_foot_nav {
+          margin-top: 16px;
+          width: 250px;
+          float: left;
+          text-align: center;
+          color: #fff;
+          font-size: 24px;
           line-height: 40px;
-          span {
-            color: #f10f0f;
-          }
-        }
-        p:nth-of-type(3) {
-          font-size: 26px;
-          font-family: PingFangSC-Medium;
-          font-weight: 500;
-          line-height: 40px;
-          span {
-            display: inline-block;
-            width: 44%;
-          }
-          .icon-gengduo {
-            font-size: 42px;
-            color: #d6ae7b;
+          .iconfont {
+            font-size: 40px;
           }
         }
       }
     }
   }
   .addgoods {
-    width:130px;
-    height:130px;
+    width: 130px;
+    height: 130px;
     position: fixed;
     bottom: 30px;
     left: 50%;
@@ -449,33 +497,12 @@ export default {
     position: fixed;
     width: 100vw;
     height: 100vh;
-    background: rgba(15, 15, 15,0.2);
+    background: rgba(15, 15, 15, 0);
     top: 0vh;
     left: 50%;
     width: 750px;
     margin-left: -375px;
     z-index: 99;
-    .page_foot_inner {
-      position: fixed;
-      bottom: 196px;
-      left: 0;
-      width: 100%;
-      height: 110px;
-      background: #888;
-      z-index: 100;
-      .page_foot_nav {
-        margin-top: 16px;
-        width: 250px;
-        float: left;
-        text-align: center;
-        color: #fff;
-        font-size: 24px;
-        line-height: 40px;
-        .iconfont{
-          font-size: 40px;
-        }
-      }
-    }
   }
 }
 </style>

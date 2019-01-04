@@ -62,6 +62,7 @@ export default {
   .btn {
     width: 690px;
     height: 80px;
+    font-size: 30px;
     background: rgb(218, 217, 217);
     border-radius: 10px;
     margin: 30px auto;

@@ -1,38 +1,42 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="author" content="JBS" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="format-detection" content="telephone=no">
-    <meta http-equiv="Expires" content="-1">
-    <meta http-equiv="Cache-Control" content="no-cache">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta name="description" content="" />
-    <meta name="Keywords" content="" />
-    <meta name="screen-orientation" content="portrait">
-    <meta name="full-screen" content="yes">
-    <!-- <meta name="browsermode" content="application"> -->
-    <meta name="x5-orientation" content="portrait">
-    <meta name="x5-fullscreen" content="true">
-    <meta name="x5-page-mode" content="app">
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <link rel="stylesheet" href="http://at.alicdn.com/t/font_956518_0v4g8pb64a7k.css">
-    <title>三维e家</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
-  <script>
-    // document.addEventListener('plusready',onPlusReady,false);
-    // function onPlusReady(){
-    //   var e =document.getElementById('bcid');
-    //   e.removeAttribute('disabled');
-    // }
-    // var scan = null;
-  </script>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="JBS" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="Expires" content="-1">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta name="description" content="" />
+  <meta name="Keywords" content="" />
+  <meta name="screen-orientation" content="portrait">
+  <meta name="full-screen" content="yes">
+  <!-- <meta name="browsermode" content="application"> -->
+  <meta name="x5-orientation" content="portrait">
+  <meta name="x5-fullscreen" content="true">
+  <meta name="x5-page-mode" content="app">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="stylesheet" href="http://at.alicdn.com/t/font_956518_0v4g8pb64a7k.css">
+  <title>三维e家</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
+<script>
+  document.addEventListener("plusready", function () {
+    // 注册返回按键事件
+    plus.key.addEventListener('backbutton', function () {
+      // 事件处理
+      window.history.go(-1);
+    }, false);
+  });
+</script>
+
 </html>

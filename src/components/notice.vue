@@ -65,11 +65,14 @@ export default {
     box-sizing: border-box;
   }
   .marquee_title {
-    padding: 0 20px;
+    padding: 0 10px;
     height: 30px;
     font-size: 30px;
-    border-right: 1px solid #d8d8d8;
+    border-right: 1Px solid #d8d8d8;
     align-items: center;
+  }
+  .icon-laba {
+    font-size: 36px;
   }
   .marquee_box {
     display: block;
@@ -96,7 +99,7 @@ export default {
     height: 30px;
     line-height: 30px;
     font-size: 30px;
-    padding-left: 20px;
+    padding-left: 10px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;

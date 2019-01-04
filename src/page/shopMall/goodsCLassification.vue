@@ -5,35 +5,25 @@
       <span>
         <i class="iconfont icon-sousuo"></i>
       </span>
-      <router-link tag="div" to="search" class="search"><input type="text" v-model="search" placeholder="请输入你想要搜索的物品或商家"></router-link>  
+      <router-link tag="div" to="search" class="search">
+        <input type="text" v-model="search" placeholder="请输入你想要搜索的物品或商家">
+      </router-link>
     </div>
     <!-- 左侧导航 -->
     <div class="leftnav">
-      <div class="box" @click="leftNav(index)" :class="{active: active==index}" v-for="(item,index) in leftnav" :key="index">{{item.nav}}</div>
+      <div
+        class="box"
+        @click="leftNav(index)"
+        :class="{active: active==index}"
+        v-for="(item,index) in leftnav"
+        :key="index"
+      >{{item.nav}}</div>
     </div>
     <!-- 右侧内容 -->
     <div class="rightgoods">
       <div class="goodtype">
         <div class="title">热门</div>
         <div class="good">
-          <div class="box">
-            <div class="img">
-              <img src="../../assets/image/jiantou.png">
-            </div>
-            <p>葡萄酒</p>
-          </div>
-          <div class="box">
-            <div class="img">
-              <img src="../../assets/image/card3.png">
-            </div>
-            <p>葡萄酒</p>
-          </div>
-          <div class="box">
-            <div class="img">
-              <img src="../../assets/image/jiantou.png">
-            </div>
-            <p>葡萄酒</p>
-          </div>
           <div class="box">
             <div class="img">
               <img src="../../assets/image/jiantou.png">
@@ -51,8 +41,8 @@ export default {
   name: "goodsCLassification",
   data() {
     return {
-        active: '0',
-        leftnav:[{ nav: '热门'},{ nav: '热门'},{ nav: '热门'},{ nav: '热门'},{ nav: '热门'},{ nav: '热门'},{ nav: '热门'},{ nav: '热门'},{ nav: '热门'},{ nav: '热门'},{ nav: '热门'},{ nav: '热门'},],
+      active: "0",
+      leftnav: []
     };
   },
 
@@ -63,9 +53,9 @@ export default {
   mounted() {},
 
   methods: {
-      leftNav(index){
-          this.active = index;
-      }
+    leftNav(index) {
+      this.active = index;
+    }
   }
 };
 </script>
@@ -74,7 +64,7 @@ export default {
   background-color: #fff;
   .item {
     position: fixed;
-    top: 11px;
+    top: 12px;
     left: 84px;
     padding: 0 30px;
     box-sizing: border-box;
@@ -90,35 +80,35 @@ export default {
       display: inline-block;
       width: 490px;
       input {
-      padding-left: 10px;
-      line-height: 60px;
-      background: none;
-      width: 490px;
-      font-size: 26px;
-      color: #fff;
-    }
-    input::-webkit-input-placeholder {
-      /* WebKit browsers */
-      color: #888;
-      font-size: 28px;
-    }
-    input:-moz-placeholder {
-      /* Mozilla Firefox 4 to 18 */
-      color: #888;
-      font-size: 28px;
-    }
+        padding-left: 10px;
+        line-height: 60px;
+        background: none;
+        width: 490px;
+        font-size: 26px;
+        color: #fff;
+      }
+      input::-webkit-input-placeholder {
+        /* WebKit browsers */
+        color: #888;
+        font-size: 28px;
+      }
+      input:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: #888;
+        font-size: 28px;
+      }
 
-    input::-moz-placeholder {
-      /* Mozilla Firefox 19+ */
-      color: #888;
-      font-size: 28px;
-    }
+      input::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: #888;
+        font-size: 28px;
+      }
 
-    input:-ms-input-placeholder {
-      /* Internet Explorer 10+ */
-      color: #888;
-      font-size: 28px;
-    }
+      input:-ms-input-placeholder {
+        /* Internet Explorer 10+ */
+        color: #888;
+        font-size: 28px;
+      }
     }
   }
   .leftnav {
@@ -133,7 +123,7 @@ export default {
     color: #fff;
     overflow-y: scroll;
     .box {
-    //   width: 180px;
+      //   width: 180px;
       line-height: 100px;
       text-align: center;
       overflow-x: scroll;
@@ -153,7 +143,7 @@ export default {
     padding-top: 82px;
     // background-color: red;
     .goodtype {
-    margin: 0 20px;
+      margin: 0 20px;
       border-bottom: 1Px solid rgba(196, 196, 196, 1);
       .title {
         line-height: 100px;
@@ -170,7 +160,7 @@ export default {
         .box {
           width: 140px;
           height: 234px;
-        //   background-color: #fd0;
+          //   background-color: #fd0;
           .img {
             width: 140px;
             height: 170px;

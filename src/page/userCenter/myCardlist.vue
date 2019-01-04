@@ -5,7 +5,7 @@
         <img src="../../assets/image/addcard.png">
       </div>
     </com-head>
-    <div class="cardmes" v-if='show'>
+    <div class="cardmes" v-if="show">
       <div class="outside">
         <p>我的银行卡</p>
         <div class="lunbo">
@@ -54,7 +54,7 @@
         </div>
       </div>
     </div>
-    <div class="mesnull"  v-if="!images.length">暂无信息</div>
+    <div class="mesnull" v-if="!images.length">暂无信息</div>
   </div>
 </template>
 

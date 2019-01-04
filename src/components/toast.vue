@@ -1,6 +1,9 @@
 <template>
   <div class="toast" v-show="show">
-    <div class="alert_box" :class="[showIn ? animateStyle[animateIndex].in : '', showOut ? animateStyle[animateIndex].out : '']">
+    <div
+      class="alert_box"
+      :class="[showIn ? animateStyle[animateIndex].in : '', showOut ? animateStyle[animateIndex].out : '']"
+    >
       <p class="alert">{{ alert }}</p>
     </div>
   </div>
@@ -8,8 +11,8 @@
 
 <script>
 export default {
-  name: 'toast',
-  data () {
+  name: "toast",
+  data() {
     return {
       // 是否顯示
       show: false,
@@ -22,32 +25,32 @@ export default {
       // 動畫方式
       animateStyle: [
         {
-          in: 'fadeInLeft',
-          out: 'fadeOutRight'
+          in: "fadeInLeft",
+          out: "fadeOutRight"
         },
         {
-          in: 'fadeInUp',
-          out: 'fadeOutUp'
+          in: "fadeInUp",
+          out: "fadeOutUp"
         }
       ],
       // 動畫方式
       animateIndex: 0,
       // 彈出內容
-      alert: ''
+      alert: ""
     };
   },
-  created () {
-    this.$bus.$on('toast', this.toastFun);
+  created() {
+    this.$bus.$on("toast", this.toastFun);
   },
   methods: {
-    toastFun (data) {
+    toastFun(data) {
       if (this.showIng) return false;
       this.animateIndex = Math.floor(Math.random() * 2);
       this.showIng = true;
       this.alert = data;
       this.show = true;
       this.showIn = true;
-      const timeLength = data.length / 10 * 2400;
+      const timeLength = (data.length / 10) * 2400;
       setTimeout(() => {
         this.showIn = false;
         this.showOut = true;
@@ -63,27 +66,27 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '../assets/scss/common_style.scss';
-  .toast {
-    position: fixed;
-    top: 40vh;
-    left: 10vw;
-    width: 80vw;
-    text-align: center;
-    z-index: 999;
-    .alert_box {
-      display: inline-block;
-      background: rgba(77, 72, 72, 1);
-      border-radius: 30px;
-      animation-duration: 0.8s;
-    }
-    .alert {
-      display: inline-block;
-      padding: 3vw 5vw;
-      margin: 0 auto;
-      color: #fff;
-      font-size: 32px;
-      line-height: 45px;
-    }
+@import "../assets/scss/common_style.scss";
+.toast {
+  position: fixed;
+  top: 40vh;
+  left: 10vw;
+  width: 80vw;
+  text-align: center;
+  z-index: 999;
+  .alert_box {
+    display: inline-block;
+    background: rgba(77, 72, 72, 1);
+    border-radius: 30px;
+    animation-duration: 0.8s;
   }
+  .alert {
+    display: inline-block;
+    padding: 3vw 5vw;
+    margin: 0 auto;
+    color: #fff;
+    font-size: 32px;
+    line-height: 45px;
+  }
+}
 </style>

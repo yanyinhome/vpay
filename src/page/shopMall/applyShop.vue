@@ -75,19 +75,11 @@ export default {
       imgbase: [],
 
       name: "",
-      ia: '',
+      ia: "",
       shoptype: "",
       phone: "",
       address: "",
-      nav: [
-        "日常用品",
-        "日常用品",
-        "日常用品",
-        "日常用品",
-        "日常用品",
-        "日常用品",
-        "日常用品"
-      ]
+      nav: []
     };
   },
 
@@ -161,7 +153,7 @@ export default {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.picValue = files[0];
-      this.imgPreview(this.picValue,'0');
+      this.imgPreview(this.picValue, "0");
     },
     navAcitive(item, index) {
       this.active = index;
@@ -238,24 +230,24 @@ export default {
         margin-right: 0;
         color: #666;
       }
-      // input::-webkit-input-placeholder {
-      //   /* WebKit browsers */
-      //   color: #888;
-      // }
-      // input:-moz-placeholder {
-      //   /* Mozilla Firefox 4 to 18 */
-      //   color: #888;
-      // }
+      input::-webkit-input-placeholder {
+        /* WebKit browsers */
+        color: #888;
+      }
+      input:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: #888;
+      }
 
-      // input::-moz-placeholder {
-      //   /* Mozilla Firefox 19+ */
-      //   color: #888;
-      // }
+      input::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: #888;
+      }
 
-      // input:-ms-input-placeholder {
-      //   /* Internet Explorer 10+ */
-      //   color: #888;
-      // }
+      input:-ms-input-placeholder {
+        /* Internet Explorer 10+ */
+        color: #888;
+      }
     }
     .item1 {
       padding: 0 30px;

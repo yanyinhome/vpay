@@ -35,11 +35,11 @@ export default {
   name: "Cardmes",
   data() {
     return {
-      bank: '',
-      branch: '',
-      name: '',
-      number: '',
-      checkbox: false,
+      bank: "",
+      branch: "",
+      name: "",
+      number: "",
+      checkbox: false
     };
   },
 
@@ -50,11 +50,11 @@ export default {
   mounted() {},
 
   methods: {
-    addCard(){
+    addCard() {
       // 验证银行卡
       let cardReg = /^([1-9]{1})(\d{15}|\d{18})$/;
-			if (!this.bank){
-        this.$bus.$emit('toast', '开户行不能为空');       
+      if (!this.bank) {
+        this.$bus.$emit("toast", "开户行不能为空");
       } else if (!this.branch) {
         this.$bus.$emit("toast", "开户支行不能为空");
       } else if (!this.name) {
@@ -63,30 +63,29 @@ export default {
         this.$bus.$emit("toast", "请输入银行卡号");
       } else if (!cardReg.test(this.number)) {
         this.$bus.$emit("toast", "你输入的银行卡号不合法");
-      } else{
+      } else {
         this.axios
-        .post("user/addbank", {
-          token: this.token(),
-          bank_name: this.name,
-          open_bank: this.bank,
-          bank_num: this.number,
-          bank_address: this.branch,
-          checkbox: this.checkbox
-        })
-        .then(({ data }) => {
-          console.log(data);
-          if (data.code == "200") {
-            this.$router.push('myCardlist');
-            this.$bus.$emit("toast", data.msg);
-          } else if (data.code == "204") {
-            this.$bus.$emit("toast", data.msg);
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+          .post("user/addbank", {
+            token: this.token(),
+            bank_name: this.name,
+            open_bank: this.bank,
+            bank_num: this.number,
+            bank_address: this.branch,
+            checkbox: this.checkbox
+          })
+          .then(({ data }) => {
+            console.log(data);
+            if (data.code == "200") {
+              this.$router.push("myCardlist");
+              this.$bus.$emit("toast", data.msg);
+            } else if (data.code == "204") {
+              this.$bus.$emit("toast", data.msg);
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
       }
-      
     }
   }
 };
@@ -149,9 +148,9 @@ export default {
       color: #979797;
       font-size: 36px;
     }
-    .icon-fuxuankuang{
-        color: #EACDA3;
-        font-size: 36px;
+    .icon-fuxuankuang {
+      color: #eacda3;
+      font-size: 36px;
     }
   }
 }
