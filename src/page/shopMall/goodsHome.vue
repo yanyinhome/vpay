@@ -7,7 +7,7 @@
         </div>
         <div class="right">
           <p>UID：{{user.UID}}</p>
-          <p>注册币：{{user.grade}}</p>
+          <p>注册币：{{grade}}</p>
         </div>
       </router-link>
       <router-link class="iconfont icon-sousuo" tag="i" to="search"></router-link>
@@ -39,8 +39,8 @@ export default {
       user: {
         img: "",
         UID: "",
-        grade: ""
       },
+      grade: "",
       goods: []
     };
   },
@@ -65,6 +65,7 @@ export default {
             this.user.img = data.data.head_img;
             this.user.UID = data.data.UID;
             this.goods = data.data.goods;
+            this.grade = data.data.reg_num;
           } else if (data.code == "204") {
             this.$bus.$emit("toast", data.msg);
           }

@@ -51,8 +51,6 @@ export default {
     // 生成二维码
     qrcode() {
       var canvas = document.getElementById("canvas");
-      // const ctx = canvas.getContext('2d');
-      // ctx.lineTo(100,100);
       QRCode.toCanvas(canvas, this.url, function(error) {
         if (error) console.error(error);
       });

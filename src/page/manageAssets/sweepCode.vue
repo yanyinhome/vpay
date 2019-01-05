@@ -3,7 +3,7 @@
     <com-head :opacity="0">扫一扫</com-head>
     <div class="scan" v-if="show">
       <div id="bcid">
-        <div style="height:40%,width:100%"></div>
+        <div class="box"></div>
         <p class="tip">...载入中...</p>
       </div>
       <p class="code">将二维码放入框内</p>
@@ -20,18 +20,18 @@
 <script>
 let scan = null;
 //点手机虚拟返回键
-// document.addEventListener("plusready", function() {
-//   // 注册返回按键事件
-//   plus.key.addEventListener(
-//     "backbutton",
-//     function() {
-//       // 事件处理
-//       scan.close(); //关闭条码识别控件
-//       window.history.back();
-//     },
-//     false
-//   );
-// });
+document.addEventListener("plusready", function() {
+  // 注册返回按键事件
+  plus.key.addEventListener(
+    "backbutton",
+    function() {
+      // 事件处理
+      scan.close(); //关闭条码识别控件
+      window.history.back();
+    },
+    false
+  );
+});
 export default {
   name: "sweepCode",
   data() {
@@ -113,16 +113,20 @@ export default {
   color: #fff;
   .scan {
     height: 100%;
+    width: 100vw;
     #bcid {
-      width: 100%;
+      width: 100vw;
       position: absolute;
       left: 0;
       right: 0;
-      top: 0;
-      // bottom: 3rem;
+      top: 82px;
       height: 60vh;
       text-align: center;
       background: #000;
+      .box {
+        height:40%;
+        width:100%;
+      }
     }
     footer {
       position: absolute;
