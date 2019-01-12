@@ -54,7 +54,8 @@ export default {
       QRCode.toCanvas(canvas, this.url, function(error) {
         if (error) console.error(error);
       });
-    },
+    }, 
+    
     loading() {
       this.axios
         .post("/user/share", {

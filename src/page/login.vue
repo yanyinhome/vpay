@@ -154,6 +154,8 @@ export default {
             account: this.tel
           })
           .then(({ data }) => {
+            console.log(22);
+
             if (data.code == "200") {
               this.sendSMSTime = 60;
               this.isSend = true;
