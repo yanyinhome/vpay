@@ -8,6 +8,18 @@
 </template>
 
 <script>
+//点手机虚拟返回键
+document.addEventListener("plusready", function() {
+  // 注册返回按键事件
+  plus.key.addEventListener(
+    "backbutton",
+    function() {
+      // 事件处理
+      window.history.back();
+    },
+    false
+  );
+});
 import toast from "./components/toast";
 import alert from "./components/alert";
 export default {
@@ -83,6 +95,7 @@ export default {
 <style lang="scss">
 @import "./assets/scss/reset.scss";
 @import "./assets/scss/common_style.scss";
+@import "./assets/iconfont/iconfont.css";
 #app {
   width: 100%;
   min-height: 100vh;

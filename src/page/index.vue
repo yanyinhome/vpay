@@ -82,10 +82,10 @@
       </div>
       <div class="turnto turnto1">
         <div class="box1">
-          <div class="item" @click="warn">
+          <router-link class="item" tag="div" to="eChain">
             <img src="../assets/image/zichan.png">
             <div>e家公链</div>
-          </div>
+          </router-link>
           <router-link class="item" tag="div" to="goodsHome">
             <img src="../assets/image/shoping.png">
             <div>藏宝阁</div>

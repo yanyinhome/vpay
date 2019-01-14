@@ -41,7 +41,8 @@
         </div>
         <div class="item">
           <i class="iconfont icon-yaoqingma"/>
-          <input type="text" v-model="code" placeholder="请输入邀请码">
+          <input v-if="!this.$route.query.UID" type="text" v-model="code" placeholder="请输入邀请码">
+          <input v-else type="text" v-model="code" placeholder="请输入邀请码" readonly>
         </div>
         <div class="jiantou" @click="resSubmit">
           <img src="../assets/image/jiantou.png">
@@ -74,7 +75,16 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    if(!this.$route.query.UID){
+      this.register = false;
+      this.login = true;
+    } else {
+      this.register = true;
+      this.login = false;
+      this.code = this.$route.query.UID;
+    }
+  },
 
   mounted() {},
 

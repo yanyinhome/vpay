@@ -33,8 +33,8 @@ export default {
         {
           iconfont: require("../assets/image/nav21.png"),
           iconfont1: require("../assets/image/nav22.png"),
-          name: "e家公链"
-          // route: '/assets'
+          name: "e家公链",
+          route: '/eChain'
         },
         {
           iconfont: require("../assets/image/nav31.png"),

@@ -20,18 +20,18 @@
 <script>
 let scan = null;
 //点手机虚拟返回键
-document.addEventListener("plusready", function() {
-  // 注册返回按键事件
-  plus.key.addEventListener(
-    "backbutton",
-    function() {
-      // 事件处理
-      scan.close(); //关闭条码识别控件
-      window.history.back();
-    },
-    false
-  );
-});
+// document.addEventListener("plusready", function() {
+//   // 注册返回按键事件
+//   plus.key.addEventListener(
+//     "backbutton",
+//     function() {
+//       // 事件处理
+//       scan.close(); //关闭条码识别控件
+//       window.history.back();
+//     },
+//     false
+//   );
+// });
 export default {
   name: "sweepCode",
   data() {

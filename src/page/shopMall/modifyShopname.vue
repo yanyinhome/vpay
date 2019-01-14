@@ -68,7 +68,7 @@ export default {
     text-align: center;
     color: #d6ae7b;
     line-height: 80px;
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 0;
     z-index: 100;

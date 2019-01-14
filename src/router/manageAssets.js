@@ -13,6 +13,9 @@ import sellCenter from '../page/manageAssets/sellCenter.vue';       //买出中�
 import uploadImg from '../page/manageAssets/uploadImg.vue';         //上传打款截图页面
 import translateIntegral from '../page/manageAssets/translateIntegral.vue';   //余额兑换积分
 
+import eChain from '../page/manageAssets/eChain.vue';   //e家公链
+import eChaindetail from '../page/manageAssets/eChaindetail.vue';   //e家公链详情
+
 
 import sweepCode from '../page/manageAssets/sweepCode.vue';   //扫码  
 
@@ -66,13 +69,15 @@ export default [
         path: '/uploadImg',
         component: uploadImg,
         name: 'uploadImg'
-    },
-    
-    
-    
-    
-    
-    {
+    },{
+        path: '/eChain',
+        component: eChain,
+        name: 'eChain'
+    },{
+        path: '/eChaindetail',
+        component: eChaindetail,
+        name: 'eChaindetail'
+    },{
         path: '/sweepCode',
         component: sweepCode,
         name: 'sweepCode',

@@ -16,6 +16,9 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 
+// import Mui from 'vue-awesome-mui';
+// Vue.use(Mui);
+
 //引入mint-ui
 import Mint from 'mint-ui';
 import 'mint-ui/lib/style.css';
@@ -144,8 +147,8 @@ Vue.prototype.moneyCheck = function () {
 
 // axios请求
 Vue.prototype.axios = axios.create({
-  baseURL: 'http://swyj.cadhx.com/api/',
-  // baseURL: 'http://www.3wej.com/api/',
+  // baseURL: 'http://swyj.cadhx.com/api/',
+  baseURL: 'http://www.3wej.com/api/',
   timeout: 10000,
   withCredentials: false,
   transformRequest: [function (data) {

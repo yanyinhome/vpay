@@ -137,7 +137,7 @@ export default {
     text-align: center;
     color: #fff;
     line-height: 80px;
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 0;
     z-index: 100;
