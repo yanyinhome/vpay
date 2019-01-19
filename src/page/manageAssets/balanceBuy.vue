@@ -58,7 +58,7 @@ export default {
     this.loading();
     if (this.status === "1") {
       //挂卖
-      this.name = "提现";
+      this.name = "挂提";
       this.itemnav = [
         "创建订单",
         "未匹配订单",
@@ -106,6 +106,7 @@ export default {
       }, 1000);
       if (this.status === "1") {
         //挂卖
+        // this.$bus.$emit("toast", '功能开发中，暂未开放');
         this.axios
           .post("transaction/dotran", {
             token: this.token(),
@@ -151,6 +152,7 @@ export default {
     activeNav(index) {
       this.active = index;
       if (this.status === "1") {
+        // this.$bus.$emit("toast", '功能开发中，暂未开放');
         //挂卖
         if (index == "1" || index == "2" || index == "3") {
           //未匹配，已匹配，已完成

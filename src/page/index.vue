@@ -53,7 +53,7 @@
         </div>
         <div class="box xia">
           <router-link class="item item1" tag="div" :to="{name:'balanceBuy',query:{status: '1'}}">
-            <img src="../assets/image/sell.png">提现
+            <img src="../assets/image/sell.png">挂提
           </router-link>
           <router-link class="item" tag="div" :to="{name:'balanceBuy',query:{status: '2'}}">
             <img src="../assets/image/buy.png">购买
