@@ -20,7 +20,7 @@
         <p>{{item.create_time}}</p>
       </div>
     </div>
-    <div v-if="!log.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
+    <div v-if="!log.length&&isRequest" style="margin-top: 30vh; text-align: center;">暂无信息</div>
   </div>
 </template>
 
@@ -29,6 +29,7 @@ export default {
   name: "turnOutlog",
   data() {
     return {
+      isRequest: false,
       status: this.$route.query.status,
       name: "",
       log: []
@@ -72,6 +73,7 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
+          this.isRequest = true;
           if (data.code === "200") {
             this.log = data.data;
           } else if (data.code === "204") {
@@ -92,6 +94,7 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
+          this.isRequest = true;
           if (data.code === "200") {
             this.log = data.data;
           } else if (data.code === "204") {
@@ -111,6 +114,7 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
+          this.isRequest = true;
           if (data.code === "200") {
             this.log = data.data;
           } else if (data.code === "204") {

@@ -417,6 +417,8 @@ export default {
           align-items: center;
           img {
             width: 100%;
+            vertical-align: middle;
+            height: 130px;
           }
         }
         .goodsmes {

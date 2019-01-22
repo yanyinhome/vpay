@@ -142,6 +142,8 @@ export default {
       height: 690px;
       img {
         width: 100%;
+        vertical-align: middle;
+        height: 100%;
       }
     }
     p:nth-of-type(1) {
@@ -198,6 +200,7 @@ export default {
         align-items: center;
         img {
           width: 100%;
+          height: 100%;
         }
       }
       .right {

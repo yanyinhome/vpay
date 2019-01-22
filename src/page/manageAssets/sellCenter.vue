@@ -37,7 +37,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!message.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
+    <div v-if="!message.length&&isRequest" style="margin-top: 30vh; text-align: center;">暂无信息</div>
   </div>
 </template>
 
@@ -46,6 +46,7 @@ export default {
   name: "sellCenter",
   data() {
     return {
+      isRequest: false,
       isDisable: false,
       show: false,
       message: [],
@@ -82,6 +83,7 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
+          this.isRequest = true;
           if (data.code === "200") {
             this.message = data.data;
           } else if (data.code === "204") {

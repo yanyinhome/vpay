@@ -236,6 +236,7 @@ export default {
         // display: flex;
         // justify-content: space-between;
         // align-items: center;
+        z-index: 9999;
         .boxmes {
           width: 450px;
           padding-top: 20px;
@@ -253,6 +254,7 @@ export default {
             overflow: hidden;
             img {
               width: 100%;
+              height: 100%;
             }
           }
           .right p {

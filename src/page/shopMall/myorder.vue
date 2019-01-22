@@ -29,7 +29,7 @@
         <button class="noborder" v-if="status=='2'" @click="sureReceive(item.id)">确定收货</button>
       </div>
     </div>
-    <div v-if="!message.length" style="margin-top: 15vh; text-align: center;">暂无订单信息</div>
+    <div v-if="!message.length&&isRequest" style="margin-top: 15vh; text-align: center;">暂无订单信息</div>
   </div>
 </template>
 
@@ -38,6 +38,7 @@ export default {
   name: "myorder",
   data() {
     return {
+      isRequest: false,
       mask: false,
       status: 0,
       search: "",
@@ -73,6 +74,7 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
+          this.isRequest = true;
           if (data.code === "200") {
             this.message = data.data.order;
           } else if (data.code === "201") {

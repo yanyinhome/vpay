@@ -1,43 +1,31 @@
 <template>
   <div id="buyCenter">
     <com-head :opacity="0">买入中心</com-head>
-    <div class="more"  style="height:100vh;overflow: scroll;-webkit-overflow-scrolling': scrollMode">
-      <mt-loadmore
-        :top-method="loadTop"
-        :bottom-method="loadBottom"
-        bottomLoadingText
-        topDropText
-        :bottomAllLoaded="allLoaded"
-        :autoFill="true"
-        :bottomDistance="70"
-        ref="loadmore"
-      >
-        <ul>
-          <div class="buyCenter" v-for="(item,index) in message" :key="index"  style="height:100px;">
-            <div class="box1">
-              <img :src="item.head_img">
-            </div>
-            <div class="box2">
-              <p>{{item.UID}}</p>
-              <p>{{item.create_time}}</p>
-            </div>
-            <div class="box3">
-              <p>金额：{{item.num}}</p>
-              <!-- <p>实付金额：{{item.create_time}}</p> -->
-              <div>
-                <button @click="showAlert(item.rate,item.id)">买入</button>
-              </div>
-            </div>
-          </div>
-          <!-- <div>
-  <div v-html="page"></div>
-          </div>-->
-        </ul>
-      </mt-loadmore>
+    <div class="account1">
+      <input type="text" v-model="userUID" placeholder="请输入用户UID">
+      <button @click="searchUID">搜索</button>
     </div>
+    <my-scroll :on-refresh="onRefresh" :on-infinite="onInfinite">
+      <div class="buyCenter" v-for="(item,index) in message" :key="index">
+        <div class="box1">
+          <img :src="item.head_img">
+        </div>
+        <div class="box2">
+          <p>{{item.UID}}</p>
+          <p>{{item.create_time}}</p>
+        </div>
+        <div class="box3">
+          <p>金额：{{item.num}}</p>
+          <!-- <p>实付金额：{{item.create_time}}</p> -->
+          <div>
+            <button @click="showAlert(item.rate,item.id)">买入</button>
+          </div>
+        </div>
+      </div>
+    </my-scroll>
 
-    <!-- <div class="show" v-show="show"> -->
-    <!-- <div class="box">
+    <div class="show" v-show="show">
+      <div class="box">
         <div class="item">
           购买金额：
           <input type="text" v-model="money" placeholder="请输入购买金额" @blur="moneyCheck()">
@@ -54,17 +42,19 @@
           <button :disabled="isDisable" @click="buySome()">确定</button>
           <button @click="show=false">取消</button>
         </div>
-    </div>-->
-    <!-- </div> -->
-    <div v-if="!message.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
+      </div>
+    </div>
+    <div v-if="!message.length&&isRequest" style="margin-top: 30vh; text-align: center;">暂无信息</div>
   </div>
 </template>
 
 <script>
+import myScroll from "@/components/loadScroll.vue";
 export default {
   name: "buyCenter",
   data() {
     return {
+      isRequest: false,
       isDisable: false,
       show: false,
       id: "",
@@ -72,9 +62,8 @@ export default {
       rate: "",
       money: "",
       password: "",
-      page: "1",
-      allLoaded: false,
-      scrollMode:"auto"
+      userUID: "",
+      page: ""
     };
   },
 
@@ -94,27 +83,28 @@ export default {
   },
 
   mounted() {},
-
+  components: {
+    "my-scroll": myScroll
+  },
   methods: {
-    loadTop() {
-      // 加载更多数据
-      // if (this.page>1) this.page--;
-      // this.page = "1";
+    onRefresh(done) {
+      // 3. 在刷新方法内部进行自己的逻辑处理 此处调用了后台接口
+      this.page = "1";
       // console.log(this.page);
-      // this.message = [];
-      // this.loading();
-      // this.$refs.loadmore.onTopLoaded();
+      this.message = [];
+      this.loading(done);
     },
-    loadBottom() {
-      // 加载更多数据
-      // console.log(789);
-      // this.page++;
+    onInfinite(done) {
+      // console.log(66);
+      this.page++;
       // console.log(this.page);
-      // this.loading();
-      // this.allLoaded = true; // 若数据已全部获取完毕
-      this.$refs.loadmore.onBottomLoaded();
+      this.loading(done);
+      let more = this.$el.querySelector('.load-more')
+      more.style.display = 'none'; //隐藏加载条
+      // this.onInfinitePort(done);
     },
-    loading() {
+
+    loading(done) {
       this.axios
         .post("transaction/record", {
           token: this.token(),
@@ -123,11 +113,35 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
+          this.isRequest = true;
           if (data.code === "200") {
             this.message = this.message.concat(data.data);
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           }
+          done();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    // 搜索UID
+    searchUID() {
+      this.axios
+        .post("transaction/record", {
+          token: this.token(),
+          type: "1",
+          keyword: this.userUID
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code === "200") {
+            this.message = data.data;
+          } else if (data.code === "205") {
+            this.message = data.data;
+            this.$bus.$emit("toast", data.msg);
+          }
+          done();
         })
         .catch(error => {
           console.log(error);
@@ -170,11 +184,9 @@ export default {
       }
     },
     showAlert(rate, id) {
-      console.log(123);
-      this.show = true;
       this.id = id;
       this.rate = rate;
-      console.log(this.show);
+      this.show = true;
     }
   }
 };
@@ -182,11 +194,55 @@ export default {
 <style lang='scss' scoped>
 #buyCenter {
   padding-top: 82px;
+  padding-bottom: 80px;
   color: #fff;
-  .more {
-    height: 100vh;
-    overflow: scroll;
-    background-color: red;
+  .account1 {
+    width: 690px;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    margin-left: 30px;
+    button {
+      margin-top: 0px;
+      width: 106px;
+      height: 48px;
+      background: linear-gradient(
+        90deg,
+        rgba(214, 174, 123, 1) 0%,
+        rgba(238, 204, 153, 1) 100%
+      );
+      border-radius: 6px;
+    }
+    input {
+      margin-right: 50px;
+      padding-left: 30px;
+      box-sizing: border-box;
+      width: 100%;
+      line-height: 80px;
+      background: rgb(65, 64, 64);
+      border-radius: 10px;
+      color: #fff;
+    }
+    input::-webkit-input-placeholder {
+      /* WebKit browsers */
+      color: #999;
+    }
+    input:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      color: #999;
+    }
+
+    input::-moz-placeholder {
+      /* Mozilla Firefox 19+ */
+      color: #999;
+    }
+
+    input:-ms-input-placeholder {
+      /* Internet Explorer 10+ */
+      color: #999;
+    }
   }
   .buyCenter {
     margin-top: 20px;
@@ -219,20 +275,6 @@ export default {
         color: rgba(255, 255, 255, 1);
         line-height: 40px;
       }
-      // p:nth-of-type(2) {
-      //   font-size: 24px;
-      //   font-family: PingFangSC-Regular;
-      //   font-weight: 400;
-      //   color: rgba(177, 177, 177, 1);
-      //   line-height: 40px;
-      //   display: flex;
-      //   align-items: center;
-      //   img {
-      //     display: inline-block;
-      //     width: 26px;
-      //     height: 26px;
-      //   }
-      // }
       p:nth-of-type(2) {
         font-size: 22px;
         font-family: PingFangSC-Regular;
@@ -266,71 +308,71 @@ export default {
         border-radius: 6px;
       }
     }
-    .show {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 9999;
-      background: rgba(0, 0, 0, 0.6);
-      .box {
-        width: 590px;
-        box-sizing: border-box;
-        padding: 30px 40px;
-        background: rgba(63, 63, 63, 1);
-        border-radius: 10px;
-        position: absolute;
-        top: 22%;
-        left: 80px;
-        text-align: center;
-        .item {
-          margin-top: 20px;
-          height: 80px;
-          line-height: 80px;
-          border-bottom: 1px solid #666;
-          input {
-            margin-left: 20px;
-            color: #fff;
-            width: 320px;
-            background: transparent;
-          }
-          input::-webkit-input-placeholder {
-            /* WebKit browsers */
-            color: #888;
-          }
-          input:-moz-placeholder {
-            /* Mozilla Firefox 4 to 18 */
-            color: #888;
-          }
-
-          input::-moz-placeholder {
-            /* Mozilla Firefox 19+ */
-            color: #888;
-          }
-
-          input:-ms-input-placeholder {
-            /* Internet Explorer 10+ */
-            color: #888;
-          }
+  }
+  .show {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.6);
+    .box {
+      width: 590px;
+      box-sizing: border-box;
+      padding: 30px 40px;
+      background: rgba(63, 63, 63, 1);
+      border-radius: 10px;
+      position: absolute;
+      top: 22%;
+      left: 80px;
+      text-align: center;
+      .item {
+        margin-top: 20px;
+        height: 80px;
+        line-height: 80px;
+        border-bottom: 1px solid #666;
+        input {
+          margin-left: 20px;
+          color: #fff;
+          width: 320px;
+          background: transparent;
         }
-        .item1 {
-          border-bottom: none;
+        input::-webkit-input-placeholder {
+          /* WebKit browsers */
+          color: #888;
         }
-        .item2 {
-          margin-top: 50px;
-          display: flex;
-          justify-content: space-around;
-          button {
-            width: 180px;
-            line-height: 70px;
-            background: linear-gradient(
-              90deg,
-              rgba(214, 174, 123, 1) 0%,
-              rgba(238, 204, 153, 1) 100%
-            );
-            border-radius: 10px;
-          }
+        input:-moz-placeholder {
+          /* Mozilla Firefox 4 to 18 */
+          color: #888;
+        }
+
+        input::-moz-placeholder {
+          /* Mozilla Firefox 19+ */
+          color: #888;
+        }
+
+        input:-ms-input-placeholder {
+          /* Internet Explorer 10+ */
+          color: #888;
+        }
+      }
+      .item1 {
+        border-bottom: none;
+      }
+      .item2 {
+        margin-top: 50px;
+        display: flex;
+        justify-content: space-around;
+        button {
+          width: 180px;
+          line-height: 70px;
+          background: linear-gradient(
+            90deg,
+            rgba(214, 174, 123, 1) 0%,
+            rgba(238, 204, 153, 1) 100%
+          );
+          border-radius: 10px;
         }
       }
     }

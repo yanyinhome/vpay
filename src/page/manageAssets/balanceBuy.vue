@@ -26,7 +26,7 @@
           >{{item}}</div>
         </div>
       </div>
-      <div class="account">
+      <div class="accounq">
         <input type="password" v-model="account" placeholder="请输入二级密码">
       </div>
       <com-button :click="balanceBuy" :disabled="isDisable">创建订单</com-button>
@@ -241,7 +241,7 @@ export default {
       background: rgba(214, 174, 123, 1);
     }
   }
-  .account {
+  .accounq {
     width: 690px;
     height: 80px;
     margin: 30px auto;

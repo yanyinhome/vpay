@@ -21,7 +21,7 @@
         <div :class="{active: status=='3'}" @click="listSelect4()">已完成</div>
       </div>
     </div>
-    <div v-if="!message.length" style="margin-top: 15vh; text-align: center;">暂无订单信息</div>
+    <div v-if="!message.length&&isRequest" style="margin-top: 15vh; text-align: center;">暂无订单信息</div>
     <div class="order" v-for="(item,index) in message" :key="index">
       <div class="orderTop">
         <div class="box1">{{item.buyname}}</div>
@@ -96,6 +96,7 @@ export default {
   name: "shopOrder",
   data() {
     return {
+      isRequest: false,
       mask: false,
       status: "0",
       fa: "",
@@ -135,6 +136,7 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
+          this.isRequest = true;
           if (data.code === "200") {
             this.message = data.data.order;
             this.fa = data.data.fa;

@@ -176,6 +176,8 @@ export default {
         overflow: hidden;
         img {
           width: 100%;
+          vertical-align: middle;
+          height: 334px;
         }
       }
     }

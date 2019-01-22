@@ -90,7 +90,7 @@ export default {
     width: 100%;
     position: fixed;
     top: 0px;
-    left: 30px;
+    left: 25px;
     background: #14171a;
     .boxmes {
       padding: 20px 0;
@@ -107,6 +107,7 @@ export default {
         align-items: center;
         img {
           width: 100%;
+          height: 100%;
         }
       }
       .right p {
@@ -151,6 +152,8 @@ export default {
         overflow: hidden;
         img {
           width: 100%;
+          vertical-align: middle;
+          height: 334px;
         }
       }
     }

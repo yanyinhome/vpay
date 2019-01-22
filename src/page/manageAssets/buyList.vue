@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!message.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
+    <div v-if="!message.length&&isRequest" style="margin-top: 30vh; text-align: center;">暂无信息</div>
   </div>
 </template>
 
@@ -35,6 +35,7 @@ export default {
   name: "buyList",
   data() {
     return {
+      isRequest: false,
       name: "",
       status: this.$route.query.status,
       show: false,
@@ -78,6 +79,7 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
+          this.isRequest = true;
           if (data.code === "200") {
             this.img = data.data.head_img;
             this.UID = data.data.UID;
@@ -103,6 +105,7 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
+          this.isRequest = true;
           if (data.code === "200") {
             this.message = data.data.log;
           } else if (data.code === "204") {
@@ -123,6 +126,7 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
+          this.isRequest = true;
           if (data.code === "200") {
             this.message = data.data.log;
           } else if (data.code === "204") {
