@@ -1,42 +1,61 @@
 <template>
   <div id="buyCenter">
     <com-head :opacity="0">买入中心</com-head>
-    <div class="buyCenter" v-for="(item,index) in message" :key="index">
-      <div class="box1">
-        <img :src="item.head_img">
-      </div>
-      <div class="box2">
-        <p>{{item.UID}}</p>
-        <p>{{item.create_time}}</p>
-      </div>
-      <div class="box3">
-        <p>金额：{{item.num}}</p>
-        <!-- <p>实付金额：{{item.create_time}}</p> -->
-        <div>
-          <button @click="showAlert(item.rate,item.id)">买入</button>
-        </div>
-      </div>
-      <div class="show" v-show="show">
-        <div class="box">
-          <div class="item">
-            购买金额：
-            <input type="text" v-model="money" placeholder="请输入购买金额" @blur="moneyCheck()">
+    <div class="more"  style="height:100vh;overflow: scroll;-webkit-overflow-scrolling': scrollMode">
+      <mt-loadmore
+        :top-method="loadTop"
+        :bottom-method="loadBottom"
+        bottomLoadingText
+        topDropText
+        :bottomAllLoaded="allLoaded"
+        :autoFill="true"
+        :bottomDistance="70"
+        ref="loadmore"
+      >
+        <ul>
+          <div class="buyCenter" v-for="(item,index) in message" :key="index"  style="height:100px;">
+            <div class="box1">
+              <img :src="item.head_img">
+            </div>
+            <div class="box2">
+              <p>{{item.UID}}</p>
+              <p>{{item.create_time}}</p>
+            </div>
+            <div class="box3">
+              <p>金额：{{item.num}}</p>
+              <!-- <p>实付金额：{{item.create_time}}</p> -->
+              <div>
+                <button @click="showAlert(item.rate,item.id)">买入</button>
+              </div>
+            </div>
           </div>
-          <div class="item item1">
-            实付金额：
-            <input type="text" v-model="payment">
-          </div>
-          <div class="item">
-            支付密码：
-            <input type="password" v-model="password" placeholder="请输入支付密码">
-          </div>
-          <div class="item item1 item2">
-            <button :disabled="isDisable" @click="buySome()">确定</button>
-            <button @click="show=false">取消</button>
-          </div>
-        </div>
-      </div>
+          <!-- <div>
+  <div v-html="page"></div>
+          </div>-->
+        </ul>
+      </mt-loadmore>
     </div>
+
+    <!-- <div class="show" v-show="show"> -->
+    <!-- <div class="box">
+        <div class="item">
+          购买金额：
+          <input type="text" v-model="money" placeholder="请输入购买金额" @blur="moneyCheck()">
+        </div>
+        <div class="item item1">
+          实付金额：
+          <input type="text" v-model="payment">
+        </div>
+        <div class="item">
+          支付密码：
+          <input type="password" v-model="password" placeholder="请输入支付密码">
+        </div>
+        <div class="item item1 item2">
+          <button :disabled="isDisable" @click="buySome()">确定</button>
+          <button @click="show=false">取消</button>
+        </div>
+    </div>-->
+    <!-- </div> -->
     <div v-if="!message.length" style="margin-top: 30vh; text-align: center;">暂无信息</div>
   </div>
 </template>
@@ -52,7 +71,10 @@ export default {
       message: [],
       rate: "",
       money: "",
-      password: ""
+      password: "",
+      page: "1",
+      allLoaded: false,
+      scrollMode:"auto"
     };
   },
 
@@ -74,16 +96,35 @@ export default {
   mounted() {},
 
   methods: {
+    loadTop() {
+      // 加载更多数据
+      // if (this.page>1) this.page--;
+      // this.page = "1";
+      // console.log(this.page);
+      // this.message = [];
+      // this.loading();
+      // this.$refs.loadmore.onTopLoaded();
+    },
+    loadBottom() {
+      // 加载更多数据
+      // console.log(789);
+      // this.page++;
+      // console.log(this.page);
+      // this.loading();
+      // this.allLoaded = true; // 若数据已全部获取完毕
+      this.$refs.loadmore.onBottomLoaded();
+    },
     loading() {
       this.axios
         .post("transaction/record", {
           token: this.token(),
-          type: "1"
+          type: "1",
+          page: this.page
         })
         .then(({ data }) => {
           console.log(data);
           if (data.code === "200") {
-            this.message = data.data;
+            this.message = this.message.concat(data.data);
           } else if (data.code === "204") {
             this.$bus.$emit("toast", data.msg);
           }
@@ -129,9 +170,11 @@ export default {
       }
     },
     showAlert(rate, id) {
+      console.log(123);
+      this.show = true;
       this.id = id;
       this.rate = rate;
-      this.show = true;
+      console.log(this.show);
     }
   }
 };
@@ -140,6 +183,11 @@ export default {
 #buyCenter {
   padding-top: 82px;
   color: #fff;
+  .more {
+    height: 100vh;
+    overflow: scroll;
+    background-color: red;
+  }
   .buyCenter {
     margin-top: 20px;
     width: 750px;
@@ -224,7 +272,7 @@ export default {
       left: 0;
       width: 100vw;
       height: 100vh;
-      z-index: 50;
+      z-index: 9999;
       background: rgba(0, 0, 0, 0.6);
       .box {
         width: 590px;
@@ -240,7 +288,7 @@ export default {
           margin-top: 20px;
           height: 80px;
           line-height: 80px;
-          border-bottom: 1Px solid #666;
+          border-bottom: 1px solid #666;
           input {
             margin-left: 20px;
             color: #fff;
