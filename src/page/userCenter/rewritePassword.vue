@@ -57,7 +57,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.about = data.data.about;
           } else if (data.code == "204") {
@@ -92,7 +92,7 @@ export default {
           newpwd: this.newpass1.replace(/\s/g, "")
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.$bus.$emit("comAlert", {
               title: "温馨提示",

@@ -82,7 +82,7 @@ export default {
           type: "2"
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.isRequest = true;
           if (data.code === "200") {
             this.message = data.data;
@@ -117,7 +117,7 @@ export default {
             sale_code: this.password
           })
           .then(({ data }) => {
-            console.log(data);
+            
             if (data.code === "200") {
               this.show = false;
               this.$router.go(-1);

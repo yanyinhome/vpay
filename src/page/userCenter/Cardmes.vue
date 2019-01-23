@@ -74,7 +74,7 @@ export default {
             checkbox: this.checkbox
           })
           .then(({ data }) => {
-            console.log(data);
+            
             if (data.code == "200") {
               this.$router.push("myCardlist");
               this.$bus.$emit("toast", data.msg);

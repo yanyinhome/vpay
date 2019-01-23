@@ -144,7 +144,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.shop = data.data.shop;
             this.yulan = data.data.shop.img;
@@ -176,7 +176,7 @@ export default {
           id: this.goodid
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.goodindex = -1;
           if (data.code === "200") {
             this.message.splice(this.goodindex, 1);
@@ -204,7 +204,7 @@ export default {
             id: this.goodid
           })
           .then(({ data }) => {
-            console.log(data);
+            
             this.goodindex = -1;
             if (data.code === "200") {
               this.loading();
@@ -224,7 +224,7 @@ export default {
             id: this.goodid
           })
           .then(({ data }) => {
-            console.log(data);
+            
             this.goodindex = -1;
             if (data.code === "200") {
               this.loading();
@@ -260,7 +260,7 @@ export default {
           img: this.imgbase[0]
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.$bus.$emit("toast", data.msg);
           } else if (data.code === "204") {

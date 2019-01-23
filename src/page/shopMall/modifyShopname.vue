@@ -37,7 +37,7 @@ export default {
             name: this.name
           })
           .then(({ data }) => {
-            console.log(data);
+            
             if (data.code === "200") {
               this.$bus.$emit("toast", data.msg);
               this.$router.push("shoplist");

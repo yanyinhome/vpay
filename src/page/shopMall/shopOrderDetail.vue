@@ -110,7 +110,7 @@ export default {
           id: this.id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.message1 = data.data.buy;
             this.message2 = data.data.sell;

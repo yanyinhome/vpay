@@ -123,7 +123,7 @@ export default {
           id: this.$route.query.id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.goods = data.data.goods;
             if (localStorage.message) {
@@ -155,7 +155,7 @@ export default {
         })
         .then(({ data }) => {
           this.show = false;
-          console.log(data);
+          
           if (data.code == "200") {
             localStorage.removeItem("message");
             this.$router.push("buySuccess");

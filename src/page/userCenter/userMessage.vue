@@ -56,7 +56,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.phone = data.data.phone;
             this.yulan = data.data.head_img;
@@ -75,7 +75,7 @@ export default {
           head_img: this.imgbase[0]
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.$router.push("index");
             this.$bus.$emit("toast", data.msg);

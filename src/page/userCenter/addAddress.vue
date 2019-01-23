@@ -123,7 +123,7 @@ export default {
           id: this.$route.query.id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.name = data.data.name;
             this.phone = data.data.phone;
@@ -172,7 +172,7 @@ export default {
           address: this.content
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.$router.push("myAddress");
             this.$bus.$emit("toast", data.msg);
@@ -196,7 +196,7 @@ export default {
           address: this.content
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.$router.push("myAddress");
             this.$bus.$emit("toast", data.msg);

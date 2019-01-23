@@ -32,7 +32,7 @@
         <img :src="lookimg">
       </div>
       <div class="box3">
-        <button @click="sureReceive">确认收款</button>
+        <button :disabled="isDisabled" @click="sureReceive">确认收款</button>
         <button @click="mask=false">取消</button>
       </div>
       <div class="box2" @click="mask=false">
@@ -48,6 +48,7 @@ export default {
   name: "sellList",
   data() {
     return {
+      isDisabled: false,
       isRequest: false,
       mask: false,
       name: "",
@@ -94,7 +95,7 @@ export default {
           type: "1"
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.isRequest = true;
           if (data.code === "200") {
             this.img = data.data.head_img;
@@ -120,7 +121,7 @@ export default {
           type: "1"
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.isRequest = true;
           if (data.code === "200") {
             this.message = data.data.log;
@@ -141,7 +142,7 @@ export default {
           type: "1"
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.isRequest = true;
           if (data.code === "200") {
             this.message = data.data.log;
@@ -164,7 +165,7 @@ export default {
           id: id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.mask = true;
             this.lookimg = data.data.imgurl;
@@ -178,13 +179,17 @@ export default {
     },
     // 确认收款
     sureReceive() {
+      this.isDisabled = true;
+      setTimeout(() => {
+        this.isDisabled = false;
+      }, 2000);
       this.axios
         .post("transaction/sub_order", {
           token: this.token(),
           id: this.id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.$router.go(-1);
             this.$bus.$emit("toast", data.msg);
@@ -204,7 +209,7 @@ export default {
           id: id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.message.splice(index, 1);
             this.$bus.$emit("toast", data.msg);

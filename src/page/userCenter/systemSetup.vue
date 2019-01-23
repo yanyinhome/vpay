@@ -49,7 +49,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.edition = data.data.edtion;
           } else if (data.code == "204") {

@@ -80,7 +80,7 @@ export default {
 
       yulan: "",
       picValue: "",
-      newimg: ""
+      imgbase: []
     };
   },
 
@@ -100,7 +100,7 @@ export default {
           id: this.id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.num = data.data.num;
             this.price = data.data.price;
@@ -123,10 +123,10 @@ export default {
         .post("transaction/dakuan", {
           token: this.token(),
           id: this.id,
-          imgurl: this.newimg
+          imgurl: this.imgbase[0]
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.$router.go(-1);
             this.$bus.$emit("toast", data.msg);
@@ -146,7 +146,7 @@ export default {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.picValue = files[0];
-      this.imgPreview(this.picValue);
+      this.imgPreview(this.picValue, "0");
     }
   }
 };

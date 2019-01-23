@@ -40,7 +40,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             const url = data.data.url;
             this.qrcode(url);

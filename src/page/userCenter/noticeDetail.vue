@@ -41,7 +41,7 @@ export default {
           id: this.id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.detail = data.data.content;
             this.news_title = data.data.title;

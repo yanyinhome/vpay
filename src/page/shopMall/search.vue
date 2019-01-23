@@ -70,7 +70,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.hotnav = data.data.hot_serch;
             this.log = data.data.serch_history;
@@ -97,7 +97,7 @@ export default {
                   token: this.token()
                 })
                 .then(({ data }) => {
-                  console.log(data);
+                  
                   if (data.code == "200") {
                     this.log = [];
                     this.$bus.$emit("toast", data.msg);

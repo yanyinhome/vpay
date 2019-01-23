@@ -77,7 +77,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.address = data.data;
           } else if (data.code == "204") {
@@ -102,7 +102,7 @@ export default {
                   id: id
                 })
                 .then(({ data }) => {
-                  console.log(data);
+                  
                   if (data.code == "200") {
                     this.loading();
                     this.$bus.$emit("toast", data.msg);
@@ -136,7 +136,7 @@ export default {
                   id: id
                 })
                 .then(({ data }) => {
-                  console.log(data);
+                  
                   if (data.code == "200") {
                     this.address.splice(index, 1);
                     this.$bus.$emit("toast", data.msg);

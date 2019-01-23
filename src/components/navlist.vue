@@ -126,7 +126,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.$router.push("shoplist");
           } else if (data.code === "201") {
@@ -208,7 +208,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.$router.push("shareMes");
           } else if (data.code === "204") {

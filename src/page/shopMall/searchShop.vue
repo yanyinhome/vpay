@@ -76,7 +76,7 @@ export default {
           keyword: this.search
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.shop = data.data.shop;
             this.goods = data.data.goods;

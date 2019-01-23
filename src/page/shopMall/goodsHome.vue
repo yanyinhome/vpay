@@ -60,7 +60,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.user.img = data.data.head_img;
             this.user.UID = data.data.UID;

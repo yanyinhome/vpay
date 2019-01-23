@@ -38,7 +38,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.eChain = data.data;
           } else if (data.code === "204") {

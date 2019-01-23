@@ -88,7 +88,7 @@ export default {
           id: this.$route.query.id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.images = data.data.imgurl;
             this.shop = data.data.shop;

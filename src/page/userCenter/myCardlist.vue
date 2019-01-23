@@ -140,7 +140,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.show = true;
             this.message = data.data;
@@ -165,7 +165,7 @@ export default {
           id: this.bankmes.id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.mask = false;
             this.$router.go(0);
@@ -197,7 +197,7 @@ export default {
                     id: this.bankmes.id
                   })
                   .then(({ data }) => {
-                    console.log(data);
+                    
                     if (data.code === "200") {
                       this.$router.go(0);
                       this.$bus.$emit("toast", data.msg);

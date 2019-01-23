@@ -40,7 +40,7 @@ export default {
           sale_code: newValue
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.$router.push("Cardmes");
           } else if (data.code == "204") {

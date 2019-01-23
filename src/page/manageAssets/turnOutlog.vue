@@ -72,7 +72,7 @@ export default {
           type: type
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.isRequest = true;
           if (data.code === "200") {
             this.log = data.data;
@@ -93,7 +93,7 @@ export default {
           type: type
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.isRequest = true;
           if (data.code === "200") {
             this.log = data.data;
@@ -113,7 +113,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.isRequest = true;
           if (data.code === "200") {
             this.log = data.data;

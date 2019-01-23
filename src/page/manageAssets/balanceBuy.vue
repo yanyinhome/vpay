@@ -88,7 +88,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.money = data.data;
           } else if (data.code === "204") {
@@ -115,7 +115,7 @@ export default {
             sale_code: this.account
           })
           .then(({ data }) => {
-            console.log(data);
+            
             if (data.code === "200") {
               this.$router.push({ name: "sellList", query: { status: "1" } });
               this.$bus.$emit("toast", data.msg);
@@ -136,7 +136,7 @@ export default {
             sale_code: this.account
           })
           .then(({ data }) => {
-            console.log(data);
+            
             if (data.code === "200") {
               this.$router.push({ name: "sellList", query: { status: "2" } });
               this.$bus.$emit("toast", data.msg);

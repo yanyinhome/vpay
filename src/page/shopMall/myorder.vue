@@ -73,7 +73,7 @@ export default {
           status: type
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.isRequest = true;
           if (data.code === "200") {
             this.message = data.data.order;
@@ -99,7 +99,7 @@ export default {
                   id: id
                 })
                 .then(({ data }) => {
-                  console.log(data);
+                  
                   if (data.code === "200") {
                     this.$bus.$emit("toast", data.msg);
                     this.message.splice(index, 1);
@@ -127,7 +127,7 @@ export default {
           id: id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.$bus.$emit("comAlert", {
               title: "物流单号",

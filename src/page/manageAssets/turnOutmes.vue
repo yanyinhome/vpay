@@ -62,7 +62,7 @@ export default {
           UID: this.UID
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.img = data.data.head_img;
             this.UID = data.data.UID;
@@ -97,7 +97,7 @@ export default {
             UID: this.UID
           })
           .then(({ data }) => {
-            console.log(data);
+            
             if (data.code == "200") {
               this.$bus.$emit("toast", data.msg);
               this.$router.push("index");

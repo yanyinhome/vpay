@@ -62,7 +62,7 @@ export default {
           id: this.$route.query.shopid
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code == "200") {
             this.count = data.data.count;
             this.shop = data.data.shop;

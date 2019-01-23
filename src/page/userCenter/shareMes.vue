@@ -62,7 +62,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.url = data.data.url;
             this.code = data.data.UID;

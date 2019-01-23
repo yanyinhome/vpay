@@ -135,7 +135,7 @@ export default {
           status: type
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.isRequest = true;
           if (data.code === "200") {
             this.message = data.data.order;
@@ -163,7 +163,7 @@ export default {
           id: id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.fahuomes = data.data.address;
             this.fahuolist = data.data.order;
@@ -184,7 +184,7 @@ export default {
           express_num: this.number
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.mask = false;
             this.listSelect2();
@@ -206,7 +206,7 @@ export default {
           id: id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.$bus.$emit("comAlert", {
               title: "物流单号",
@@ -238,7 +238,7 @@ export default {
             status: parseInt(this.status) + 1
           })
           .then(({ data }) => {
-            console.log(data);
+            
             if (data.code === "200") {
               this.message = data.data.order;
               this.fa = data.data.fa;

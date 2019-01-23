@@ -98,7 +98,7 @@ export default {
           token: this.token()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.nav = data.data;
           } else if (data.code === "204") {
@@ -132,7 +132,7 @@ export default {
             phone: this.phone
           })
           .then(({ data }) => {
-            console.log(data);
+            
             if (data.code === "200") {
               this.$bus.$emit("toast", data.msg);
               this.applyStatus = true;

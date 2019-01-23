@@ -78,7 +78,7 @@ export default {
           type: "2"
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.isRequest = true;
           if (data.code === "200") {
             this.img = data.data.head_img;
@@ -104,7 +104,7 @@ export default {
           type: "2"
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.isRequest = true;
           if (data.code === "200") {
             this.message = data.data.log;
@@ -125,7 +125,7 @@ export default {
           type: "2"
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.isRequest = true;
           if (data.code === "200") {
             this.message = data.data.log;
@@ -150,7 +150,7 @@ export default {
           id: id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.message.splice(index, 1);
             this.$bus.$emit("toast", data.msg);

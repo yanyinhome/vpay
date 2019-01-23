@@ -112,7 +112,7 @@ export default {
           page: this.page
         })
         .then(({ data }) => {
-          console.log(data);
+          
           this.isRequest = true;
           if (data.code === "200") {
             this.message = this.message.concat(data.data);
@@ -134,7 +134,7 @@ export default {
           keyword: this.userUID
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.message = data.data;
           } else if (data.code === "205") {
@@ -169,7 +169,7 @@ export default {
             sale_code: this.password
           })
           .then(({ data }) => {
-            console.log(data);
+            
             if (data.code === "200") {
               this.show = false;
               this.$router.go(-1);

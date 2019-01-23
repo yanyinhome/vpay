@@ -41,7 +41,7 @@ export default {
             sale_code: this.password,
           })
           .then(({ data }) => {
-            console.log(data);
+            
             if (data.code == "200") {
               this.$router.push("index");
               this.$bus.$emit("toast", data.msg);

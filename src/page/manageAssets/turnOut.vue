@@ -39,7 +39,7 @@ export default {
             UID: this.account
           })
           .then(({ data }) => {
-            console.log(data);
+            
             if (data.code == "200") {
               this.$router.push({
                 name: "turnOutmes",

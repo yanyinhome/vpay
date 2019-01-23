@@ -115,7 +115,7 @@ export default {
           id: this.$route.query.id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.name = data.data.goods.name;
             this.price = data.data.goods.price;
@@ -166,7 +166,7 @@ export default {
           img: this.imgid.join()
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.$router.push("shoplist");
             this.$bus.$emit("toast", data.msg);
@@ -190,7 +190,7 @@ export default {
           id: this.$route.query.id
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.$router.push("shoplist");
             this.$bus.$emit("toast", data.msg);
@@ -229,7 +229,7 @@ export default {
           imgurl: this.imgbase[0]
         })
         .then(({ data }) => {
-          console.log(data);
+          
           if (data.code === "200") {
             this.imgid.push(data.data.id);
             this.imgurl.push(data.data.url);
