@@ -58,6 +58,7 @@
       </div>
     </div>
     <com-button :click="submitTo">上传商品</com-button>
+    
   </div>
 </template>
 
