@@ -16,7 +16,7 @@ Vue.prototype.imgPreview = function (file,Num) {
         // 读取成功后的回调
         reader.onloadend = function () {
             let result = this.result;
-            self.yulan= this.result; //可预览图片
+            self.yulan = this.result; //可预览图片
             let img = new Image();
             img.src = result;
             // console.log(result)
